@@ -1,0 +1,75 @@
+Magnetic Scrolls Interpreter by Niclas Karlsson, EPOC version by Simon Quinn
+----------------------------------------------------------------------------
+Version 2.0, 07/03/02
+
+This is the EPOC/Nokia port of Niclas Karlsson's Magnetic Scrolls interpreter. Code was ported from Stefan Jokisch's DOS version.
+
+Very little use is made of the the EPOC/EIKON environment, just simple open file and save file dialogs - no menus. What more do you need!
+
+IMPORTANT!!! There is a bug in the Nokia version which causes the game to crash if you navigate to a different directory to the default with the file save/restore dialog. I believe this may be a bug in the EPOC v6 O/S (Nokia) as it does not crash in EPOC v5 and the WINS v6 development emulator. Any help on this would be appreciated.
+
+
+INSTALLATION for Nokia Communicator
+-----------------------------------
+· Copy the file MAGNETIC.EXE somewhere, preferably onto your memory card
+· In Filemanager locate the MAGNETIC.EXE file and "Add to Desk"
+· You can now run Magnetic from the Desktop
+· You'll also need "Switcher" to change back to Magnetic from other programs as Magnetic doesn't 
+  show up on the Standard task switcher.
+
+
+INSTALLATION for EPOC/Psion PDAs
+--------------------------------
+· Install STDLIB.SIS first
+· Copy the file MAGNETIC.EXE somewhere, preferably onto your memory card
+· Magnetic will not appear in the Extras bar, you need to open MAGNETIC.EXE from the SYSTEM file manager
+
+
+RUNNING THE GAME
+----------------
+Read the file MAGNETIC.TXT for information on getting and running games. Their file extensions end in MAG.
+
+Copy the files into the directory D:\MAGNETIC onto your Memory Card. Magnetic defaults to opening this directory. 
+
+If you want the pretty title pictures at the game start then you'll need the "magnetic_title_pack.zip" which contains a number of MBM files. Copy these files into the same directory as the MAG files. If you don't want either the title pictures or graphics simply remove or rename the relevant MBM and GFX files.
+
+Start Magnetic from the Desktop and simply open the game (.MAG) that you want to run.
+
+To save or restore, enter the "save" or "restore" command then press a letter and return and press y and return. You will then see the save/restore dialog. This has to work this way due to the way the original Magnetic Scrolls interpreter is written.
+
+Hot keys are available in the game to enable specific Magnetic options:
+	Ctrl-I  help
+	Ctrl-V  show copyright and license info
+	Ctrl-P  playback on
+	Ctrl-R  recording on/off
+	Ctrl-S  seed random numbers
+	Ctrl-T  transcription on/off
+	Ctrl-U  undo last turn
+	Ctrl-X  exit game
+
+NOTE: Graphics are on by default unless running "Wonderland", which defaults to off. Enter the command "graphics" to toggle the displaying of graphics.
+
+NOTE: Graphics are only supported on the Nokia Communicator, Psion 7 and Psion netBook.
+
+
+Changes in version 2.0
+----------------------
+· Added support for graphics and title pictures! (Psion 7/netBook/Nokia Communicator)
+· Added support for EPOC ER6 (Nokia Communicator 9210)
+· Full support for script playback/record, transcription, undo, seed random numbers
+· Version 2.0 now supports "Wonderland".
+· Added EPOC dialogs for file open/save, no need to run from ESHELL anymore.
+
+Changes in version 1.0 release 2
+--------------------------------
+· Changed the default font for Series5 & Series7 to a larger clearer font. 
+· Removed the dynamic font zoom as it caused too many problems
+
+
+BUGS
+----
+Please don't send me any emails for enhancements, I don't have the time. The source code is supplied so feel free to do your own enhancements. Please visit my site at www.geocities.com/ebookif/
+
+
+Have fun!
+Simon Quinn, UK

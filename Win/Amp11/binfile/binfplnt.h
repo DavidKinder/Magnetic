@@ -1,0 +1,38 @@
+#ifndef __NT__
+#error must compile for NT
+#endif
+
+#ifndef __NTPLAYBINFILE_H
+#define __NTPLAYFILEPLAY_H
+
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include <windows.h>
+#include <mmsystem.h>
+#include "binfile.h"
+
+class ntplaybinfile : public binfile
+{
+protected:
+  HWAVEOUT wavehnd;
+  int blklen;
+  int nblk;
+  WAVEHDR *hdrs;
+  char *playbuf;
+  int curbuf;
+  int curbuflen;
+
+  virtual errstat rawclose();
+  virtual binfilepos rawwrite(const void *buf, binfilepos len);
+
+public:
+  ntplaybinfile();
+  virtual ~ntplaybinfile();
+
+  int open(int rate, int stereo, int bit16, int blen, int nb);
+	void abort(void);
+};
+
+#endif

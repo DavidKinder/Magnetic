@@ -1,0 +1,20 @@
+TARGET			magnetic.exe
+TARGETTYPE		exedll
+
+UID             	0
+UNICODEUID      	0
+
+PROJECT			epocproj
+SUBPROJECT		magnetic
+
+SOURCE			mainepoc.cpp emu.c 
+SOURCE			epoc_console.cpp
+
+USERINCLUDE		. 
+SYSTEMINCLUDE  		\epoc32\include\libc  \epoc32\include 
+
+
+LIBRARY			estlib.lib euser.lib bafl.lib cone.lib eikon.lib apgrfx.lib gdi.lib
+LIBRARY			fbscli.lib efsrv.lib ws32.lib
+
+
