@@ -1,0 +1,34 @@
+* Setting the text background to black doesn't work very well, because
+  the cursor remains black. See GTK+ bugs #79585 and #83192. Possibly
+  others as well.
+
+  There is a "cursor-color" property in GtkWidget, but apparently
+  that's intended for themes.
+
+* I've seen occasional colour corruption in GTK+ widgets. Apparently
+  this is an XFree86 bug in the Matrox driver. If you are having these
+  problems, try adding this to the "Screen" section of your
+  XF86Config-4 file:
+
+    Option "XaaNoOffscreenPixmaps"
+
+  I've also heard rumors that it won't happen in XFree86 4.2.0.
+
+* On some occasions I've seen GtkMagnetic start with the wrong font.
+  It seems it has quite different ideas about what fonts are available
+  when anti-aliasing is active compared to when it's not. Perhaps
+  that's what's causing it...
+
+* If GtkMagnetic pops up a modal dialog while the mouse pointer is
+  obscured, it will still be obscured if you move it over the text
+  view. Probably a GTK+ bug, but I haven't yet received any comments
+  on my bug report.
+
+* If Jinxter hangs if you try to GIVE TIN TO BAKER, then try taking
+  the bread out and give him that instead. I don't know if this is a
+  bug in Magnetic, or in the version of Jinxter I was playing.
+
+* In some cases, when a second window (hints, file selector, etc.) is
+  opened or resized, focus will flicker back and forth between the
+  windows for a second or so. I have absolutely no idea what's
+  happening here.
