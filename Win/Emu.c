@@ -30,7 +30,7 @@
 *               Load/Save implemented.
 *
 * 0.7  011097 : The last (major) bug is now fixed (an 8-bit variable instead
-*                of a 16-bit one messed up the adjectives). Small cleanup.
+*               of a 16-bit one messed up the adjectives). Small cleanup.
 *
 * 0.8  011397 : Now also runs Fish and Corruption. Small status-bar fix.
 *

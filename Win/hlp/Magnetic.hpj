@@ -1,0 +1,19 @@
+; This file is maintained by HCW. Do not modify this file directly.
+
+[OPTIONS]
+COMPRESS=12 Hall Zeck
+LCID=0x809 0x0 0x0 ; English (British)
+REPORT=Yes
+CONTENTS=contents
+TITLE=Magnetic Help
+HLP=Magnetic.hlp
+
+[FILES]
+Magnetic.rtf
+
+[MAP]
+opt_back=0x10003
+opt_scale=0x10001
+opt_scalet=0x10004
+opt_show=0x10000
+opt_text=0x10002

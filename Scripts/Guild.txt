@@ -1,0 +1,9 @@
+After script 1, you'll have to go into the one direction where
+you don't die.
+-> either check transcript for the "Enamelled on the surface..." reply
+   or save + test all directions
+
+This is (unfortunately) determined before the start of the game so 
+the #seed value won't help. Then, use script 2 to finish the game.
+
+(we *need* set random seed as command line option!!!)
