@@ -1,0 +1,22 @@
+SRC = emu.c extr_pc.c gfxlink.c main.c mainami.c xtract64.c
+OBJ = $(SRC:"*.c":"*.o")
+
+all: Magnetic GfxLink Xtract64
+
+Magnetic : emu.o mainami.o
+    dcc %(right) -o %(left)
+
+GfxLink : gfxlink.o
+    dcc %(right) -o %(left)
+
+Xtract64 : xtract64.o
+    dcc %(right) -o %(left)
+
+ExtractPC : extr_pc.o
+    dcc %(right) -o %(left)
+
+MagStdIO : emu.o main.o
+    dcc %(right) -o %(left)
+
+$(OBJ) : $(SRC)
+    dcc -c %(right) -o %(left)
