@@ -12,6 +12,7 @@
 #include "StdAfx.h"
 #include <string.h>
 #include <stdlib.h>
+#include <memory>
 
 #include "Magnetic.h"
 #include "MagneticDoc.h"
@@ -129,8 +130,8 @@ BOOL CMagneticApp::InitInstance()
 	// Create file dialog for loading games
 	m_pNewGameDialog = new CFileDialog(TRUE,NULL,
 		GetProfileString("Settings","Last File",""),
-		OFN_FILEMUSTEXIST|OFN_HIDEREADONLY,
-		"Magnetic Files (*.mag)|*.mag|All Files (*.*)|*.*||");
+		OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_ENABLESIZING,
+		"Magnetic Files (*.mag)|*.mag|All Files (*.*)|*.*||",NULL,0);
 	if (m_pNewGameDialog == NULL)
 		return FALSE;
 	m_pNewGameDialog->m_ofn.lpstrTitle = "Open a Magnetic Scrolls game";
@@ -491,8 +492,9 @@ public:
 
 // Implementation
 protected:
+	// Generated message map functions
 	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
+	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
@@ -515,6 +517,30 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 		// No message handlers
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
+
+BOOL CAboutDlg::OnInitDialog() 
+{
+	CDialog::OnInitDialog();
+
+  // Get the static logo bitmap control
+  CRect logoRect;
+  CWnd* logoWnd = GetDlgItem(IDC_LOGO);
+  logoWnd->GetWindowRect(logoRect);
+  ScreenToClient(logoRect);
+  double aspect = ((double)logoRect.Width())/logoRect.Height();
+
+  // Get the credits group control
+  CRect creditsRect;
+  CWnd* creditsWnd = GetDlgItem(IDC_CREDITS);
+  creditsWnd->GetWindowRect(creditsRect);
+  ScreenToClient(creditsRect);
+
+  // Resize the logo
+  logoRect.right = creditsRect.left-logoRect.left;
+  logoRect.bottom = logoRect.top+(int)(logoRect.Width()/aspect);
+  logoWnd->MoveWindow(logoRect);
+  return TRUE;
+}
 
 // App command to run the dialog
 void CMagneticApp::OnAppAbout()

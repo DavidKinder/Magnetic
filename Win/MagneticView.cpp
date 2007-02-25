@@ -304,8 +304,8 @@ void CMagneticView::OnTimer(UINT nIDEvent)
 void CMagneticView::OnRecord() 
 {
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-	CFileDialog RecordDlg(FALSE,NULL,m_strRecName,OFN_HIDEREADONLY,
-		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this);
+	CFileDialog RecordDlg(FALSE,NULL,m_strRecName,OFN_HIDEREADONLY|OFN_ENABLESIZING,
+		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this,0);
 	RecordDlg.m_ofn.lpstrTitle = "Record Input File";
 
 	switch (m_Recording)
@@ -335,8 +335,8 @@ void CMagneticView::OnPlayback()
 {
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 	CFileDialog PlayDlg(TRUE,NULL,m_strRecName,
-		OFN_FILEMUSTEXIST|OFN_HIDEREADONLY,
-		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this);
+		OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_ENABLESIZING,
+		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this,0);
 	PlayDlg.m_ofn.lpstrTitle = "Play Back a File";
 
 	switch (m_Recording)
@@ -369,8 +369,8 @@ void CMagneticView::OnPlayback()
 void CMagneticView::OnScript() 
 {
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-	CFileDialog ScriptDlg(FALSE,NULL,m_strScrName,OFN_HIDEREADONLY,
-		"Script Files (*.scr)|*.scr|All Files (*.*)|*.*||",this);
+	CFileDialog ScriptDlg(FALSE,NULL,m_strScrName,OFN_HIDEREADONLY|OFN_ENABLESIZING,
+		"Script Files (*.scr)|*.scr|All Files (*.*)|*.*||",this,0);
 	ScriptDlg.m_ofn.lpstrTitle = "Scripting";
 
 	switch (m_Scripting)
@@ -1458,8 +1458,8 @@ type8 ms_load_file(type8s *name, type8 *ptr, type16 size)
 			return 0;
 
 		CFileDialog LoadDlg(TRUE,NULL,pView->GetFileName(),
-			OFN_FILEMUSTEXIST|OFN_HIDEREADONLY,
-			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView);
+			OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_ENABLESIZING,
+			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView,0);
 		LoadDlg.m_ofn.lpstrTitle = "Load a Saved Game";
 
 		if (ms_is_running())
@@ -1495,8 +1495,8 @@ type8 ms_save_file(type8s *name, type8 *ptr, type16 size)
 		if (pView == NULL)
 			return 0;
 
-		CFileDialog SaveDlg(FALSE,NULL,pView->GetFileName(),OFN_HIDEREADONLY,
-			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView);
+		CFileDialog SaveDlg(FALSE,NULL,pView->GetFileName(),OFN_HIDEREADONLY|OFN_ENABLESIZING,
+			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView,0);
 		SaveDlg.m_ofn.lpstrTitle = "Save the Current Game";
 
 		if (ms_is_running())

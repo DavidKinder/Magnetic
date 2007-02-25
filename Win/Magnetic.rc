@@ -164,16 +164,16 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION |
 CAPTION "About Magnetic"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         129,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE | 
-                    SS_SUNKEN,6,4,81,110,WS_EX_CLIENTEDGE
-    GROUPBOX        "Credits",IDC_STATIC,94,4,178,89
+    CONTROL         129,IDC_LOGO,"Static",SS_BITMAP |
+                    SS_SUNKEN,6,4,70,88,WS_EX_CLIENTEDGE
+    GROUPBOX        "Credits",IDC_CREDITS,94,4,178,89
     LTEXT           "Magnetic v2.2, an interpreter for Magnetic Scrolls games. Copyright © 1997-2004 Niclas Karlsson.",
                     IDC_STATIC,99,16,165,16
     LTEXT           "Magnetic is released under the terms of the GNU General Public License.",
                     IDC_STATIC,100,35,160,16
     LTEXT           "Magnetic was written by Niclas Karlsson,\nDavid Kinder, Stefan Meier and Paul David Doherty.",
                     IDC_STATIC,99,54,170,16
-    LTEXT           "Magnetic for Windows Release 9.\nWindows version written by David Kinder.",
+    LTEXT           "Magnetic for Windows Release 10.\nWindows version written by David Kinder.",
                     IDC_STATIC,99,73,141,16
     DEFPUSHBUTTON   "OK",IDOK,159,98,48,14,WS_GROUP
 END
