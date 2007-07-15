@@ -17,6 +17,7 @@
 #include "MagneticDoc.h"
 #include "MagneticView.h"
 #include "MagneticTitle.h"
+#include "Dialogs.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -304,8 +305,8 @@ void CMagneticView::OnTimer(UINT nIDEvent)
 void CMagneticView::OnRecord() 
 {
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-	CFileDialog RecordDlg(FALSE,NULL,m_strRecName,OFN_HIDEREADONLY|OFN_ENABLESIZING,
-		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this,0);
+	SimpleFileDialog RecordDlg(FALSE,NULL,m_strRecName,OFN_HIDEREADONLY|OFN_ENABLESIZING,
+		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this);
 	RecordDlg.m_ofn.lpstrTitle = "Record Input File";
 
 	switch (m_Recording)
@@ -334,9 +335,9 @@ void CMagneticView::OnRecord()
 void CMagneticView::OnPlayback() 
 {
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-	CFileDialog PlayDlg(TRUE,NULL,m_strRecName,
+	SimpleFileDialog PlayDlg(TRUE,NULL,m_strRecName,
 		OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_ENABLESIZING,
-		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this,0);
+		"Record Files (*.rec)|*.rec|All Files (*.*)|*.*||",this);
 	PlayDlg.m_ofn.lpstrTitle = "Play Back a File";
 
 	switch (m_Recording)
@@ -369,8 +370,8 @@ void CMagneticView::OnPlayback()
 void CMagneticView::OnScript() 
 {
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-	CFileDialog ScriptDlg(FALSE,NULL,m_strScrName,OFN_HIDEREADONLY|OFN_ENABLESIZING,
-		"Script Files (*.scr)|*.scr|All Files (*.*)|*.*||",this,0);
+	SimpleFileDialog ScriptDlg(FALSE,NULL,m_strScrName,OFN_HIDEREADONLY|OFN_ENABLESIZING,
+		"Script Files (*.scr)|*.scr|All Files (*.*)|*.*||",this);
 	ScriptDlg.m_ofn.lpstrTitle = "Scripting";
 
 	switch (m_Scripting)
@@ -1176,7 +1177,17 @@ BOOL CMagneticView::OpenGame(LPCTSTR lpszPathName)
 	}
 	else
 	{
-		if (pView)
+    if (pView)
+		{
+			pView->m_bStatusBar = false;
+      pView->Invalidate();
+    }
+
+		// Show the title picture, if possible
+		CMagneticTitleDlg Title;
+		Title.ShowTitle(lpszPathName);
+
+    if (pView)
 		{
 			// Set up default file names
 			MakeFilePath(pView->m_strRecName,lpszPathName,".rec");
@@ -1185,10 +1196,6 @@ BOOL CMagneticView::OpenGame(LPCTSTR lpszPathName)
 
 			pView->m_bStatusBar = ms_is_magwin() ? false : true;
 		}
-
-		// Show the title picture, if possible
-		CMagneticTitleDlg Title;
-		Title.ShowTitle(lpszPathName);
 	}
 
 	if (pView)
@@ -1457,9 +1464,9 @@ type8 ms_load_file(type8s *name, type8 *ptr, type16 size)
 		if (pView == NULL)
 			return 0;
 
-		CFileDialog LoadDlg(TRUE,NULL,pView->GetFileName(),
+		SimpleFileDialog LoadDlg(TRUE,NULL,pView->GetFileName(),
 			OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_ENABLESIZING,
-			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView,0);
+			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView);
 		LoadDlg.m_ofn.lpstrTitle = "Load a Saved Game";
 
 		if (ms_is_running())
@@ -1495,8 +1502,8 @@ type8 ms_save_file(type8s *name, type8 *ptr, type16 size)
 		if (pView == NULL)
 			return 0;
 
-		CFileDialog SaveDlg(FALSE,NULL,pView->GetFileName(),OFN_HIDEREADONLY|OFN_ENABLESIZING,
-			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView,0);
+		SimpleFileDialog SaveDlg(FALSE,NULL,pView->GetFileName(),OFN_HIDEREADONLY|OFN_ENABLESIZING,
+			"Saved Game Files (*.sav)|*.sav|All Files (*.*)|*.*||",pView);
 		SaveDlg.m_ofn.lpstrTitle = "Save the Current Game";
 
 		if (ms_is_running())

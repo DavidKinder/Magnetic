@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib"
+				AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
@@ -80,7 +80,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib"
+				AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;LOGGFX;LOGGFX_EXT;LOG_FILE=\&quot;c:\\temp\\mag.log\&quot;"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
@@ -139,7 +139,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib"
+				AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -894,7 +894,7 @@
 				Name="Windows"
 				Filter="">
 				<File
-					RelativePath="..\..\..\Libraries\mfc\BCMenu.cpp">
+					RelativePath="..\..\..\Libraries\mfc\ColourButton.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
@@ -915,25 +915,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\Libraries\mfc\ColourButton.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="DebugLog|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
-					</FileConfiguration>
+					RelativePath="..\..\..\Libraries\mfc\Dialogs.cpp">
 				</File>
 				<File
 					RelativePath=".\HintDialog.cpp">
@@ -1045,6 +1027,9 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\Libraries\mfc\MenuBar.cpp">
 				</File>
 				<File
 					RelativePath=".\OptionsDlg.cpp">

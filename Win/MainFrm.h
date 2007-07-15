@@ -9,13 +9,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "BCMenu.h"
-
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
 
-class CMainFrame : public CFrameWnd
+#include "MenuBar.h"
+
+class CMainFrame : public MenuBarFrameWnd
 {
 protected: // create from serialization only
 	CMainFrame();
@@ -44,19 +44,11 @@ public:
 #endif
 
 protected:  // control bar embedded members
-	CStatusBar m_wndStatusBar;
-	CToolBar m_wndToolBar;
-
-public:	// custom menus
-	HMENU NewMenu();
-	BCMenu m_menu;
+	CStatusBar m_statusBar;
 
 // Generated message map functions
 	//{{AFX_MSG(CMainFrame)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
-	afx_msg LRESULT OnMenuChar(UINT nChar, UINT nFlags, CMenu* pMenu);
-	afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
 	afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
 	afx_msg BOOL OnQueryNewPalette();
 	//}}AFX_MSG

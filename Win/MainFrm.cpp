@@ -26,15 +26,12 @@ static char THIS_FILE[] = __FILE__;
 // Implementation of CMainFrame
 /////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
+IMPLEMENT_DYNCREATE(CMainFrame, MenuBarFrameWnd)
 
-BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
+BEGIN_MESSAGE_MAP(CMainFrame, MenuBarFrameWnd)
 	//{{AFX_MSG_MAP(CMainFrame)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_HELP, OnHelpFinder)
-	ON_WM_MEASUREITEM()
-	ON_WM_MENUCHAR()
-	ON_WM_INITMENUPOPUP()
 	ON_WM_PALETTECHANGED()
 	ON_WM_QUERYNEWPALETTE()
 	//}}AFX_MSG_MAP
@@ -60,28 +57,21 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
-	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
+	if (MenuBarFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
+  if (!CreateBar(IDR_MAINFRAME,IDB_TOOLBAR32))
+    return -1;
 
-	if (!m_wndToolBar.CreateEx(this,TBSTYLE_FLAT,
-		WS_CHILD|WS_VISIBLE|CBRS_TOP|CBRS_TOOLTIPS|CBRS_FLYBY))
-		return -1;
-	if (!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
-		return -1;
-
-	if (!m_wndStatusBar.Create(this) ||
-		!m_wndStatusBar.SetIndicators(indicators,
-		  sizeof(indicators)/sizeof(UINT)))
+	if (!m_statusBar.Create(this) ||
+      !m_statusBar.SetIndicators(indicators,sizeof(indicators)/sizeof(UINT)))
 	{
-		TRACE0("Failed to create status bar\n");
-		return -1;      // fail to create
+		return -1;
 	}
 
 	BOOL bToolBar, bStatusBar;
 	pApp->GetControlBars(bToolBar,bStatusBar);
-	ShowControlBar(&m_wndToolBar,bToolBar,TRUE);
-	ShowControlBar(&m_wndStatusBar,bStatusBar,TRUE);
-
+	ShowControlBar(&m_toolBar,bToolBar,TRUE);
+	ShowControlBar(&m_statusBar,bStatusBar,TRUE);
 	return 0;
 }
 
@@ -99,11 +89,11 @@ BOOL CMainFrame::DestroyWindow()
 	iMax = (Place.showCmd == SW_SHOWMAXIMIZED);
 	rPlace = Place.rcNormalPosition;
 
-	BOOL bToolBar = m_wndToolBar.GetStyle() & WS_VISIBLE;
-	BOOL bStatusBar = m_wndStatusBar.GetStyle() & WS_VISIBLE;
+	BOOL bToolBar = m_toolBar.GetStyle() & WS_VISIBLE;
+	BOOL bStatusBar = m_statusBar.GetStyle() & WS_VISIBLE;
 	pApp->SetControlBars(bToolBar,bStatusBar);
 
-	return CFrameWnd::DestroyWindow();
+	return MenuBarFrameWnd::DestroyWindow();
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
@@ -121,55 +111,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 		cs.cy = rPlace.Height();
 	}
 
-	return CFrameWnd::PreCreateWindow(cs);
-}
-
-HMENU CMainFrame::NewMenu()
-{
-	m_menu.LoadMenu(IDR_MAINFRAME);
-	m_menu.LoadToolbar(IDR_MAINFRAME);
-	return m_menu.Detach();
-}
-
-void CMainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct) 
-{
-	BOOL setflag = FALSE;
-
-	if (lpMeasureItemStruct->CtlType == ODT_MENU)
-	{
-		if (IsMenu((HMENU)lpMeasureItemStruct->itemID))
-		{
-			CMenu* cmenu = CMenu::FromHandle((HMENU)lpMeasureItemStruct->itemID);
-			if (m_menu.IsMenu(cmenu))
-			{
-				m_menu.MeasureItem(lpMeasureItemStruct);
-				setflag = TRUE;
-			}
-		}
-	}
-	if (!setflag)
-		CFrameWnd::OnMeasureItem(nIDCtl, lpMeasureItemStruct);
-}
-
-LRESULT CMainFrame::OnMenuChar(UINT nChar, UINT nFlags, CMenu* pMenu) 
-{
-	LRESULT lresult;
-
-	if (m_menu.IsMenu(pMenu))
-		lresult = BCMenu::FindKeyboardShortcut(nChar, nFlags, pMenu);
-	else
-		lresult = CFrameWnd::OnMenuChar(nChar, nFlags, pMenu);
-	return lresult;
-}
-
-void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu) 
-{
-	CFrameWnd::OnInitMenuPopup(pPopupMenu, nIndex, bSysMenu);
-	if (!bSysMenu)
-	{
-		if (m_menu.IsMenu(pPopupMenu))
-			BCMenu::UpdateMenu(pPopupMenu);
-	}
+	return MenuBarFrameWnd::PreCreateWindow(cs);
 }
 
 void CMainFrame::OnPaletteChanged(CWnd*) 
@@ -198,12 +140,12 @@ BOOL CMainFrame::OnQueryNewPalette()
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
 {
-	CFrameWnd::AssertValid();
+	MenuBarFrameWnd::AssertValid();
 }
 
 void CMainFrame::Dump(CDumpContext& dc) const
 {
-	CFrameWnd::Dump(dc);
+	MenuBarFrameWnd::Dump(dc);
 }
 
 #endif //_DEBUG

@@ -394,7 +394,7 @@ HPALETTE CMagneticTitleDlg::CreateOctreePalette(HANDLE hImage, UINT nMaxColors, 
     bleft = GetLeftShiftCount(bmask);
 
     pwBits = (WORD*) ds.dsBm.bmBits;
-    for (i = 0; i < fabs(ds.dsBmih.biHeight); i++)
+    for (i = 0; i < abs(ds.dsBmih.biHeight); i++)
 		{
       for (j = 0; j < ds.dsBmih.biWidth; j++)
 			{
@@ -413,7 +413,7 @@ HPALETTE CMagneticTitleDlg::CreateOctreePalette(HANDLE hImage, UINT nMaxColors, 
 
   case 24: // Another for 24-bit DIBs
     pbBits = (BYTE*) ds.dsBm.bmBits;
-    for (i = 0; i < fabs(ds.dsBmih.biHeight); i++)
+    for (i = 0; i < abs(ds.dsBmih.biHeight); i++)
 		{
       for (j = 0; j < ds.dsBmih.biWidth; j++)
 			{
@@ -448,7 +448,7 @@ HPALETTE CMagneticTitleDlg::CreateOctreePalette(HANDLE hImage, UINT nMaxColors, 
     bright = GetRightShiftCount(bmask);
 
     pdwBits = (DWORD*) ds.dsBm.bmBits;
-    for (i = 0; i < fabs(ds.dsBmih.biHeight); i++)
+    for (i = 0; i < abs(ds.dsBmih.biHeight); i++)
 		{
       for (j = 0; j < ds.dsBmih.biWidth; j++)
 			{

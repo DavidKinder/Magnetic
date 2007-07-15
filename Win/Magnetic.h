@@ -98,6 +98,8 @@ public:
 	void SetGameLoaded(int iLoaded);
 
 protected:
+  CRect GetScreenSize(void);
+
 	// File dialog data
 	CFileDialog* m_pNewGameDialog;
 

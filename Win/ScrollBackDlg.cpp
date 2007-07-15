@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 
 CScrollBackDlg::CScrollBackDlg(CWnd* pParent /*=NULL*/)
-	: m_TextTop(0), CDialog(CScrollBackDlg::IDD, pParent)
+	: m_TextTop(0), BaseDialog(CScrollBackDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CScrollBackDlg)
 		// NOTE: the ClassWizard will add member initialization here
@@ -34,13 +34,13 @@ CScrollBackDlg::CScrollBackDlg(CWnd* pParent /*=NULL*/)
 
 void CScrollBackDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
+	BaseDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CScrollBackDlg)
 		// NOTE: the ClassWizard will add DDX and DDV calls here
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CScrollBackDlg, CDialog)
+BEGIN_MESSAGE_MAP(CScrollBackDlg, BaseDialog)
 	//{{AFX_MSG_MAP(CScrollBackDlg)
 	ON_WM_SIZE()
 	ON_BN_CLICKED(IDC_COPY, OnCopy)
@@ -53,7 +53,7 @@ END_MESSAGE_MAP()
 
 BOOL CScrollBackDlg::OnInitDialog() 
 {
-	CDialog::OnInitDialog();
+	BaseDialog::OnInitDialog();
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 	
 	// Subclass the text control
@@ -70,7 +70,7 @@ BOOL CScrollBackDlg::OnInitDialog()
 	SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
 
 	// Resize the dialog
-	CDialog::MoveWindow(m_DialogRect);
+	BaseDialog::MoveWindow(m_DialogRect);
 
 	// Set the control to format the text so that it fits
 	// into the window
@@ -91,10 +91,9 @@ BOOL CScrollBackDlg::OnInitDialog()
 
 void CScrollBackDlg::OnSize(UINT nType, int cx, int cy) 
 {
-	CDialog::OnSize(nType, cx, cy);
+	BaseDialog::OnSize(nType, cx, cy);
 
 	// Resize the text control
-	// Resize the edit control
 	if (m_RichEdit.GetSafeHwnd() != NULL)
 		m_RichEdit.SetWindowPos(NULL,0,m_TextTop,cx,cy-m_TextTop,SWP_NOZORDER);
 }

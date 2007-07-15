@@ -10,6 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "StdAfx.h"
+#include <MultiMon.h>
 #include <string.h>
 #include <stdlib.h>
 #include <memory>
@@ -19,6 +20,7 @@
 #include "MagneticView.h"
 #include "MainFrm.h"
 #include "OptionsDlg.h"
+#include "Dialogs.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,15 +60,33 @@ BOOL CMagneticApp::InitInstance()
 	SetRegistryKey(_T("David Kinder"));
 	LoadStdProfileSettings();
 
-	// Load Magnetic display settings
-	m_LogFont.lfHeight = GetProfileInt("Display","Font Size",-16);
+  NONCLIENTMETRICS ncm;
+  ::ZeroMemory(&ncm,sizeof ncm);
+  ncm.cbSize = sizeof ncm;
+  ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof ncm,&ncm,0);
+
+  CDC* dc = CWnd::GetDesktopWindow()->GetDC();
+  int fontSize = -MulDiv(10,dc->GetDeviceCaps(LOGPIXELSY),72);
+  CWnd::GetDesktopWindow()->ReleaseDC(dc);
+
+  CRect screen = GetScreenSize();
+  int scalePics = 100;
+  int scaleTitles = 100;
+	if ((screen.Width() > 800) && (screen.Height() > 600))
+	{
+    scalePics = 200;
+    scaleTitles = 150;
+  }
+
+  // Load Magnetic display settings
+	m_LogFont.lfHeight = GetProfileInt("Display","Font Size",fontSize);
 	m_LogFont.lfCharSet = ANSI_CHARSET;
 	m_LogFont.lfOutPrecision = OUT_TT_PRECIS;
 	m_LogFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
 	m_LogFont.lfQuality = PROOF_QUALITY;
 	m_LogFont.lfPitchAndFamily = DEFAULT_PITCH|FF_DONTCARE;
-	strncpy(m_LogFont.lfFaceName,
-		GetProfileString("Display","Font Name","Times New Roman"),LF_FACESIZE);
+	strncpy(m_LogFont.lfFaceName,GetProfileString(
+    "Display","Font Name",ncm.lfMessageFont.lfFaceName),LF_FACESIZE);
 	m_Margins.cx = 8;
 	m_Margins.cy = 4;
 
@@ -86,9 +106,9 @@ BOOL CMagneticApp::InitInstance()
 	m_PicTopLeft.y = GetProfileInt("Picture","Top",0);
 
 	m_ShowGfx = (ShowGraphics)GetProfileInt("Picture","Show",
-		ShowGraphics::SeparateWindow);
-	m_dScaleFactor = (double)GetProfileInt("Picture","Scale",100)*0.01;
-	m_dScaleTitles = (double)GetProfileInt("Titles","Scale",100)*0.01;
+		ShowGraphics::MainWindow);
+	m_dScaleFactor = (double)GetProfileInt("Picture","Scale",scalePics)*0.01;
+	m_dScaleTitles = (double)GetProfileInt("Titles","Scale",scaleTitles)*0.01;
 	m_dGamma = (double)GetProfileInt("Picture","Gamma",100)*0.01;
 	m_ForeColour = GetProfileInt("Display","Foreground",~0);
 	m_BackColour = GetProfileInt("Display","Background",~0);
@@ -128,10 +148,10 @@ BOOL CMagneticApp::InitInstance()
 	::SHChangeNotify(SHCNE_ASSOCCHANGED,SHCNF_IDLIST,0,0);
 
 	// Create file dialog for loading games
-	m_pNewGameDialog = new CFileDialog(TRUE,NULL,
+	m_pNewGameDialog = new SimpleFileDialog(TRUE,NULL,
 		GetProfileString("Settings","Last File",""),
 		OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_ENABLESIZING,
-		"Magnetic Files (*.mag)|*.mag|All Files (*.*)|*.*||",NULL,0);
+		"Magnetic Files (*.mag)|*.mag|All Files (*.*)|*.*||",NULL);
 	if (m_pNewGameDialog == NULL)
 		return FALSE;
 	m_pNewGameDialog->m_ofn.lpstrTitle = "Open a Magnetic Scrolls game";
@@ -147,18 +167,9 @@ BOOL CMagneticApp::InitInstance()
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 
-	CMenu* pMenu = m_pMainWnd->GetMenu();
-  if (pMenu)
-		pMenu->DestroyMenu();
-  HMENU hMenu = ((CMainFrame*)m_pMainWnd)->NewMenu();
-  pMenu = CMenu::FromHandle(hMenu);
-  m_pMainWnd->SetMenu(pMenu);
-  ((CMainFrame*)m_pMainWnd)->m_hMenuDefault = hMenu;
-
-	m_pMainWnd->ShowWindow(SW_SHOW);
+  m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
 	m_pMainWnd->DragAcceptFiles();
-
 	return TRUE;
 }
 
@@ -322,6 +333,19 @@ void CMagneticApp::OnUpdateRecentFileMenu(CCmdUI* pCmdUI)
 	}
 }
 
+CRect CMagneticApp::GetScreenSize()
+{
+	MONITORINFO monInfo;
+	::ZeroMemory(&monInfo,sizeof monInfo);
+	monInfo.cbSize = sizeof monInfo;
+
+	HMONITOR mon = ::MonitorFromWindow(AfxGetMainWnd()->GetSafeHwnd(),MONITOR_DEFAULTTOPRIMARY);
+	if (::GetMonitorInfo(mon,&monInfo))
+		return monInfo.rcMonitor;
+
+	return CRect(0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN));
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // Get and set program settings
 /////////////////////////////////////////////////////////////////////////////
@@ -474,7 +498,7 @@ void CMagneticApp::SetGameLoaded(int iLoaded)
 // CAboutDlg dialog class
 /////////////////////////////////////////////////////////////////////////////
 
-class CAboutDlg : public CDialog
+class CAboutDlg : public BaseDialog
 {
 public:
 	CAboutDlg();
@@ -499,7 +523,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
+CAboutDlg::CAboutDlg() : BaseDialog(CAboutDlg::IDD)
 {
 	//{{AFX_DATA_INIT(CAboutDlg)
 	//}}AFX_DATA_INIT
@@ -507,12 +531,12 @@ CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
+	BaseDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CAboutDlg)
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+BEGIN_MESSAGE_MAP(CAboutDlg, BaseDialog)
 	//{{AFX_MSG_MAP(CAboutDlg)
 		// No message handlers
 	//}}AFX_MSG_MAP
@@ -520,7 +544,7 @@ END_MESSAGE_MAP()
 
 BOOL CAboutDlg::OnInitDialog() 
 {
-	CDialog::OnInitDialog();
+	BaseDialog::OnInitDialog();
 
   // Get the static logo bitmap control
   CRect logoRect;

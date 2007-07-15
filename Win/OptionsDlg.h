@@ -10,12 +10,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "ColourButton.h"
+#include "Dialogs.h"
 
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
 
-class COptionsDlg : public CDialog
+class COptionsDlg : public BaseDialog
 {
 // Construction
 public:

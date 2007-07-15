@@ -16,10 +16,10 @@
 #define VC_EXTRALEAN
 #define _AFX_ALL_WARNINGS
 
-#define WINVER 0x0400         // Windows 95 and NT 4
-#define _WIN32_WINNT 0x0400   // Windows NT 4
-#define _WIN32_WINDOWS 0x0410 // Windows 98
-#define _WIN32_IE 0x0400      // Internet Explorer 4
+#define WINVER 0x0501         // Windows XP
+#define _WIN32_WINNT 0x0501
+#define _WIN32_WINDOWS 0x0501
+#define _WIN32_IE 0x0501      // Internet Explorer 5.5
 
 #include <afxwin.h>
 #include <afxext.h>

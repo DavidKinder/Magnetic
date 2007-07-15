@@ -1237,10 +1237,10 @@ int ampegdecoderl3::openlayer(int ver, int rate, int freq, int stereo)
   huffoffset=0;
   for (i=0; i<32; i++)
   {
-    ktab[0][i][0]=(i&1)?exp(-log(2)*0.5*((i+1)>>1)):1;
-    ktab[0][i][1]=(i&1)?1:exp(-log(2)*0.5*(i>>1));
-    ktab[1][i][0]=(i&1)?exp(-log(2)*0.25*((i+1)>>1)):1;
-    ktab[1][i][1]=(i&1)?1:exp(-log(2)*0.25*(i>>1));
+    ktab[0][i][0]=(i&1)?exp(-log(2.0)*0.5*((i+1)>>1)):1;
+    ktab[0][i][1]=(i&1)?1:exp(-log(2.0)*0.5*(i>>1));
+    ktab[1][i][0]=(i&1)?exp(-log(2.0)*0.25*((i+1)>>1)):1;
+    ktab[1][i][1]=(i&1)?1:exp(-log(2.0)*0.25*(i>>1));
     ktab[2][i][0]=sin(_PI/12*i)/(sin(_PI/12*i)+cos(_PI/12*i));
     ktab[2][i][1]=cos(_PI/12*i)/(sin(_PI/12*i)+cos(_PI/12*i));
   }
@@ -1284,7 +1284,7 @@ int ampegdecoderl3::openlayer(int ver, int rate, int freq, int stereo)
 
   pow43tab[0]=0;
   for (i=1; i<8206; i++)
-    pow43tab[i]=exp(log(i)*4/3);
+    pow43tab[i]=exp(log((float)i)*4/3);
   sqrt05=sqrt(0.5);
 
   for (i=0; i<576; i++)

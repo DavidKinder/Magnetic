@@ -28,7 +28,7 @@ static char THIS_FILE[] = __FILE__;
 // Implementation of the CHintDialog dialog
 /////////////////////////////////////////////////////////////////////////////
 
-CHintDialog::CHintDialog(CWnd* pParent) :	CDialog(CHintDialog::IDD,pParent)
+CHintDialog::CHintDialog(CWnd* pParent) :	BaseDialog(CHintDialog::IDD,pParent)
 {
 	//{{AFX_DATA_INIT(CHintDialog)
 	//}}AFX_DATA_INIT
@@ -40,7 +40,7 @@ CHintDialog::CHintDialog(CWnd* pParent) :	CDialog(CHintDialog::IDD,pParent)
 
 void CHintDialog::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
+	BaseDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CHintDialog)
 	DDX_Control(pDX, IDC_TOPICS, m_topicButton);
 	DDX_Control(pDX, IDC_SHOWHINT, m_hintButton);
@@ -49,7 +49,7 @@ void CHintDialog::DoDataExchange(CDataExchange* pDX)
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CHintDialog, CDialog)
+BEGIN_MESSAGE_MAP(CHintDialog, BaseDialog)
 	//{{AFX_MSG_MAP(CHintDialog)
 	ON_WM_SIZE()
 	ON_WM_GETMINMAXINFO()
@@ -163,12 +163,12 @@ BOOL CHintDialog::DestroyWindow()
 	GetWindowPlacement(&Place);
 	pApp->GetHintsRect() = Place.rcNormalPosition;
 
-	return CDialog::DestroyWindow();
+	return BaseDialog::DestroyWindow();
 }
 
 BOOL CHintDialog::OnInitDialog() 
 {
-	CDialog::OnInitDialog();
+	BaseDialog::OnInitDialog();
 
 	CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 	SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
@@ -196,7 +196,7 @@ BOOL CHintDialog::OnInitDialog()
 
 void CHintDialog::OnSize(UINT nType, int cx, int cy)
 {
-	CDialog::OnSize(nType,cx,cy);
+	BaseDialog::OnSize(nType,cx,cy);
 	if (GetDlgItem(IDOK)->GetSafeHwnd())
 		LayoutControls();
 }

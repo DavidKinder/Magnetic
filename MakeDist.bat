@@ -12,7 +12,7 @@
 "\Program Files\Zip\zip" \Temp\MagneticSrc.zip Dos32\allegro.c Dos32\makefile
 "\Program Files\Zip\zip" -r \Temp\MagneticSrc.zip Win\* -x Win\Release\*
 pushd \Programs
-"\Program Files\Zip\zip" \Temp\MagneticSrc.zip Libraries\mfc\BCMenu.*
+"\Program Files\Zip\zip" \Temp\MagneticSrc.zip Libraries\mfc\MenuBar.*
 "\Program Files\Zip\zip" \Temp\MagneticSrc.zip Libraries\mfc\ColourButton.*
 popd
 
