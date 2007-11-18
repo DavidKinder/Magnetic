@@ -28,8 +28,8 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CMagneticDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CMagneticDoc, CDocument)
-	//{{AFX_MSG_MAP(CMagneticDoc)
-	//}}AFX_MSG_MAP
+  //{{AFX_MSG_MAP(CMagneticDoc)
+  //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 CMagneticDoc::CMagneticDoc()
@@ -42,20 +42,20 @@ CMagneticDoc::~CMagneticDoc()
 
 BOOL CMagneticDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 {
-	if (!CDocument::OnOpenDocument(lpszPathName))
-		return FALSE;
+  if (!CDocument::OnOpenDocument(lpszPathName))
+    return FALSE;
 
-	return CMagneticView::OpenGame(lpszPathName);
+  return CMagneticView::OpenGame(lpszPathName);
 }
 
 #ifdef _DEBUG
 void CMagneticDoc::AssertValid() const
 {
-	CDocument::AssertValid();
+  CDocument::AssertValid();
 }
 
 void CMagneticDoc::Dump(CDumpContext& dc) const
 {
-	CDocument::Dump(dc);
+  CDocument::Dump(dc);
 }
 #endif //_DEBUG

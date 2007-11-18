@@ -18,8 +18,8 @@
 class CMainFrame : public MenuBarFrameWnd
 {
 protected: // create from serialization only
-	CMainFrame();
-	DECLARE_DYNCREATE(CMainFrame)
+  CMainFrame();
+  DECLARE_DYNCREATE(CMainFrame)
 
 // Attributes
 public:
@@ -28,29 +28,29 @@ public:
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
-	public:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	virtual BOOL DestroyWindow();
-	//}}AFX_VIRTUAL
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CMainFrame)
+  public:
+  virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+  virtual BOOL DestroyWindow();
+  //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	virtual ~CMainFrame();
+  virtual ~CMainFrame();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+  virtual void AssertValid() const;
+  virtual void Dump(CDumpContext& dc) const;
 #endif
 
 protected:  // control bar embedded members
-	CStatusBar m_statusBar;
+  CStatusBar m_statusBar;
 
 // Generated message map functions
-	//{{AFX_MSG(CMainFrame)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
-	afx_msg BOOL OnQueryNewPalette();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  //{{AFX_MSG(CMainFrame)
+  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
+  afx_msg BOOL OnQueryNewPalette();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
 };

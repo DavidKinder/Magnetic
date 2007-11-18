@@ -6,8 +6,8 @@
 // Visual C++ MFC Windows interface by David Kinder
 //
 // StdAfx.h:  Include file for standard system include files, or project
-//						specific include files that are used frequently, but are
-//					  changed infrequently
+//            specific include files that are used frequently, but are
+//            changed infrequently
 //
 /////////////////////////////////////////////////////////////////////////////
 

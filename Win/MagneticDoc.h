@@ -16,27 +16,27 @@
 class CMagneticDoc : public CDocument
 {
 protected: // create from serialization only
-	CMagneticDoc();
-	DECLARE_DYNCREATE(CMagneticDoc)
+  CMagneticDoc();
+  DECLARE_DYNCREATE(CMagneticDoc)
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMagneticDoc)
-	public:
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-	//}}AFX_VIRTUAL
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CMagneticDoc)
+  public:
+  virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+  //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	virtual ~CMagneticDoc();
+  virtual ~CMagneticDoc();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+  virtual void AssertValid() const;
+  virtual void Dump(CDumpContext& dc) const;
 #endif
 
 // Generated message map functions
 protected:
-	//{{AFX_MSG(CMagneticDoc)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  //{{AFX_MSG(CMagneticDoc)
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
 };

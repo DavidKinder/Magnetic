@@ -2045,7 +2045,7 @@ void ms_putchar (type8 c)
 			if (ostream_script)
 			{
 				if (scrbufpos != 0)
-            	scrbufpos--;
+					scrbufpos--;
 			}
 		}
 
@@ -2355,7 +2355,7 @@ void ms_showpic (type32 number, type8 mode)
 
 	} else if (pic_lines != 0) {
 
-      os_more_prompt ();
+		os_more_prompt ();
 
 		os_erase_area (16, 0, screen_height - 1, screen_width - 1);
 
@@ -2386,7 +2386,7 @@ void ms_showpic (type32 number, type8 mode)
 
 type8 ms_showhints (struct ms_hint *hints)
 {
-  return 0;
+	return 0;
 
 }/* ms_showhints */
 
