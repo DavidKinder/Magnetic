@@ -10,6 +10,7 @@
 * Copyright (C) 1997-2008  Niclas Karlsson
 *
 * Amiga interface by David Kinder
+* Changes for AROS by Matthias Rustler
 *
 *     This program is free software; you can redistribute it and/or modify
 *     it under the terms of the GNU General Public License as published by
@@ -30,6 +31,7 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <proto/amigaguide.h>
 #include <proto/asl.h>
@@ -41,7 +43,6 @@
 #include <proto/icon.h>
 #include <proto/intuition.h>
 #include <exec/memory.h>
-#include <graphics/display.h>
 #include <graphics/gfxmacros.h>
 #include <graphics/videocontrol.h>
 #include <hardware/custom.h>
@@ -49,6 +50,12 @@
 #include <intuition/intuitionbase.h>
 #include <workbench/startup.h>
 #include "defs.h"
+
+#ifdef __AROS__
+#include <aros/oldprograms.h>
+#else
+#include <graphics/display.h>
+#endif
 
 struct Screen *amiga_openscreen(struct TextAttr *font,int gfx_depth);
 void amiga_init(void);
@@ -101,7 +108,7 @@ extern type32 i_count;
 extern type8 *picture_buffer;
 type8 log_on = 0;
 type8 *gamename = 0;
-FILE *log = 0, *log2 = 0;
+FILE *logfile1 = 0, *logfile2 = 0;
 type8 ms_gfx_enabled;
 type16 pic_width, pic_height;
 type16 pic_palette[16];
@@ -168,16 +175,16 @@ type8 *realname;
 
 void script_write(type8 c)
 {
-  if (log_on == 2 && fputc(c,log) == EOF)
+  if (log_on == 2 && fputc(c,logfile1) == EOF)
   {
-    fclose(log);
+    fclose(logfile1);
     log_on = 0;
   }
 }
 
 void transcript_write(type8 c)
 {
-  if (log2 == 0)
+  if (logfile2 == 0)
     return;
 
   switch (c)
@@ -189,13 +196,13 @@ void transcript_write(type8 c)
       }
       break;
     case '\n':
-      if (fwrite(transcript,1,transcript_idx,log2) < transcript_idx)
+      if (fwrite(transcript,1,transcript_idx,logfile2) < transcript_idx)
       {
-	fclose(log2);
-	log2 = 0;
+	fclose(logfile2);
+	logfile2 = 0;
 	return;
       }
-      fputc(c,log2);
+      fputc(c,logfile2);
       transcript_idx = 0;
       break;
     default:
@@ -211,10 +218,10 @@ void transcript_write(type8 c)
 	  }
 	  spc--;
         }
-	if (fwrite(transcript,1,spc+1,log2) < spc+1)
+	if (fwrite(transcript,1,spc+1,logfile2) < spc+1)
 	{
-	  fclose(log2);
-	  log2 = 0;
+	  fclose(logfile2);
+	  logfile2 = 0;
 	  return;
 	}
 	memmove(transcript,transcript+spc+1,transcript_idx-spc-1);
@@ -256,10 +263,10 @@ type8 c,i;
     {
       if (log_on == 1)
       {
-	if ((c = fgetc(log)) == EOF)
+	if ((c = fgetc(logfile1)) == EOF)
 	{
 	  log_on = 0;
-	  fclose(log);
+	  fclose(logfile1);
 	  c = amiga_getinputch();
 	}
 	else if (c == '\r')
@@ -271,11 +278,11 @@ type8 c,i;
 	char line[256];
 	int got = 0;
 
-	  if (fgets(line,256,log))
+	  if (fgets(line,256,logfile1))
 	  {
 	    if ((stricmp(line,"seed\n") == 0) || (stricmp(line,"seed\r\n") == 0))
 	    {
-	      if (fgets(line,256,log))
+	      if (fgets(line,256,logfile1))
 	      {
 		ms_seed(atoi(line));
 		c = '\n';
@@ -307,7 +314,7 @@ type8 c,i;
 	  {
 	    amiga_str("\n[Closing script file]\n>");
 	    log_on = 0;
-	    fclose(log);
+	    fclose(logfile1);
 	  }
 	  else if (!strcmp(buf,"undo"))
 	  {
@@ -370,101 +377,6 @@ type8 ms_showhints(struct ms_hint *hints)
 
 void ms_playmusic(type8 * midi_data, type32 length, type16 tempo)
 {
-}
-
-main(int argc, char **argv)
-{
-type8 running, i, *gfxname = 0, *hintname = 0;
-type32 dlimit, slimit;
-
-  dlimit = slimit = 0xffffffff;
-  for (i = 1; i < argc; i++)
-  {
-    if (argv[i][0] == '-')
-    {
-      switch (tolower(argv[i][1]))
-      {
-	case 'd':
-	  if (strlen(argv[i]) > 2)
-	    dlimit = atoi(&argv[i][2]);
-	  else dlimit = 0;
-	  break;
-	case 's':
-	  if (strlen(argv[i]) > 2)
-	    slimit = atoi(&argv[i][2]);
-	  else slimit = 655360;
-	  break;
-	case 't':
-	  if (!(log2 = fopen(&argv[i][2],"w")))
-	    printf("Failed to open \"%s\" for writing.\n",&argv[i][2]);
-	  break; 
-	case 'r':
-	  if (log = fopen(&argv[i][2],"r"))
-	    log_on = 1;
-	  else printf("Failed to open \"%s\" for reading.\n",&argv[i][2]);
-	  break;
-	case 'w':
-	  if (log = fopen(&argv[i][2],"w"))
-	    log_on = 2;
-	  else printf("Failed to open \"%s\" for writing.\n",&argv[i][2]);
-	  break;
-	default:
-	  printf("Unknown option -%c, ignoring.\n",argv[i][1]);
-      }
-    }
-    else
-    {
-      if (!gamename)
-	gamename=argv[i];
-      else if (!gfxname)
-	gfxname=argv[i];
-      else if (!hintname)
-	hintname=argv[i];
-    }
-  }
-
-  if (!gamename)
-  {
-    printf("Magnetic v2.3, an interpreter for Magnetic Scrolls games. Copyright © Niclas\n"
-	   "Karlsson 1997-2008. Written by Niclas Karlsson, David Kinder, Stefan Meier\n"
-	   "and Paul David Doherty.\n\n"
-	   "Syntax: %s [options] game [gfxfile] [hintname]\n\n"
-	   "Where the options are:\n"
-	   " -rname read script file\n"
-	   " -tname write transcript file\n"
-	   " -wname write script file\n\n"
-	   "The interpreter commands are:\n"
-	   " #undo   to undo the previous command\n"
-	   " #logoff to turn off script writing\n\n",argv[0]);
-    exit(1);
-  }
-
-  if (gfxname == 0)
-    gfxname = amiga_getextname(gamename,gfx_name,".gfx");
-  if (hintname == 0)
-    hintname = amiga_getextname(gamename,hint_name,".hnt");
-  if (!(ms_gfx_enabled = ms_init(gamename,gfxname,hintname,NULL)))
-  {
-    printf("Couldn't start up game \"%s\".\n",gamename);
-    exit(1);
-  }
-  amiga_init();
-
-  ms_gfx_enabled--;
-  running = 1;
-  while ((i_count < slimit) && running)
-  {
-    if (i_count >= dlimit) ms_status();
-    running = ms_rungame();
-  }
-  if (i_count == slimit)
-  {
-    printf("\n\nSafety limit (%d) reached.\n",slimit);
-    ms_status();
-  }
-  ms_freemem();
-  if (log_on) fclose(log);
-  exit(0);
 }
 
 /* Password functions */
@@ -550,14 +462,14 @@ struct IntuiMessage *msg, *succ;
   *win = NULL;
 }
 
-struct Preferences
+struct MagneticPreferences
 {
-  UWORD Version;
-  UWORD WindowLeft, WindowTop;
-  UWORD WindowWidth, WindowHeight;
-  UWORD GfxWinLeft, GfxWinTop;
+  WORD Version;
+  WORD WindowLeft, WindowTop;
+  WORD WindowWidth, WindowHeight;
+  WORD GfxWinLeft, GfxWinTop;
 };
-struct Preferences MagneticPrefs;
+struct MagneticPreferences MagneticPrefs;
 
 struct NewMenu NewMenus[] =
 {
@@ -570,7 +482,7 @@ struct NewMenu NewMenus[] =
   { NM_ITEM,"Quit","Q",0,0,0 },
   { NM_END,0,0,0,0,0 }};
 
-char Version[] = "$VER:Magnetic 2.3 (24.8.2008)";
+char Version[] = "$VER:Magnetic 2.3 (24.10.2010)";
 char TitleBar[] = "Magnetic Scrolls";
 
 #define HISTORY_LINES 20
@@ -886,7 +798,7 @@ int i, window_left, window_top, window_width, window_height;
   amiga_resetcrsr();
 }
 
-__autoexit void amiga_exit(void)
+void amiga_exit(void)
 {
 int i;
 
@@ -923,8 +835,10 @@ int i;
 
 void amiga_scr(struct Screen *screen)
 {
-struct TagItem vti[] =
-  {VTAG_VIEWPORTEXTRA_GET,0,VTAG_END_CM,0};
+struct TagItem vti[] = {
+  { VTAG_VIEWPORTEXTRA_GET,0 },
+  { VTAG_END_CM,0 }
+};
 struct ViewPortExtra *vpe;
 
   ScreenWidth = screen->Width;
@@ -1285,7 +1199,8 @@ static struct EasyStruct requester =
 
   copper = CopperActive;
   amiga_syscolours(0);
-  if (copper) amiga_clearcopper(1);
+  if (copper)
+    amiga_clearcopper(1);
   requester.es_TextFormat = text;
   requester.es_GadgetFormat = gadgets;
   va_start(arguments,gadgets);
@@ -1293,8 +1208,10 @@ static struct EasyStruct requester =
   return_value = EasyRequestArgs(Window,&requester,0,arguments);
   amiga_busy(0);
   va_end(arguments);
-  if (copper) amiga_setcopper();
+  if (copper)
+    amiga_setcopper();
   amiga_syscolours(1);
+  return return_value;
 }
 
 void amiga_busy(int busy)
@@ -1699,21 +1616,6 @@ int x,y,x1;
   }
 }
 
-int wbmain(struct WBStartup *wbmsg)
-{
-char startdir[256],game[256],*args[2],*dir;
-
-  strcpy(startdir,"");
-  if (Icon = GetDiskObject(wbmsg->sm_ArgList[0].wa_Name))
-    if (dir = FindToolType(Icon->do_ToolTypes,"DIR"))
-      strcpy(startdir,dir);
-
-  amiga_freq(startdir,game,TitleBar,"#?.mag");
-  args[0] = "Magnetic";
-  args[1] = game;
-  main(2,args);
-}
-
 void amiga_freq(char *initdir,char *buffer,char *title,char *pattern)
 {
   if (FileReq == 0)
@@ -1930,8 +1832,12 @@ void amiga_freepens(void)
 
 void amiga_setcopper(void)
 {
+#ifndef __AROS__
 extern __far struct Custom custom;
-struct TagItem uCopTags[] = {{VTAG_USERCLIP_SET,0L},{VTAG_END_CM,0L}};
+struct TagItem uCopTags[] = {
+  { VTAG_USERCLIP_SET,0L },
+  { VTAG_END_CM,0L }
+};
 struct UCopList *uCopList;
 
   if (CopperActive) amiga_clearcopper(0);
@@ -1971,11 +1877,16 @@ struct UCopList *uCopList;
   }
 
   CopperActive = 1;
+#endif /* !__AROS__ */
 }
 
 void amiga_clearcopper(int think)
 {
-struct TagItem uCopTags[] = {{VTAG_USERCLIP_CLR,0L},{VTAG_END_CM,0L}};
+#ifndef __AROS__
+struct TagItem uCopTags[] = {
+  { VTAG_USERCLIP_CLR,0L },
+  { VTAG_END_CM,0L }
+};
 struct UCopList *uCopList;
 
   if (CopperActive == 0) return;
@@ -1991,6 +1902,7 @@ struct UCopList *uCopList;
   if (think) RethinkDisplay();
 
   CopperActive = 0;
+#endif /* !__AROS__ */
 }
 
 void amiga_syscolours(int black)
@@ -2140,7 +2052,7 @@ BPTR prefs_file;
 
   if (prefs_file = amiga_open_prefs())
   {
-    Read(prefs_file,&MagneticPrefs,sizeof(struct Preferences));
+    Read(prefs_file,&MagneticPrefs,sizeof(struct MagneticPreferences));
     Close(prefs_file);
   }
 }
@@ -2164,7 +2076,131 @@ BPTR prefs_file;
 
   if ((prefs_file = Open("PROGDIR:Magnetic.prefs",MODE_NEWFILE)) != 0)
   {
-    Write(prefs_file,&MagneticPrefs,sizeof(struct Preferences));
+    Write(prefs_file,&MagneticPrefs,sizeof(struct MagneticPreferences));
     Close(prefs_file);
   }
 }
+
+#ifdef _DCC
+int wbmain(struct WBStartup *wbmsg)
+{
+  main(0,(char **)wbmsg);
+}
+#endif /* _DCC */
+
+main(int argc, char **argv)
+{
+type8 running, *gfxname = 0, *hintname = 0;
+type32 dlimit, slimit;
+
+  atexit(amiga_exit);
+  dlimit = slimit = 0xffffffff;
+
+  if (argc == 0)
+  {
+  struct WBStartup *wbmsg = (struct WBStartup *)argv;
+  char startdir[256], *dir;
+  static char gamepath[256];
+
+    strcpy(startdir,"");
+    if (Icon = GetDiskObject(wbmsg->sm_ArgList[0].wa_Name))
+      if (dir = FindToolType(Icon->do_ToolTypes,"DIR"))
+	strcpy(startdir,dir);
+
+    amiga_freq(startdir,gamepath,TitleBar,"#?.mag");
+    gamename = gamepath;
+  }
+  else
+  {
+    int i;
+    for (i = 1; i < argc; i++)
+    {
+      if (argv[i][0] == '-')
+      {
+	switch (tolower(argv[i][1]))
+	{
+	  case 'd':
+	    if (strlen(argv[i]) > 2)
+	      dlimit = atoi(&argv[i][2]);
+	    else dlimit = 0;
+	    break;
+	  case 's':
+	    if (strlen(argv[i]) > 2)
+	      slimit = atoi(&argv[i][2]);
+	    else slimit = 655360;
+	    break;
+	  case 't':
+	    if (!(logfile2 = fopen(&argv[i][2],"w")))
+	      printf("Failed to open \"%s\" for writing.\n",&argv[i][2]);
+	    break; 
+	  case 'r':
+	    if (logfile1 = fopen(&argv[i][2],"r"))
+	      log_on = 1;
+	    else printf("Failed to open \"%s\" for reading.\n",&argv[i][2]);
+	    break;
+	  case 'w':
+	    if (logfile1 = fopen(&argv[i][2],"w"))
+	      log_on = 2;
+	    else printf("Failed to open \"%s\" for writing.\n",&argv[i][2]);
+	    break;
+	  default:
+	    printf("Unknown option -%c, ignoring.\n",argv[i][1]);
+	}
+      }
+      else
+      {
+	if (!gamename)
+	  gamename=argv[i];
+	else if (!gfxname)
+	  gfxname=argv[i];
+	else if (!hintname)
+	  hintname=argv[i];
+      }
+    }
+
+    if (!gamename)
+    {
+      printf("Magnetic v2.3, an interpreter for Magnetic Scrolls games. Copyright © Niclas\n"
+	     "Karlsson 1997-2008. Written by Niclas Karlsson, David Kinder, Stefan Meier\n"
+	     "and Paul David Doherty.\n\n"
+	     "Syntax: %s [options] game [gfxfile] [hintname]\n\n"
+	     "Where the options are:\n"
+	     " -rname read script file\n"
+	     " -tname write transcript file\n"
+	     " -wname write script file\n\n"
+	     "The interpreter commands are:\n"
+	     " #undo   to undo the previous command\n"
+	     " #logoff to turn off script writing\n\n",argv[0]);
+      exit(1);
+    }
+  }
+
+  if (gfxname == 0)
+    gfxname = amiga_getextname(gamename,gfx_name,".gfx");
+  if (hintname == 0)
+    hintname = amiga_getextname(gamename,hint_name,".hnt");
+  if (!(ms_gfx_enabled = ms_init(gamename,gfxname,hintname,NULL)))
+  {
+    printf("Couldn't start up game \"%s\".\n",gamename);
+    exit(1);
+  }
+  amiga_init();
+
+  ms_gfx_enabled--;
+  running = 1;
+  while ((i_count < slimit) && running)
+  {
+    if (i_count >= dlimit) ms_status();
+    running = ms_rungame();
+  }
+  if (i_count == slimit)
+  {
+    printf("\n\nSafety limit (%d) reached.\n",(int)slimit);
+    ms_status();
+  }
+  ms_freemem();
+  if (log_on)
+    fclose(logfile1);
+  exit(0);
+}
+
