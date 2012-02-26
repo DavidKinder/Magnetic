@@ -3,7 +3,7 @@
 * Magnetic - Magnetic Scrolls Interpreter.
 *
 * Written by Niclas Karlsson <nkarlsso@abo.fi>,
-*            David Kinder <davidk.kinder@virgin.net>,
+*            David Kinder <davidk@davidkinder.co.uk>,
 *            Stefan Meier <Stefan.Meier@if-legends.org> and
 *            Paul David Doherty <pdd@if-legends.org>
 *

@@ -238,7 +238,7 @@
     Niclas Karlsson <nkarlsso@abo.fi>
     Development of the Magnetic interpreter.
 
-    David Kinder <davidk.kinder@virgin.net>
+    David Kinder <davidk@davidkinder.co.uk>
     Magnetic 2.x development, Windows, MS-DOS (32-bit) and Amiga ports.
 
     Stefan Meier <stefan.meier@if-legends.org>
