@@ -197,7 +197,7 @@ void CMagneticPic::NewPicture(int iWidth, int iHeight, const unsigned char* pBuf
   }
 
   m_pBitmap = new unsigned char[iDibWidth*iHeight];
-  for (i = 0; i < iHeight; i++)
+  for (int i = 0; i < iHeight; i++)
   {
     for (int j = 0; j < iDibWidth; j++)
     {
