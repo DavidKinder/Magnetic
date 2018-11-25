@@ -673,7 +673,7 @@ type8 ms_init(type8s * name, type8s * gfxname, type8s * hntname, type8s * sndnam
 	else
 	{
 		undo_stat[0] = undo_stat[1] = 0;
-		ms_seed(time(0));
+		ms_seed((type32)time(0));
 		if (!(fp = fopen(name, "rb")))
 			return 0;
 		if ((fread(header, 1, 42, fp) != 42) || (read_l(header) != 0x4d615363))
