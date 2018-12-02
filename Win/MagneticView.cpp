@@ -44,6 +44,8 @@ BEGIN_MESSAGE_MAP(CMagneticView, CView)
   ON_WM_DESTROY()
   ON_WM_SIZE()
   ON_WM_CREATE()
+  ON_WM_KILLFOCUS()
+  ON_WM_SETFOCUS()
   ON_COMMAND(ID_FILE_RECORD, OnRecord)
   ON_COMMAND(ID_FILE_PLAYBACK, OnPlayback)
   ON_COMMAND(ID_FILE_SCRIPT, OnScript)
@@ -71,6 +73,8 @@ CMagneticView::CMagneticView() : m_PicWnd(m_Picture,m_AnimFrames),
   m_pFileRecord = NULL;
   m_pFileScript = NULL;
   m_bMorePrompt = false;
+  m_bCaret = false;
+  m_bInputActive = false;
   m_bStatusBar = false;
   m_bAnimate = false;
 }
@@ -98,10 +102,24 @@ int CMagneticView::OnCreate(LPCREATESTRUCT lpCreateStruct)
   return 0;
 }
 
+void CMagneticView::OnKillFocus(CWnd* pNewWnd)
+{
+  CaretOff();
+  CView::OnKillFocus(pNewWnd);
+}
+
+void CMagneticView::OnSetFocus(CWnd* pOldWnd)
+{
+  CView::OnSetFocus(pOldWnd);
+  if (m_bInputActive)
+    CaretOn();
+}
+
 void CMagneticView::OnDestroy() 
 {
   KillTimer(m_iTimer);
   TextClearup();
+  CaretOff();
 
   CView::OnDestroy();
 }
@@ -968,6 +986,34 @@ void CMagneticView::UseHistory(CString& strNewInput, int iOldLength)
   }
 }
 
+void CMagneticView::CaretOn(void)
+{
+  if (GetFocus() == this)
+  {
+    if (!m_bCaret)
+    {
+      TEXTMETRIC FontInfo;
+      m_pTextDC->GetTextMetrics(&FontInfo);
+      int iFontHeight = (int)(FontInfo.tmHeight*1.1);
+
+      // Turn the caret on
+      CreateSolidCaret(2,iFontHeight);
+      ShowCaret();
+      m_bCaret = true;
+    }
+  }
+}
+
+void CMagneticView::CaretOff(void)
+{
+  if (m_bCaret)
+  {
+    HideCaret();
+    DestroyCaret();
+    m_bCaret = false;
+  }
+}
+
 void CMagneticView::Animate(void)
 {
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
@@ -1163,30 +1209,6 @@ void CMagneticView::SetRecordFile(FILE* pFile)
 // Static support functions for the interpreter
 /////////////////////////////////////////////////////////////////////////////
 
-void CMagneticView::CaretOn(void)
-{
-  CMagneticView* pView = CMagneticView::GetView();
-  if (pView == NULL)
-    return;
-
-  TEXTMETRIC FontInfo;
-  pView->m_pTextDC->GetTextMetrics(&FontInfo);
-  int iFontHeight = (int)(FontInfo.tmHeight*1.1);
-
-  // Turn the caret on
-  pView->CreateSolidCaret(2,iFontHeight);
-  pView->ShowCaret();
-}
-
-void CMagneticView::CaretOff(void)
-{
-  CMagneticView* pView = CMagneticView::GetView();
-
-  if (pView)
-    pView->HideCaret();
-  DestroyCaret();
-}
-
 void CMagneticView::MakeFilePath(CString& strNewPath, LPCTSTR pszOldPath, LPCTSTR pszExt)
 {
   strNewPath = pszOldPath;
@@ -1303,7 +1325,8 @@ char CMagneticView::GetInput(bool& done, bool trans)
 
   // Refresh the view
   pView->Invalidate();
-  CaretOn();
+  pView->CaretOn();
+  pView->m_bInputActive = true;
 
   while (cInput != 10 && cInput != 1)
   {
@@ -1315,14 +1338,11 @@ char CMagneticView::GetInput(bool& done, bool trans)
     CArray<int, int>& Input = pView->m_Input;
     if (Input.GetSize() == 0)
     {
-      if (pView)
-        pView->ShowCaret();
       pApp->PumpMessage();
       pApp->CWinApp::OnIdle(0);  // Call base class OnIdle();
       pView = CMagneticView::GetView();
       if (pView)
       {
-        pView->HideCaret();
         CMagneticApp::Redraw Status = pApp->GetRedrawStatus();
         switch (Status)
         {
@@ -1337,8 +1357,8 @@ char CMagneticView::GetInput(bool& done, bool trans)
           else
             cInput = 10;  // intentional fall-through
         case CMagneticApp::Redraw::ThisLine:
-          CaretOff();
-          CaretOn();
+          pView->CaretOff();
+          pView->CaretOn();
           pView->Invalidate();
           break;
         }
@@ -1474,8 +1494,11 @@ char CMagneticView::GetInput(bool& done, bool trans)
   }
 
   if (pView)
+  {
     pView->m_iLines = 0;
-  CaretOff();
+    pView->m_bInputActive = false;
+    pView->CaretOff();
+  }
 
   if (cInput == (signed char)(CMagneticView::SPECIAL_KEYS + VK_SPACE))
     cInput = ' ';

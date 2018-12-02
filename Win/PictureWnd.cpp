@@ -303,6 +303,7 @@ BEGIN_MESSAGE_MAP(CPictureWnd, CWnd)
   ON_WM_KEYDOWN()
   ON_WM_PALETTECHANGED()
   ON_WM_QUERYNEWPALETTE()
+  ON_WM_SETFOCUS()
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -413,4 +414,10 @@ BOOL CPictureWnd::OnQueryNewPalette()
   int iColours = m_Picture.SetPalette(pDC,this);
   ReleaseDC(pDC);
   return iColours;
+}
+
+void CPictureWnd::OnSetFocus(CWnd*)
+{
+  if (m_pMagneticWnd)
+    m_pMagneticWnd->SetFocus();
 }
