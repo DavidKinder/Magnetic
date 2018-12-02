@@ -71,6 +71,7 @@ public:
   COLORREF GetForeColour(void);
   COLORREF GetBackColour(void);
   COLORREF GetGfxColour(void);
+  CRect GetScreenSize(void);
 
   void SetRedrawStatus(Redraw Status);
   Redraw GetRedrawStatus(void);
@@ -98,8 +99,6 @@ public:
   void SetGameLoaded(int iLoaded);
 
 protected:
-  CRect GetScreenSize(void);
-
   // File dialog data
   CFileDialog* m_pNewGameDialog;
 

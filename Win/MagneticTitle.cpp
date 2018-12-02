@@ -87,8 +87,7 @@ BOOL CMagneticTitleDlg::OnInitDialog()
   CDialog::OnInitDialog();
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
-  int iScrWidth = ::GetSystemMetrics(SM_CXFULLSCREEN);
-  int iScrHeight = ::GetSystemMetrics(SM_CYFULLSCREEN);
+  CRect ScrSize = pApp->GetScreenSize();
   int iWidth = (int)(m_BitmapInfo.biWidth * m_dScaleX * pApp->GetScaleTitles());
   int iHeight = (int)(-1 * m_BitmapInfo.biHeight * m_dScaleY * pApp->GetScaleTitles());
 
@@ -99,7 +98,10 @@ BOOL CMagneticTitleDlg::OnInitDialog()
   iWidth += (Window.Width()-Client.Width());
   iHeight += (Window.Height()-Client.Height());
 
-  MoveWindow((iScrWidth-iWidth)/2,(iScrHeight-iHeight)/2,iWidth,iHeight);
+  MoveWindow(
+    ScrSize.left+((ScrSize.Width()-iWidth)/2),
+    ScrSize.top+((ScrSize.Height()-iHeight)/2),
+    iWidth,iHeight);
   return TRUE;
 }
 
