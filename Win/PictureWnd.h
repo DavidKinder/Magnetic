@@ -83,6 +83,7 @@ protected:
   afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
   afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
   afx_msg BOOL OnQueryNewPalette();
+  afx_msg void OnSetFocus(CWnd* pOldWnd);
   //}}AFX_MSG
   DECLARE_MESSAGE_MAP()
 

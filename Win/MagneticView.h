@@ -69,6 +69,8 @@ public:
   // Support functions for the interpreter
   void TextSetup(void);
   void TextClearup(void);
+  void CaretOn(void);
+  void CaretOff(void);
   void UseHistory(CString& strNewInput, int iOldLength);
   void AddOutChar(char c);
   void AddStatChar(char c);
@@ -98,8 +100,6 @@ public:
   void ClearPagination(void);
 
   // Static support functions for the interpreter
-  static void CaretOn(void);
-  static void CaretOff(void);
   static void MakeFilePath(CString& strNewPath, LPCTSTR pszOldPath, LPCTSTR pszExt);
   static BOOL OpenGame(LPCTSTR lpszPathName);
   static char GetInput(bool& done, bool trans);
@@ -119,6 +119,8 @@ protected:
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  afx_msg void OnKillFocus(CWnd* pNewWnd);
+  afx_msg void OnSetFocus(CWnd* pOldWnd);
   afx_msg void OnRecord();
   afx_msg void OnPlayback();
   afx_msg void OnScript();
@@ -146,6 +148,8 @@ protected:
   int m_iLines;
   int m_iMaxLines;
   bool m_bMorePrompt;
+  bool m_bCaret;
+  bool m_bInputActive;
 
   CString m_strOutput;
   CArray<int,int> m_Input;
