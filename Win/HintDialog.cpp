@@ -272,8 +272,8 @@ void CHintListBox::SetItemHeights(void)
   GetClientRect(clientRect);
   clientRect.DeflateRect(2,0);
 
-  HDC dc = ::GetDC(NULL);
-  HFONT oldFont = (HFONT)::SelectObject(dc,GetFont()->GetSafeHandle());
+  CDC* dc = GetDC();
+  CFont* oldFont = dc->SelectObject(GetFont());
 
   for (int i = 0; i < GetCount(); i++)
   {
@@ -284,19 +284,19 @@ void CHintListBox::SetItemHeights(void)
     // Get the height of the text
     CRect r = clientRect;
     SetItemHeight(i,
-      ::DrawText(dc,item,item.GetLength(),r,DT_LEFT|DT_WORDBREAK|DT_CALCRECT));
+      dc->DrawText(item,item.GetLength(),r,DT_LEFT|DT_WORDBREAK|DT_CALCRECT));
   }
 
-  ::SelectObject(dc,oldFont);
-  ::ReleaseDC(NULL,dc);
+  dc->SelectObject(oldFont);
+  ReleaseDC(dc);
 }
 
 void CHintListBox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 {
   if (lpMeasureItemStruct->itemID != -1)
   {
-    HDC dc = ::GetDC(NULL);
-    HFONT oldFont = (HFONT)::SelectObject(dc,GetFont()->GetSafeHandle());
+    CDC* dc = GetDC();
+    CFont* oldFont = dc->SelectObject(GetFont());
 
     CString item;
     GetText(lpMeasureItemStruct->itemID,item);
@@ -306,10 +306,10 @@ void CHintListBox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
     clientRect.DeflateRect(2,0);
 
     lpMeasureItemStruct->itemHeight =
-      ::DrawText(dc,item,item.GetLength(),clientRect,DT_LEFT|DT_WORDBREAK|DT_CALCRECT);
+      dc->DrawText(item,item.GetLength(),clientRect,DT_LEFT|DT_WORDBREAK|DT_CALCRECT);
 
-    ::SelectObject(dc,oldFont);
-    ::ReleaseDC(NULL,dc);
+    dc->SelectObject(oldFont);
+    ReleaseDC(dc);
   }
 }
 
