@@ -52,5 +52,9 @@ protected:  // control bar embedded members
   afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
   afx_msg BOOL OnQueryNewPalette();
   //}}AFX_MSG
+  afx_msg LRESULT OnDpiChanged(WPARAM, LPARAM);
+
   DECLARE_MESSAGE_MAP()
+
+  int m_dpi;
 };

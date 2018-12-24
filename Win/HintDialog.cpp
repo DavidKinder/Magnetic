@@ -158,9 +158,12 @@ BOOL CHintDialog::DestroyWindow()
 {
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
-  // Save the window position
+  // Save the dialog position in a DPI neutral form
   WINDOWPLACEMENT Place;
-  GetWindowPlacement(&Place);
+  {
+    DPI::ContextUnaware dpiUnaware;
+    GetWindowPlacement(&Place);
+  }
   pApp->GetHintsRect() = Place.rcNormalPosition;
 
   return BaseDialog::DestroyWindow();
@@ -177,9 +180,13 @@ BOOL CHintDialog::OnInitDialog()
   m_btnSize.SetRect(0,0,50,14);
   MapDialogRect(&m_btnSize);
 
+  // Restore the dialog size and position from DPI neutral values
   CRect& rPlace = pApp->GetHintsRect();
   if (rPlace.Width() > 0)
+  {
+    DPI::ContextUnaware dpiUnaware;
     MoveWindow(rPlace);
+  }
   LayoutControls();
 
   if (m_allHints != NULL)

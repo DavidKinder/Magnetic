@@ -10,10 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "StdAfx.h"
-#include <MultiMon.h>
 #include <string.h>
 #include <stdlib.h>
 #include <memory>
+
+#define COMPILE_MULTIMON_STUBS
+#include <MultiMon.h>
 
 #include "Magnetic.h"
 #include "MagneticDoc.h"
@@ -66,10 +68,6 @@ BOOL CMagneticApp::InitInstance()
   ncm.cbSize = sizeof ncm;
   ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof ncm,&ncm,0);
 
-  CDC* dc = CWnd::GetDesktopWindow()->GetDC();
-  int fontSize = -MulDiv(10,dc->GetDeviceCaps(LOGPIXELSY),72);
-  CWnd::GetDesktopWindow()->ReleaseDC(dc);
-
   CRect screen = GetScreenSize();
   int scalePics = 100;
   int scaleTitles = 100;
@@ -80,7 +78,12 @@ BOOL CMagneticApp::InitInstance()
   }
 
   // Load Magnetic display settings
-  m_LogFont.lfHeight = GetProfileInt("Display","Font Size",fontSize);
+  int fontSize = GetProfileInt("Display","Font Size",10);
+  if (fontSize < 0)
+    m_iFontPoints = -MulDiv(fontSize,72,DPI::getSystemDPI());
+  else
+    m_iFontPoints = fontSize;
+  m_LogFont.lfHeight = -MulDiv(m_iFontPoints,DPI::getSystemDPI(),72);
   m_LogFont.lfCharSet = ANSI_CHARSET;
   m_LogFont.lfOutPrecision = OUT_TT_PRECIS;
   m_LogFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
@@ -88,8 +91,6 @@ BOOL CMagneticApp::InitInstance()
   m_LogFont.lfPitchAndFamily = DEFAULT_PITCH|FF_DONTCARE;
   strncpy(m_LogFont.lfFaceName,GetProfileString(
     "Display","Font Name",ncm.lfMessageFont.lfFaceName),LF_FACESIZE);
-  m_Margins.cx = 8;
-  m_Margins.cy = 4;
 
   SetRedrawStatus(Redraw::NoRedraw);
 
@@ -158,7 +159,7 @@ BOOL CMagneticApp::InitInstance()
   m_pNewGameDialog->m_ofn.lpstrTitle = "Open a Magnetic Scrolls game";
 
   // Create font dialog
-  m_pFontDialog = new CFontDialog(&m_LogFont,CF_SCREENFONTS);
+  m_pFontDialog = new DPI::FontDialog(&m_LogFont,CF_SCREENFONTS);
   if (m_pFontDialog == NULL)
     return FALSE;
 
@@ -180,7 +181,7 @@ int CMagneticApp::ExitInstance()
   WriteProfileString("Settings","Last File",m_pNewGameDialog->GetPathName());
 
   WriteProfileString("Display","Font Name",CString(m_LogFont.lfFaceName));
-  WriteProfileInt("Display","Font Size",m_LogFont.lfHeight);
+  WriteProfileInt("Display","Font Size",m_iFontPoints);
   WriteProfileInt("Display","Foreground",m_ForeColour);
   WriteProfileInt("Display","Background",m_BackColour);
   WriteProfileInt("Display","Graphics",m_GfxColour);
@@ -257,9 +258,12 @@ void CMagneticApp::OnFileOpen()
 void CMagneticApp::OnViewFont() 
 {
   SetRedrawStatus(Redraw::ThisLine);
+
   // Change the display font
   if (m_pFontDialog->DoModal() == IDOK)
   {
+    m_iFontPoints = m_pFontDialog->m_cf.iPointSize / 10;
+
     CMagneticView* pView = CMagneticView::GetView();
     if (pView)
     {
@@ -356,6 +360,11 @@ LOGFONT* CMagneticApp::GetLogFont(void)
   return &m_LogFont;
 }
 
+int CMagneticApp::GetFontPoints(void)
+{
+  return m_iFontPoints;
+}
+
 void CMagneticApp::SetRedrawStatus(Redraw Status)
 {
   m_RedrawStatus = Status;
@@ -366,11 +375,6 @@ CMagneticApp::Redraw CMagneticApp::GetRedrawStatus(void)
   Redraw Return = m_RedrawStatus;
   m_RedrawStatus = Redraw::NoRedraw;
   return Return;
-}
-
-CSize& CMagneticApp::GetMargins()
-{
-  return m_Margins;
 }
 
 COLORREF CMagneticApp::GetForeColour(void)
@@ -440,6 +444,7 @@ CRect& CMagneticApp::GetHintsRect(void)
 {
   return m_HintsRect;
 }
+
 CMagneticApp::ShowGraphics CMagneticApp::GetShowGraphics(void)
 {
   return m_ShowGfx;

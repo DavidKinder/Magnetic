@@ -322,16 +322,23 @@ CPictureWnd::~CPictureWnd()
 // CPictureWnd interpreter interface
 /////////////////////////////////////////////////////////////////////////////
 
-BOOL CPictureWnd::CreatePicWnd(CWnd* pParent, const RECT& rect)
+BOOL CPictureWnd::CreatePicWnd(CWnd* pParent)
 {
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
   m_pMagneticWnd = pParent;
   BOOL bCreate = CreateEx(0,AfxRegisterWndClass(0),"Magnetic",
-    WS_CAPTION|WS_VISIBLE|WS_SYSMENU,rect,pParent,0,NULL);
+    WS_CAPTION|WS_VISIBLE|WS_SYSMENU,CRect(0,0,0,0),pParent,0,NULL);
   if (bCreate == FALSE)
     return FALSE;
   SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
+
+  // Restore the window position from DPI neutral values
+  CRect rPlace(pApp->GetPicTopLeft(),CSize(0,0));
+  {
+    DPI::ContextUnaware dpiUnaware;
+    MoveWindow(rPlace);
+  }
 
   // Get the horizontal and vertical border sizes
   CRect r1, r2;
@@ -391,11 +398,13 @@ void CPictureWnd::OnDestroy()
 {
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
-  // Store the position of the top-left corner of the window.
+  // Store the position of the window in a DPI neutral form
   CRect rWnd;
+  {
+    DPI::ContextUnaware dpiUnaware;
+    GetWindowRect(rWnd);
+  }
   CPoint& TopLeft = pApp->GetPicTopLeft();
-  GetWindowRect(rWnd);
-
   TopLeft = rWnd.TopLeft();
 
   CWnd::OnDestroy();

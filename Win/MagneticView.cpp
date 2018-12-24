@@ -153,6 +153,7 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
   int iPicWidth = 0;
   int iPicHeight = 0;
   CRect TextClient(Client);
+  CSize Margins(GetMargins());
 
   if (m_bStatusBar)
   {
@@ -206,8 +207,8 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
   BitmapDC.SetBkColor(pApp->GetBackColour());
 
   // Work out the number of lines of text to draw
-  m_iMaxLines = (TextClient.Height()-(2*pApp->GetMargins().cy)) / iFontHeight;
-  y += pApp->GetMargins().cy;
+  m_iMaxLines = (TextClient.Height()-(2*Margins.cy)) / iFontHeight;
+  y += Margins.cy;
   
   // Starting position in the text output buffer
   int i = m_PageTable.GetSize() - m_iMaxLines - 1;
@@ -242,7 +243,7 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
       if (*(lpszOutput+m_PageTable[i]+iCount-1) == '\0')
         iCount--;
     }
-    BitmapDC.TextOut(pApp->GetMargins().cx,y,lpszOutput+m_PageTable[i],iCount);
+    BitmapDC.TextOut(Margins.cx,y,lpszOutput+m_PageTable[i],iCount);
     y += iFontHeight;
     i++;
   }
@@ -256,7 +257,7 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
   {
     CSize TextLen = BitmapDC.GetTextExtent(lpszOutput+m_PageTable[i-1],
       m_PageTable[i]-m_PageTable[i-1]-1);
-    LastLine.left += TextLen.cx + pApp->GetMargins().cx;
+    LastLine.left += TextLen.cx + Margins.cx;
 
     SolidRect(&BitmapDC,LastLine,pApp->GetBackColour());
   }
@@ -756,14 +757,20 @@ int CMagneticView::FindPreviousSpace(LPCSTR lpszText, int iPos)
   return iNewPos;
 }
 
+CSize CMagneticView::GetMargins(void)
+{
+  TEXTMETRIC FontInfo;
+  m_pTextDC->GetTextMetrics(&FontInfo);
+  return CSize(FontInfo.tmAveCharWidth,FontInfo.tmHeight / 5);
+}
+
 BOOL CMagneticView::LineFull(CDC* pDC, LPCSTR lpszText, int iLength)
 {
-  CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
   CSize TextLen = pDC->GetTextExtent(lpszText,iLength);
   CRect Client;
   GetClientRect(Client);
 
-  return (TextLen.cx >= (Client.Width()-(2*pApp->GetMargins().cx))) ? 1 : 0;
+  return (TextLen.cx >= (Client.Width()-(2*GetMargins().cx))) ? 1 : 0;
 }
 
 void CMagneticView::AddOutChar(char c)
@@ -886,12 +893,13 @@ void CMagneticView::AddStatChar(char c)
 
 void CMagneticView::SetCursorPos(CDC* pDC, int iRight)
 {
-  CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-
   int i = m_PageTable.GetSize()-2;  // Start of the last visible line
-  int offset = m_iLines-m_iMaxLines-1;
-  if (offset > 0)
-    i -= offset;
+  if (m_bMorePrompt)
+  {
+    int offset = m_iLines-m_iMaxLines-1;
+    if (offset > 0)
+      i -= offset;
+  }
 
   if (i >= 0)
   {
@@ -899,7 +907,7 @@ void CMagneticView::SetCursorPos(CDC* pDC, int iRight)
       m_PageTable[i+1]-m_PageTable[i]-1-iRight);
 
     // Set the caret position
-    SetCaretPos(CPoint(TextLen.cx+pApp->GetMargins().cx,m_LastLineRect.top));
+    SetCaretPos(CPoint(TextLen.cx+GetMargins().cx,m_LastLineRect.top));
   }
 }
 
@@ -1072,8 +1080,7 @@ void CMagneticView::SetPictureWindowState(void)
   {
     if ((m_PicWnd.GetSafeHwnd() == NULL) && (m_Picture.IsValid()))
     {
-      CRect WindowArea(pApp->GetPicTopLeft(),CSize(0,0));
-      if (m_PicWnd.CreatePicWnd(this,WindowArea))
+      if (m_PicWnd.CreatePicWnd(this))
         SetFocus();
     }
     m_PicWnd.Update();

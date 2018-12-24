@@ -17,6 +17,7 @@
   #error include 'stdafx.h' before including this file for PCH
 #endif
 
+#include "DpiFunctions.h"
 #include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -67,7 +68,7 @@ public:
   };
 
   LOGFONT* GetLogFont(void);
-  CSize& GetMargins(void);
+  int GetFontPoints(void);
   COLORREF GetForeColour(void);
   COLORREF GetBackColour(void);
   COLORREF GetGfxColour(void);
@@ -104,11 +105,11 @@ protected:
 
   // Font dialog data
   LOGFONT m_LogFont;
-  CFontDialog* m_pFontDialog;
+  int m_iFontPoints;
+  DPI::FontDialog* m_pFontDialog;
 
   // Text window data
   Redraw m_RedrawStatus;
-  CSize m_Margins;
   CRect m_WindowRect;
   int m_iWindowMax;
 

@@ -62,7 +62,7 @@ public:
 
 // Operations
 public:
-  BOOL CreatePicWnd(CWnd* pParent, const RECT& rect);
+  BOOL CreatePicWnd(CWnd* pParent);
   void Update(void);
 
 // Overrides

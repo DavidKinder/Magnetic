@@ -15,6 +15,7 @@
 #include "MagneticDoc.h"
 #include "MagneticView.h"
 #include "MainFrm.h"
+#include "DpiFunctions.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,6 +36,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, MenuBarFrameWnd)
   ON_WM_PALETTECHANGED()
   ON_WM_QUERYNEWPALETTE()
   //}}AFX_MSG_MAP
+  ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -44,7 +46,7 @@ static UINT indicators[] =
   ID_INDICATOR_NUM,
 };
 
-CMainFrame::CMainFrame()
+CMainFrame::CMainFrame() : m_dpi(96)
 {
 }
 
@@ -55,6 +57,19 @@ CMainFrame::~CMainFrame()
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
+
+  m_dpi = DPI::getWindowDPI(this);
+
+  // Now we have a window, set the font height
+  pApp->GetLogFont()->lfHeight = -MulDiv(pApp->GetFontPoints(),m_dpi,72);
+
+  // Restore the window size and position from DPI neutral values
+  CRect rPlace = pApp->GetWindowRect();
+  if (rPlace.Width() > 0)
+  {
+    DPI::ContextUnaware dpiUnaware;
+    MoveWindow(rPlace);
+  }
 
   if (MenuBarFrameWnd::OnCreate(lpCreateStruct) == -1)
     return -1;
@@ -78,9 +93,12 @@ BOOL CMainFrame::DestroyWindow()
 {
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
-  // Save the window position
+  // Save the window position in a DPI neutral form
   WINDOWPLACEMENT Place;
-  GetWindowPlacement(&Place);
+  {
+    DPI::ContextUnaware dpiUnaware;
+    GetWindowPlacement(&Place);
+  }
 
   int& iMax = pApp->GetWindowMax();
   CRect& rPlace = pApp->GetWindowRect();
@@ -97,19 +115,7 @@ BOOL CMainFrame::DestroyWindow()
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-  CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-
   cs.style &= ~FWS_ADDTOTITLE;
-
-  CRect& rPlace = pApp->GetWindowRect();
-  if (rPlace.Width() > 0)
-  {
-    cs.x = rPlace.left;
-    cs.y = rPlace.top;
-    cs.cx = rPlace.Width();
-    cs.cy = rPlace.Height();
-  }
-
   return MenuBarFrameWnd::PreCreateWindow(cs);
 }
 
@@ -134,6 +140,33 @@ BOOL CMainFrame::OnQueryNewPalette()
   int iColours = pView->GetPicture().SetPalette(pDC,this);
   ReleaseDC(pDC);
   return iColours;
+}
+
+LRESULT CMainFrame::OnDpiChanged(WPARAM wparam, LPARAM lparam)
+{
+  MoveWindow((LPRECT)lparam,TRUE);
+
+  int newDpi = (int)HIWORD(wparam);
+  if (m_dpi != newDpi)
+  {
+    CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
+    LOGFONT* lf = pApp->GetLogFont();
+    lf->lfHeight = MulDiv(lf->lfHeight,newDpi,m_dpi);
+
+    CMagneticView* pView = CMagneticView::GetView();
+    if (pView)
+    {
+      pView->TextClearup();
+      pView->TextSetup();
+      pView->Invalidate();
+    }
+    m_dpi = newDpi;
+  }
+
+  // Force the menu and status bars to update
+  UpdateDPI(newDpi);
+  m_statusBar.SetIndicators(indicators,sizeof(indicators)/sizeof(UINT));
+  return 0;
 }
 
 #ifdef _DEBUG

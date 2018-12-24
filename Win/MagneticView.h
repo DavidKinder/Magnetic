@@ -110,6 +110,7 @@ protected:
   int Paginate(CDC* pDC, int p1, int p2);
   BOOL LineFull(CDC* pDC, LPCSTR lpszText, int iLength);
   int FindPreviousSpace(LPCSTR lpszText, int iPos);
+  CSize GetMargins(void);
 
 // Generated message map functions
 protected:
