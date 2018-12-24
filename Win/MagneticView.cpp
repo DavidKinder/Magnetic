@@ -419,7 +419,6 @@ void CMagneticView::OnScrollback()
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
   pApp->SetRedrawStatus(CMagneticApp::Redraw::ThisLine);
-  AfxGetMainWnd()->GetWindowRect(m_Scrollback.GetRect());
   m_Scrollback.DoModal();
 }
 

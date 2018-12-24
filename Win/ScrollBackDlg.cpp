@@ -24,8 +24,10 @@ static char THIS_FILE[] = __FILE__;
 // Implementation of the CScrollBackDlg dialog
 /////////////////////////////////////////////////////////////////////////////
 
+#define WM_SAMESIZEASMAIN (WM_APP+1)
+
 CScrollBackDlg::CScrollBackDlg(CWnd* pParent /*=NULL*/)
-  : m_TextTop(0), BaseDialog(CScrollBackDlg::IDD, pParent)
+  : BaseDialog(CScrollBackDlg::IDD, pParent)
 {
   //{{AFX_DATA_INIT(CScrollBackDlg)
     // NOTE: the ClassWizard will add member initialization here
@@ -45,6 +47,8 @@ BEGIN_MESSAGE_MAP(CScrollBackDlg, BaseDialog)
   ON_WM_SIZE()
   ON_BN_CLICKED(IDC_COPY, OnCopy)
   //}}AFX_MSG_MAP
+  ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
+  ON_MESSAGE(WM_SAMESIZEASMAIN, OnSameSizeAsMain)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -60,17 +64,16 @@ BOOL CScrollBackDlg::OnInitDialog()
   if (m_RichEdit.SubclassDlgItem(IDC_TEXT,this) == FALSE)
     return FALSE;
 
-  // Get the relative position of the top of the text control
-  CRect size;
-  m_RichEdit.GetWindowRect(size);
-  ScreenToClient(size);
-  m_TextTop = size.top;
-
   // Change the window icon
   SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
 
+  // Don't automatically resize on a DPI change
+  DPI::disableDialogResize(this);
+
   // Resize the dialog
-  BaseDialog::MoveWindow(m_DialogRect);
+  CRect DialogRect;
+  AfxGetMainWnd()->GetWindowRect(DialogRect);
+  MoveWindow(DialogRect);
 
   // Set the control to format the text so that it fits
   // into the window
@@ -92,20 +95,44 @@ BOOL CScrollBackDlg::OnInitDialog()
 void CScrollBackDlg::OnSize(UINT nType, int cx, int cy) 
 {
   BaseDialog::OnSize(nType, cx, cy);
-
-  // Resize the text control
-  if (m_RichEdit.GetSafeHwnd() != NULL)
-    m_RichEdit.SetWindowPos(NULL,0,m_TextTop,cx,cy-m_TextTop,SWP_NOZORDER);
+  ResizeRichEdit();
 }
 
-void CScrollBackDlg::OnCopy() 
+void CScrollBackDlg::OnCopy()
 {
   m_RichEdit.Copy();
 }
 
-CRect& CScrollBackDlg::GetRect(void)
+LRESULT CScrollBackDlg::OnDpiChanged(WPARAM, LPARAM)
 {
-  return m_DialogRect;
+  Default();
+  PostMessage(WM_SAMESIZEASMAIN);
+  return 0;
+}
+
+LRESULT CScrollBackDlg::OnSameSizeAsMain(WPARAM, LPARAM)
+{
+  // Resize the dialog to be the same as the main window
+  CRect DialogRect;
+  AfxGetMainWnd()->GetWindowRect(DialogRect);
+  MoveWindow(DialogRect);
+  return 0;
+}
+
+void CScrollBackDlg::ResizeRichEdit(void)
+{
+  if (m_RichEdit.GetSafeHwnd())
+  {
+    CRect editRect;
+    m_RichEdit.GetWindowRect(editRect);
+    ScreenToClient(editRect);
+
+    CRect clientRect;
+    GetClientRect(clientRect);
+
+    m_RichEdit.MoveWindow(0,editRect.top,
+      clientRect.Width(),clientRect.Height()-editRect.top);
+  }
 }
 
 CString& CScrollBackDlg::GetScrollback(void)

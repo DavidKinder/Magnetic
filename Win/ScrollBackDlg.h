@@ -36,6 +36,7 @@ public:
 
 // Implementation
 protected:
+  void ResizeRichEdit(void);
 
   // Generated message map functions
   //{{AFX_MSG(CScrollBackDlg)
@@ -43,15 +44,14 @@ protected:
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnCopy();
   //}}AFX_MSG
+  afx_msg LRESULT OnDpiChanged(WPARAM, LPARAM);
+  afx_msg LRESULT OnSameSizeAsMain(WPARAM, LPARAM);
   DECLARE_MESSAGE_MAP()
 
 public:
-  CRect& GetRect(void);
   CString& GetScrollback(void);
 
 protected:
-  CRect m_DialogRect;
   CString m_strScrollback;
   CRichEditCtrl m_RichEdit;
-  int m_TextTop;
 };
