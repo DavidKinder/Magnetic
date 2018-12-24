@@ -184,7 +184,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     PUSHBUTTON      "Close window",IDOK,2,2,65,13
     PUSHBUTTON      "Copy selected text to clipboard",IDC_COPY,73,2,111,13
-    CONTROL         "",IDC_TEXT,"RICHEDIT",TCS_HOTTRACK | TCS_VERTICAL | 
+    CONTROL         "",IDC_TEXT,"RichEdit20A",TCS_HOTTRACK | TCS_VERTICAL | 
                     TCS_RAGGEDRIGHT | TCS_FOCUSONBUTTONDOWN | 
                     TCS_MULTISELECT | WS_BORDER | WS_VSCROLL | WS_TABSTOP,2,
                     17,283,100

@@ -58,7 +58,7 @@ BOOL CMagneticApp::InitInstance()
 {
   ::CoInitialize(NULL);
   AfxEnableControlContainer();
-  AfxInitRichEdit();
+  AfxInitRichEdit2();
 
   SetRegistryKey(_T("David Kinder"));
   LoadStdProfileSettings();
