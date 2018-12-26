@@ -216,27 +216,25 @@ void CMagneticPic::NewPicture(int iWidth, int iHeight, const unsigned char* pBuf
   m_Size = CSize(iWidth,iHeight);
 }
 
-int CMagneticPic::GetScaledWidth(void) const
+double CMagneticPic::GetScaleFactor(int dpi) const
+{
+  double factor = ((CMagneticApp*)AfxGetApp())->GetScaleFactor();
+  return factor * (dpi / 96.0);
+}
+
+int CMagneticPic::GetScaledWidth(int dpi) const
 {
   int iWidth = 0;
   if (m_pBitmap && m_pBitmapInfo)
-  {
-    CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-    double dScale = pApp->GetScaleFactor();
-    iWidth = (int)(m_Size.cx * dScale);
-  }
+    iWidth = (int)(m_Size.cx * GetScaleFactor(dpi));
   return iWidth;
 }
 
-int CMagneticPic::GetScaledHeight(void) const
+int CMagneticPic::GetScaledHeight(int dpi) const
 {
   int iHeight = 0;
   if (m_pBitmap && m_pBitmapInfo)
-  {
-    CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-    double dScale = pApp->GetScaleFactor();
-    iHeight = (int)(m_Size.cy * dScale);
-  }
+    iHeight = (int)(m_Size.cy * GetScaleFactor(dpi));
   return iHeight;
 }
 
@@ -305,6 +303,7 @@ BEGIN_MESSAGE_MAP(CPictureWnd, CWnd)
   ON_WM_QUERYNEWPALETTE()
   ON_WM_SETFOCUS()
   //}}AFX_MSG_MAP
+  ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 END_MESSAGE_MAP()
 
 CPictureWnd::CPictureWnd(CMagneticPic& Picture, CArray<CMagneticPic*,CMagneticPic*>& AnimFrames) :
@@ -354,11 +353,13 @@ void CPictureWnd::Update(void)
 {
   if (GetSafeHwnd())
   {
+    int dpi = DPI::getWindowDPI(this);
+
     // Resize the window to fit the picture and then repaint
     CRect rWnd;
     GetWindowRect(rWnd);
-    rWnd.right = rWnd.left + m_Picture.GetScaledWidth() + m_Borders.cx;
-    rWnd.bottom = rWnd.top + m_Picture.GetScaledHeight() + m_Borders.cy;
+    rWnd.right = rWnd.left + m_Picture.GetScaledWidth(dpi) + m_Borders.cx;
+    rWnd.bottom = rWnd.top + m_Picture.GetScaledHeight(dpi) + m_Borders.cy;
     MoveWindow(rWnd,TRUE);
     Invalidate();
   }
@@ -429,4 +430,11 @@ void CPictureWnd::OnSetFocus(CWnd*)
 {
   if (m_pMagneticWnd)
     m_pMagneticWnd->SetFocus();
+}
+
+LRESULT CPictureWnd::OnDpiChanged(WPARAM, LPARAM lparam)
+{
+  MoveWindow((LPRECT)lparam,TRUE);
+  Update();
+  return 0;
 }

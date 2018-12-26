@@ -175,12 +175,13 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
   // space and draw both background and picture
   if (pApp->GetShowGraphics() == CMagneticApp::ShowGraphics::MainWindow)
   {
-    int iOffset = m_bStatusBar ? iFontHeight : 0;
-    iPicWidth = m_Picture.GetScaledWidth();
-    iPicHeight = m_Picture.GetScaledHeight();
+    int dpi = DPI::getWindowDPI(this);
+    iPicWidth = m_Picture.GetScaledWidth(dpi);
+    iPicHeight = m_Picture.GetScaledHeight(dpi);
     if (iPicWidth > 0 && iPicHeight > 0)
     {
       TextClient.top += iPicHeight;
+      int iOffset = m_bStatusBar ? iFontHeight : 0;
 
       BitmapDC.FillSolidRect(Client.left,Client.top+iOffset,Client.Width(),
         iPicHeight,pApp->GetGfxColour());

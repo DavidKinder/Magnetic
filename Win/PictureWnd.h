@@ -28,8 +28,9 @@ public:
 
   bool IsValid(void) const;
   int SetPalette(CDC* pDC, CWnd* pWnd) const;
-  int GetScaledWidth(void) const;
-  int GetScaledHeight(void) const;
+  double GetScaleFactor(int dpi) const;
+  int GetScaledWidth(int dpi) const;
+  int GetScaledHeight(int dpi) const;
 
   void NewPicture(int iWidth, int iHeight, const unsigned char* pBuffer, const unsigned short* pPalette);
   void ClearAll(void);
@@ -85,6 +86,7 @@ protected:
   afx_msg BOOL OnQueryNewPalette();
   afx_msg void OnSetFocus(CWnd* pOldWnd);
   //}}AFX_MSG
+  afx_msg LRESULT OnDpiChanged(WPARAM, LPARAM);
   DECLARE_MESSAGE_MAP()
 
 protected:
