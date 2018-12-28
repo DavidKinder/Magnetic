@@ -14,9 +14,6 @@
 #include <stdlib.h>
 #include <memory>
 
-#define COMPILE_MULTIMON_STUBS
-#include <MultiMon.h>
-
 #include "Magnetic.h"
 #include "MagneticDoc.h"
 #include "MagneticView.h"
@@ -68,7 +65,7 @@ BOOL CMagneticApp::InitInstance()
   ncm.cbSize = sizeof ncm;
   ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof ncm,&ncm,0);
 
-  CRect screen = GetScreenSize();
+  CRect screen = DPI::getMonitorRect(CWnd::GetDesktopWindow());
   int scalePics = 100;
   int scaleTitles = 100;
   if ((screen.Width() > 800) && (screen.Height() > 600))
@@ -158,15 +155,15 @@ BOOL CMagneticApp::InitInstance()
     return FALSE;
   m_pNewGameDialog->m_ofn.lpstrTitle = "Open a Magnetic Scrolls game";
 
-  // Create font dialog
-  m_pFontDialog = new DPI::FontDialog(&m_LogFont,CF_SCREENFONTS);
-  if (m_pFontDialog == NULL)
-    return FALSE;
-
   CCommandLineInfo cmdInfo;
   ParseCommandLine(cmdInfo);
 
   if (!ProcessShellCommand(cmdInfo))
+    return FALSE;
+
+  // Create font dialog
+  m_pFontDialog = new DPI::FontDialog(&m_LogFont,CF_SCREENFONTS,m_pMainWnd);
+  if (m_pFontDialog == NULL)
     return FALSE;
 
   m_pMainWnd->ShowWindow(SW_SHOW);
@@ -336,19 +333,6 @@ void CMagneticApp::OnUpdateRecentFileMenu(CCmdUI* pCmdUI)
         pCmdUI->m_pMenu->EnableMenuItem(nID + iMRU, MF_DISABLED|MF_GRAYED);
     }
   }
-}
-
-CRect CMagneticApp::GetScreenSize()
-{
-  MONITORINFO monInfo;
-  ::ZeroMemory(&monInfo,sizeof monInfo);
-  monInfo.cbSize = sizeof monInfo;
-
-  HMONITOR mon = ::MonitorFromWindow(AfxGetMainWnd()->GetSafeHwnd(),MONITOR_DEFAULTTOPRIMARY);
-  if (::GetMonitorInfo(mon,&monInfo))
-    return monInfo.rcMonitor;
-
-  return CRect(0,0,::GetSystemMetrics(SM_CXSCREEN),::GetSystemMetrics(SM_CYSCREEN));
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -150,8 +150,7 @@ LRESULT CMainFrame::OnDpiChanged(WPARAM wparam, LPARAM lparam)
   if (m_dpi != newDpi)
   {
     CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
-    LOGFONT* lf = pApp->GetLogFont();
-    lf->lfHeight = MulDiv(lf->lfHeight,newDpi,m_dpi);
+    pApp->GetLogFont()->lfHeight = -MulDiv(pApp->GetFontPoints(),newDpi,72);
 
     CMagneticView* pView = CMagneticView::GetView();
     if (pView)
