@@ -46,15 +46,20 @@ protected:
   afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
   afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
   afx_msg void OnPaint();
-  //}}AFX_MSG
   afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
   afx_msg BOOL OnQueryNewPalette();
+  //}}AFX_MSG
+  afx_msg LRESULT OnDpiChanged(WPARAM, LPARAM);
   DECLARE_MESSAGE_MAP()
 
 public:
   void ShowTitle(LPCTSTR pszGamePath);
 
 protected:
+  double GetScaleTitle(void);
+  void ScalePicture(double scale);
+  void CentreDialog(double scale);
+
   png_bytep* m_pRowPointers;
   BYTE* m_pPixels;
   BITMAPINFOHEADER m_BitmapInfo;
@@ -62,6 +67,7 @@ protected:
   HBITMAP m_hBitmap;
   double m_dScaleX;
   double m_dScaleY;
+  int m_dpi;
 
 protected:
   HPALETTE CreateOctreePalette(HANDLE hImage, UINT nMaxColors, UINT nColorBits);

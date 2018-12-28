@@ -44,6 +44,7 @@ CMagneticTitleDlg::CMagneticTitleDlg(CWnd* pParent /*=NULL*/)
   m_hBitmap = NULL;
   m_dScaleX = 1.0;
   m_dScaleY = 1.0;
+  m_dpi = 96;
   m_pMusicThread = NULL;
 }
 
@@ -73,9 +74,10 @@ BEGIN_MESSAGE_MAP(CMagneticTitleDlg, CDialog)
   ON_WM_KEYDOWN()
   ON_WM_LBUTTONDOWN()
   ON_WM_PAINT()
-  //}}AFX_MSG_MAP
   ON_WM_QUERYNEWPALETTE()
   ON_WM_PALETTECHANGED()
+  //}}AFX_MSG_MAP
+  ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -85,23 +87,11 @@ END_MESSAGE_MAP()
 BOOL CMagneticTitleDlg::OnInitDialog() 
 {
   CDialog::OnInitDialog();
-  CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
 
-  CRect ScrSize = pApp->GetScreenSize();
-  int iWidth = (int)(m_BitmapInfo.biWidth * m_dScaleX * pApp->GetScaleTitles());
-  int iHeight = (int)(-1 * m_BitmapInfo.biHeight * m_dScaleY * pApp->GetScaleTitles());
-
-  // Adjust for the borders
-  CRect Window, Client;
-  GetWindowRect(Window);
-  GetClientRect(Client);
-  iWidth += (Window.Width()-Client.Width());
-  iHeight += (Window.Height()-Client.Height());
-
-  MoveWindow(
-    ScrSize.left+((ScrSize.Width()-iWidth)/2),
-    ScrSize.top+((ScrSize.Height()-iHeight)/2),
-    iWidth,iHeight);
+  m_dpi = DPI::getWindowDPI(this);
+  double scale = GetScaleTitle();
+  ScalePicture(scale);
+  CentreDialog(scale);
   return TRUE;
 }
 
@@ -129,11 +119,11 @@ void CMagneticTitleDlg::OnPaint()
     dc.RealizePalette();
   }
 
-  CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
+  double scale = GetScaleTitle();
   CBitmap* pOldBitmap = dcMem.SelectObject(CBitmap::FromHandle(m_hBitmap));
   dc.BitBlt(0,0,
-    (int)(m_BitmapInfo.biWidth * m_dScaleX * pApp->GetScaleTitles()),
-    (int)(-1 * m_BitmapInfo.biHeight * m_dScaleY * pApp->GetScaleTitles()),
+    (int)(m_BitmapInfo.biWidth * m_dScaleX * scale),
+    (int)(-1 * m_BitmapInfo.biHeight * m_dScaleY * scale),
     &dcMem,0,0,SRCCOPY);
   dcMem.SelectObject(pOldBitmap);
 }
@@ -166,14 +156,26 @@ BOOL CMagneticTitleDlg::OnQueryNewPalette()
   return iColours;
 }
 
+LRESULT CMagneticTitleDlg::OnDpiChanged(WPARAM wparam, LPARAM)
+{
+  int newDpi = (int)HIWORD(wparam);
+  if (m_dpi != newDpi)
+  {
+    m_dpi = newDpi;
+    double scale = GetScaleTitle();
+    ScalePicture(scale);
+    CentreDialog(scale);
+    Invalidate();
+  }
+  return 0;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // Call to show the dialog
 /////////////////////////////////////////////////////////////////////////////
 void CMagneticTitleDlg::ShowTitle(LPCTSTR pszGamePath)
 {
-  CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
   CString strGamePath(pszGamePath);
-
   if (strGamePath.GetLength() > 4)
   {
     CString strTitlePic = strGamePath.Left(strGamePath.GetLength()-4);
@@ -269,11 +271,6 @@ void CMagneticTitleDlg::ShowTitle(LPCTSTR pszGamePath)
     png_destroy_read_struct(&png_ptr,&info_ptr,&end_info);
     fclose(fp);
 
-    CClientDC dcWnd(CWnd::GetDesktopWindow());
-    CDC dc;
-    dc.CreateCompatibleDC(&dcWnd);
-    BYTE* pPixels;
-
     if (aspect_ratio == 1)
     {
       if (width >= 640)
@@ -293,40 +290,86 @@ void CMagneticTitleDlg::ShowTitle(LPCTSTR pszGamePath)
       m_dScaleY = 1.0;
     }
 
-    int iWidth = m_BitmapInfo.biWidth;
-    int iHeight = m_BitmapInfo.biHeight;
-    m_BitmapInfo.biWidth = (int)(m_BitmapInfo.biWidth * m_dScaleX * pApp->GetScaleTitles());
-    m_BitmapInfo.biHeight = (int)(m_BitmapInfo.biHeight * m_dScaleY * pApp->GetScaleTitles());
-
-    m_hBitmap = ::CreateDIBSection(dc.m_hDC,
-      (CONST BITMAPINFO*)&m_BitmapInfo,DIB_RGB_COLORS,
-      (VOID**)&pPixels,NULL,0);
-    m_BitmapInfo.biWidth = iWidth;
-    m_BitmapInfo.biHeight = iHeight;
-
-    if (m_hBitmap)
-    {
-      // Resize the title picture
-      CBitmap* pOldBitmap = dc.SelectObject(CBitmap::FromHandle(m_hBitmap));
-      ::StretchDIBits(dc.m_hDC,
-        0,0,
-        (int)(m_BitmapInfo.biWidth * m_dScaleX * pApp->GetScaleTitles()),
-        (int)(-1 * m_BitmapInfo.biHeight * m_dScaleY * pApp->GetScaleTitles()),
-        0,0,
-        iWidth,
-        -m_BitmapInfo.biHeight,
-        (LPVOID)m_pPixels,(LPBITMAPINFO)&m_BitmapInfo,
-        DIB_RGB_COLORS,SRCCOPY);
-      dc.SelectObject(pOldBitmap);
-
-      if (dc.GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
-        m_hPalette = CreateOctreePalette(m_hBitmap,236,8);
-    }
-
     StartMusic(pszGamePath);
     DoModal();
     StopMusic();
   }
+}
+
+double CMagneticTitleDlg::GetScaleTitle(void)
+{
+  double scale = ((CMagneticApp*)AfxGetApp())->GetScaleTitles();
+  return scale * (m_dpi / 96.0);
+}
+
+void CMagneticTitleDlg::ScalePicture(double scale)
+{
+  CClientDC dcWnd(AfxGetMainWnd());
+  CDC dc;
+  dc.CreateCompatibleDC(&dcWnd);
+
+  int iWidth = m_BitmapInfo.biWidth;
+  int iHeight = m_BitmapInfo.biHeight;
+  m_BitmapInfo.biWidth = (int)(iWidth * m_dScaleX * scale);
+  m_BitmapInfo.biHeight = (int)(iHeight * m_dScaleY * scale);
+
+  if (m_hBitmap)
+  {
+    ::DeleteObject(m_hBitmap);
+    m_hBitmap = NULL;
+  }
+
+  BYTE* pPixels;
+  m_hBitmap = ::CreateDIBSection(dc.m_hDC,
+    (CONST BITMAPINFO*)&m_BitmapInfo,DIB_RGB_COLORS,
+    (VOID**)&pPixels,NULL,0);
+  m_BitmapInfo.biWidth = iWidth;
+  m_BitmapInfo.biHeight = iHeight;
+
+  if (m_hBitmap)
+  {
+    // Resize the title picture
+    CBitmap* pOldBitmap = dc.SelectObject(CBitmap::FromHandle(m_hBitmap));
+    ::StretchDIBits(dc.m_hDC,
+      0,0,
+      (int)(m_BitmapInfo.biWidth * m_dScaleX * scale),
+      (int)(-1 * m_BitmapInfo.biHeight * m_dScaleY * scale),
+      0,0,
+      iWidth,
+      -m_BitmapInfo.biHeight,
+      (LPVOID)m_pPixels,(LPBITMAPINFO)&m_BitmapInfo,
+      DIB_RGB_COLORS,SRCCOPY);
+    dc.SelectObject(pOldBitmap);
+
+    if (dc.GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+    {
+      if (m_hPalette)
+      {
+        ::DeleteObject(m_hPalette);
+        m_hPalette = NULL;
+      }
+      m_hPalette = CreateOctreePalette(m_hBitmap,236,8);
+    }
+  }
+}
+
+void CMagneticTitleDlg::CentreDialog(double scale)
+{
+  int iWidth = (int)(m_BitmapInfo.biWidth * m_dScaleX * scale);
+  int iHeight = (int)(-1 * m_BitmapInfo.biHeight * m_dScaleY * scale);
+
+  // Adjust for the borders
+  CRect Window, Client;
+  GetWindowRect(Window);
+  GetClientRect(Client);
+  iWidth += (Window.Width()-Client.Width());
+  iHeight += (Window.Height()-Client.Height());
+
+  CRect screen = DPI::getMonitorRect(GetParent());
+  MoveWindow(
+    screen.left+((screen.Width()-iWidth)/2),
+    screen.top+((screen.Height()-iHeight)/2),
+    iWidth,iHeight);
 }
 
 /////////////////////////////////////////////////////////////////////////////
