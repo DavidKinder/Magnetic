@@ -74,7 +74,6 @@ IDR_MAINFRAME           ICON                    "res\\magnetic.ico"
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 IDB_TOOLBAR32           BITMAP                  "res\\Toolbar32.bmp"
-IDB_LOGO                BITMAP                  "res\\Logo.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -162,7 +161,7 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION |
 CAPTION "About Magnetic"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         129,IDC_LOGO,"Static",SS_BITMAP | SS_SUNKEN,6,4,70,88,
+    CONTROL         129,IDC_LOGO,"Static",SS_OWNERDRAW | SS_SUNKEN,6,4,70,88,
                     WS_EX_CLIENTEDGE
     GROUPBOX        "Credits",IDC_CREDITS,94,4,178,89
     LTEXT           "Magnetic v2.3, an interpreter for Magnetic Scrolls games. Copyright © 1997-2008 Niclas Karlsson.",
@@ -365,6 +364,7 @@ END
 //
 
 IDR_MANIFEST            RT_MANIFEST             "res\\Magnetic.manifest"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

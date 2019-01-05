@@ -21,6 +21,14 @@
 #include "OptionsDlg.h"
 #include "Dialogs.h"
 
+#include "png.h"
+
+#pragma warning(disable : 4611)
+
+namespace {
+#include "2PassScale.h"
+}
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -488,6 +496,158 @@ void CMagneticApp::SetGameLoaded(int iLoaded)
 // CAboutDlg dialog class
 /////////////////////////////////////////////////////////////////////////////
 
+class CLogoStatic : public CStatic
+{
+public:
+  CLogoStatic();
+  ~CLogoStatic();
+
+  virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+
+private:
+  void GetBitmap(const CSize& size);
+
+  BYTE* m_logoPixels;
+  CSize m_logoSize;
+  BYTE* m_scaledPixels;
+  CSize m_scaledSize;
+};
+
+CLogoStatic::CLogoStatic()
+{
+  m_logoPixels = NULL;
+  m_scaledPixels = NULL;
+}
+
+CLogoStatic::~CLogoStatic()
+{
+  delete[] m_logoPixels;
+  delete[] m_scaledPixels;
+}
+
+void CLogoStatic::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
+{
+  CDC* dc = CDC::FromHandle(lpDrawItemStruct->hDC);
+  CRect r(lpDrawItemStruct->rcItem);
+
+  GetBitmap(r.Size());
+
+  BITMAPINFOHEADER bitmapInfo = { 0 };
+  bitmapInfo.biSize = sizeof bitmapInfo;
+  bitmapInfo.biWidth = m_scaledSize.cx;
+  bitmapInfo.biHeight = m_scaledSize.cy*-1;
+  bitmapInfo.biPlanes = 1;
+  bitmapInfo.biBitCount = 32;
+  bitmapInfo.biCompression = BI_RGB;
+  ::StretchDIBits(dc->GetSafeHdc(),r.left,r.top,m_scaledSize.cx,m_scaledSize.cy,
+    0,0,m_scaledSize.cx,m_scaledSize.cy,
+    m_scaledPixels,(LPBITMAPINFO)&bitmapInfo,DIB_RGB_COLORS,SRCCOPY);
+}
+
+struct PngDataIO
+{
+  BYTE* data;
+  ULONG offset;
+
+  static void Read(png_structp png_ptr, png_bytep data, png_size_t length)
+  {
+    PngDataIO* dataIO = (PngDataIO*)png_get_io_ptr(png_ptr);
+    memcpy(data,dataIO->data+dataIO->offset,length);
+    dataIO->offset += length;
+  }
+};
+
+void CLogoStatic::GetBitmap(const CSize& size)
+{
+  if (m_logoPixels == NULL)
+  {
+    // Get the raw PNG logo data
+    HRSRC res = ::FindResource(NULL,MAKEINTRESOURCE(IDR_LOGO),"PICTURE");
+    if (!res)
+      return;
+    HGLOBAL resData = ::LoadResource(NULL,res);
+    if (!resData)
+      return;
+    BYTE* logoData = (BYTE*)::LockResource(resData);
+    if (!logoData)
+      return;
+
+    if (!png_check_sig(logoData,8))
+      return;
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
+    if (!png_ptr)
+      return;
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+    if (!info_ptr)
+    {
+      png_destroy_read_struct(&png_ptr,NULL,NULL);
+      return;
+    }
+    png_infop end_info = png_create_info_struct(png_ptr);
+    if (!end_info)
+    {
+      png_destroy_read_struct(&png_ptr,&info_ptr,(png_infopp)NULL);
+      return;
+    }
+    png_bytep* pixelRows = NULL;
+    if (setjmp(png_jmpbuf(png_ptr)))
+    {
+      png_destroy_read_struct(&png_ptr,&info_ptr,&end_info);
+      delete[] pixelRows;
+      return;
+    }
+
+    // Read the logo image as an array of RGBA pixels
+    PngDataIO data;
+    data.data = logoData;
+    data.offset = 8;
+    png_set_read_fn(png_ptr,&data,PngDataIO::Read);
+    png_set_sig_bytes(png_ptr,8);
+    png_read_info(png_ptr,info_ptr);
+    m_logoSize.cx = png_get_image_width(png_ptr,info_ptr);
+    m_logoSize.cy = png_get_image_height(png_ptr,info_ptr);
+    int bit_depth = png_get_bit_depth(png_ptr,info_ptr);
+    int color_type = png_get_color_type(png_ptr,info_ptr);
+
+    if (color_type == PNG_COLOR_TYPE_PALETTE && bit_depth <= 8)
+      png_set_palette_to_rgb(png_ptr);
+    if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
+      png_set_expand_gray_1_2_4_to_8(png_ptr);
+    if (bit_depth == 16)
+      png_set_strip_16(png_ptr);
+    if (bit_depth < 8)
+      png_set_packing(png_ptr);
+    if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+      png_set_gray_to_rgb(png_ptr);
+
+    png_color_16 white = { 0,255,255,255,0 };
+    png_set_background(png_ptr,&white,PNG_BACKGROUND_GAMMA_SCREEN,0,1.0);
+    png_set_bgr(png_ptr);
+    png_set_filler(png_ptr,0,PNG_FILLER_AFTER);
+
+    m_logoPixels = new BYTE[m_logoSize.cx*m_logoSize.cy*4];
+    pixelRows = new png_bytep[m_logoSize.cy];
+    for (int i = 0; i < (int)m_logoSize.cy; i++)
+      pixelRows[i] = m_logoPixels+(m_logoSize.cx*i*4);
+    png_read_image(png_ptr,pixelRows);
+    png_read_end(png_ptr,end_info);
+    png_destroy_read_struct(&png_ptr,&info_ptr,&end_info);
+    delete[] pixelRows;
+  }
+
+  if ((m_scaledPixels == NULL) || (m_scaledSize != size))
+  {
+    delete[] m_scaledPixels;
+    m_scaledPixels = new BYTE[size.cx*size.cy*4];
+    m_scaledSize = size;
+
+    // Scale the bitmap
+    TwoPassScale<BilinearFilter> scaler;
+    scaler.Scale((COLORREF*)m_logoPixels,m_logoSize.cx,m_logoSize.cy,
+      (COLORREF*)m_scaledPixels,m_scaledSize.cx,m_scaledSize.cy);
+  }
+}
+
 class CAboutDlg : public BaseDialog
 {
 public:
@@ -511,6 +671,8 @@ protected:
   virtual BOOL OnInitDialog();
   //}}AFX_MSG
   DECLARE_MESSAGE_MAP()
+
+  CLogoStatic m_logo;
 };
 
 CAboutDlg::CAboutDlg() : BaseDialog(CAboutDlg::IDD)
@@ -536,10 +698,11 @@ BOOL CAboutDlg::OnInitDialog()
 {
   BaseDialog::OnInitDialog();
 
-  // Get the static logo bitmap control
+  // Subclass the static logo bitmap control
+  if (m_logo.SubclassDlgItem(IDC_LOGO,this) == FALSE)
+    return FALSE;
   CRect logoRect;
-  CWnd* logoWnd = GetDlgItem(IDC_LOGO);
-  logoWnd->GetWindowRect(logoRect);
+  m_logo.GetWindowRect(logoRect);
   ScreenToClient(logoRect);
   double aspect = ((double)logoRect.Width())/logoRect.Height();
 
@@ -552,7 +715,7 @@ BOOL CAboutDlg::OnInitDialog()
   // Resize the logo
   logoRect.right = creditsRect.left-logoRect.left;
   logoRect.bottom = logoRect.top+(int)(logoRect.Width()/aspect);
-  logoWnd->MoveWindow(logoRect);
+  m_logo.MoveWindow(logoRect);
   return TRUE;
 }
 

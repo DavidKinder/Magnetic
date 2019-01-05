@@ -4,7 +4,7 @@
 //
 #define IDR_MANIFEST                    1
 #define IDR_MAINFRAME                   128
-#define IDB_LOGO                        129
+#define IDR_LOGO                        129
 #define IDD_ABOUTBOX                    130
 #define IDD_SCROLLBACK                  131
 #define IDD_OPTIONS                     132
