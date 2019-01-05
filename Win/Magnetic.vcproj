@@ -975,6 +975,9 @@
 					RelativePath="..\..\..\Libraries\mfc\Dialogs.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Libraries\mfc\DpiFunctions.cpp">
+				</File>
+				<File
 					RelativePath=".\HintDialog.cpp">
 				</File>
 				<File
@@ -983,19 +986,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
 					</FileConfiguration>
 				</File>
 				<File

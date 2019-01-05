@@ -23,6 +23,7 @@
 
 #include "png.h"
 
+#pragma warning(disable : 4244)
 #pragma warning(disable : 4611)
 
 namespace {
