@@ -170,7 +170,7 @@ BEGIN
                     IDC_STATIC,100,35,160,16
     LTEXT           "Magnetic was written by Niclas Karlsson,\nDavid Kinder, Stefan Meier and Paul David Doherty.",
                     IDC_STATIC,99,54,171,16
-    LTEXT           "Magnetic for Windows Release 14.\nWindows version written by David Kinder.",
+    LTEXT           "Magnetic for Windows Release 15.\nWindows version written by David Kinder.",
                     IDC_STATIC,99,73,141,16
     DEFPUSHBUTTON   "OK",IDOK,159,98,48,14,WS_GROUP
 END
@@ -283,12 +283,12 @@ BEGIN
             VALUE "Comments", "Windows version by David Kinder"
             VALUE "CompanyName", "Magnetic Scrolls"
             VALUE "FileDescription", "Magnetic Scrolls Interpreter"
-            VALUE "FileVersion", "2, 3, 0, 14"
+            VALUE "FileVersion", "2, 3, 0, 15"
             VALUE "InternalName", "Magnetic"
             VALUE "LegalCopyright", "Copyright (C) 1997-2008 Niclas Karlsson"
             VALUE "OriginalFilename", "Magnetic.exe"
             VALUE "ProductName", "Magnetic Scrolls Interpreter"
-            VALUE "ProductVersion", "2, 3, 0, 14"
+            VALUE "ProductVersion", "2, 3, 0, 15"
         END
     END
     BLOCK "VarFileInfo"
