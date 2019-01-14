@@ -15,11 +15,6 @@
 #include "Magnetic.h"
 #include "MagneticTitle.h"
 
-#include "ampdec.h"
-#include "binfarc.h"
-#include "binfplnt.h"
-#include "binfstd.h"
-
 #pragma warning(disable : 4611)
 
 #ifdef _DEBUG
@@ -45,7 +40,6 @@ CMagneticTitleDlg::CMagneticTitleDlg(CWnd* pParent /*=NULL*/)
   m_dScaleX = 1.0;
   m_dScaleY = 1.0;
   m_dpi = 96;
-  m_pMusicThread = NULL;
 }
 
 CMagneticTitleDlg::~CMagneticTitleDlg()
@@ -58,8 +52,6 @@ CMagneticTitleDlg::~CMagneticTitleDlg()
     ::DeleteObject(m_hPalette);
   if (m_hBitmap)
     ::DeleteObject(m_hBitmap);
-  if (m_pMusicThread)
-    delete m_pMusicThread;
 }
 
 void CMagneticTitleDlg::DoDataExchange(CDataExchange* pDX)
@@ -685,7 +677,7 @@ void CMagneticTitleDlg::GetPaletteColors(NODE* pTree, PALETTEENTRY* pPalEntries,
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Start and stop the thread which plays MPEG Layer3 audio files
+// Start and stop playing the title MP3 audio file
 /////////////////////////////////////////////////////////////////////////////
 
 void CMagneticTitleDlg::StartMusic(LPCTSTR pszGamePath)
@@ -694,107 +686,23 @@ void CMagneticTitleDlg::StartMusic(LPCTSTR pszGamePath)
 
   if (strGamePath.GetLength() > 4)
   {
-    m_strMusic = strGamePath.Left(strGamePath.GetLength()-4);
-    m_strMusic += ".mp3";
-    m_bMusicHalt = FALSE;
+    CString strMusicPath;
+    strMusicPath = strGamePath.Left(strGamePath.GetLength()-4);
+    strMusicPath += ".mp3";
 
-    m_pMusicThread = AfxBeginThread(MusicThread,NULL,
-      THREAD_PRIORITY_NORMAL,0,CREATE_SUSPENDED);
-    if (m_pMusicThread)
+    if (::GetFileAttributes(strMusicPath) != INVALID_FILE_ATTRIBUTES)
     {
-      m_pMusicThread->m_bAutoDelete = FALSE;
-      m_pMusicThread->ResumeThread();
+      CString cmd;
+      cmd.Format("open \"%s\" type mpegvideo alias title",(LPCSTR)strMusicPath);
+      MCIERROR err = mciSendString(cmd,NULL,0,0);
+      if (err == 0)
+        mciSendString("play title",NULL,0,0);
     }
   }
 }
 
 void CMagneticTitleDlg::StopMusic()
 {
-  if (m_pMusicThread)
-  {
-    m_bMusicHalt = TRUE;
-    WaitForSingleObject(m_pMusicThread->m_hThread,INFINITE);
-  }
-}
-
-CString CMagneticTitleDlg::m_strMusic;
-BOOL CMagneticTitleDlg::m_bMusicHalt;
-
-UINT CMagneticTitleDlg::MusicThread(LPVOID)
-{
-  sbinfile AudioFile;
-  if (AudioFile.open(m_strMusic,sbinfile::openro) < 0)
-    return 1;
-
-  abinfile AWaveData;
-  binfile *WaveData = &AudioFile;
-  if (AudioFile.getmode() & binfile::modeseek)
-  {
-    char riff[4];
-    AudioFile.seekend(-128);
-    AudioFile.read(riff,3);
-    AWaveData.open(AudioFile,0,AudioFile.length()-(memcmp(riff,"TAG",3) ? 0 : 128));
-    WaveData = &AWaveData;
-  }
-
-  int down = 0;
-  int chn = 0;
-  int freq,stereo;
-
-  ampegdecoder Decoder;
-  if (Decoder.open(*WaveData,freq,stereo,1,down,chn))
-    return 1;
-
-  ntplaybinfile AudioPlayer;
-  if (AudioPlayer.open(freq,stereo,1,4608*4,32))
-    return 1;
-
-  float vol = 1;
-  float bal = 0;
-  float ctr = 0;
-  float sep = 1;
-  float srnd = 1;
-
-  float vols[3][3];
-  vols[0][0] = (float)(0.5*(1.0-bal)*(1.0-ctr+sep));
-  vols[0][1] = (float)(0.5*(1.0-bal)*(1.0+ctr-sep));
-  vols[0][2] = (float)(1-bal);
-  vols[1][0] = (float)(0.5*(1.0+bal)*(1.0-ctr-sep)*srnd);
-  vols[1][1] = (float)(0.5*(1.0+bal)*(1.0+ctr+sep)*srnd);
-  vols[1][2] = (float)((1.0+bal)*srnd);
-  vols[2][0] = (float)(0.5*(1.0-ctr));
-  vols[2][1] = (float)(0.5*(1.0+ctr));
-  vols[2][2] = (float)(1.0);
-  Decoder.ioctl(Decoder.ioctlsetstereo,vols,0);
-  vols[0][0]=vol;
-  Decoder.ioctl(Decoder.ioctlsetvol,&vols[0][0],0);
-
-  static float l3equal[576];
-  float pitch = 0;
-  float pitch0 = 1764;
-  int i;
-
-  for (i = 0; i < 576; i++)
-    l3equal[i] = (float)exp(pitch*log((i+0.5)*freq/(576.0*2*pitch0)));
-  Decoder.ioctl(Decoder.ioctlsetequal576,l3equal,0);
-
-  short sampbuf[2304];
-  peekch(Decoder);
-  while (m_bMusicHalt == FALSE)
-  {
-    int l = Decoder.read(sampbuf,4608);
-    if (!l)
-      break;
-    AudioPlayer.write(sampbuf,l);
-  }
-
-  Decoder.close();
-  WaveData->close();
-  AudioFile.close();
-  if (m_bMusicHalt)
-    AudioPlayer.abort();
-  else
-    AudioPlayer.close();
-
-  return 0;
+  mciSendString("stop title",NULL,0,0);
+  mciSendString("close title",NULL,0,0);
 }

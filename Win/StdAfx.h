@@ -15,6 +15,8 @@
 #pragma once
 #define VC_EXTRALEAN
 #define _AFX_ALL_WARNINGS
+#define _CRT_NONSTDC_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #define WINVER 0x0501         // Windows XP
 #define _WIN32_WINNT 0x0501
@@ -28,6 +30,4 @@
 #include <afxtempl.h>
 #include <afxdisp.h>
 
-#define DIRECTSOUND_VERSION 0
-#include <dmusici.h>
-#include <dmusicf.h>
+#include <mmsystem.h>

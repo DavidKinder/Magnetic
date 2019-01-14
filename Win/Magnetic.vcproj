@@ -221,269 +221,6 @@
 				</FileConfiguration>
 			</File>
 			<Filter
-				Name="Amp11"
-				Filter="">
-				<File
-					RelativePath="amp11\amp1dec.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="DebugLog|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="amp11\amp2dec.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="DebugLog|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="amp11\amp3dec.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="DebugLog|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="amp11\ampdec.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="DebugLog|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="amp11\ampsynth.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="DebugLog|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-							UsePrecompiledHeader="0"
-							WarningLevel="1"/>
-					</FileConfiguration>
-				</File>
-				<Filter
-					Name="binfile"
-					Filter="">
-					<File
-						RelativePath="amp11\binfile\binfarc.cpp">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="DebugLog|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="amp11\binfile\binfile.cpp">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="DebugLog|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="amp11\binfile\binfplnt.cpp">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="DebugLog|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="amp11\binfile\binfstd.cpp">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="DebugLog|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=".\Amp11;.\Amp11\binfile"
-								PreprocessorDefinitions="NOUNISTD"
-								UsePrecompiledHeader="0"
-								WarningLevel="1"/>
-						</FileConfiguration>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
 				Name="LibPNG"
 				Filter="">
 				<File
@@ -986,19 +723,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
+							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
+							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
+							AdditionalIncludeDirectories="..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;\Programs\Libraries\scalegfx"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1007,19 +744,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1028,21 +765,21 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"
 							PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;__NT__;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"
 							PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;LOGGFX;LOGGFX_EXT;LOG_FILE=\&quot;c:\\temp\\mag.log\&quot;;__NT__;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"
 							PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;__NT__;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
@@ -1052,19 +789,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1073,19 +810,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1097,19 +834,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1118,19 +855,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1139,19 +876,19 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"/>
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1160,21 +897,21 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"
 							UsePrecompiledHeader="1"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="DebugLog|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"
 							UsePrecompiledHeader="1"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;.\Amp11;.\Amp11\binfile;\Programs\Libraries\mfc;$(NoInherit)"
+							AdditionalIncludeDirectories="..\generic,\Programs\Libraries\libpng,\Programs\Libraries\zlib;\Programs\Libraries\mfc;$(NoInherit)"
 							UsePrecompiledHeader="1"/>
 					</FileConfiguration>
 				</File>

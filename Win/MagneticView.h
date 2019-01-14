@@ -187,8 +187,7 @@ protected:
   UINT m_iTimer;
   bool m_bAnimate;
 
-  CComPtr<IDirectMusicPerformance> m_Perform;
-  CComPtr<IDirectMusicSegment> m_Segment;
+  CString m_strMusicPath;
 
 public:
   CHintDialog m_hintDlg;  // Hint dialog

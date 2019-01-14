@@ -654,6 +654,7 @@ void CMagneticView::ClearAll(void)
   m_Picture.ClearAll();
   SetAnimate(FALSE);
   ClearAnims();
+  PlayMusic(NULL,0,0);
 }
 
 void CMagneticView::TrimOutput(void)
@@ -1094,62 +1095,43 @@ void CMagneticView::SetPictureWindowState(void)
 
 void CMagneticView::PlayMusic(unsigned char* pMidiData, int iLength, int iTempo)
 {
-  if (pMidiData == NULL)
+  // Always stop any currently playing music
+  mciSendString("stop music",NULL,0,0);
+  mciSendString("close music",NULL,0,0);
+  if (!m_strMusicPath.IsEmpty())
+    ::DeleteFile(m_strMusicPath);
+
+  if (pMidiData != NULL)
   {
-    if (m_Perform != NULL)
-      m_Perform->Stop(NULL,NULL,0,0);
-    if (m_Segment != NULL)
+    // Generate a unique temporary filename
+    if (m_strMusicPath.IsEmpty())
     {
-      m_Segment->SetParam(GUID_Unload,0xFFFFFFFF,0,0,(void*)m_Perform);
-      m_Segment.Release();
+      char tmpPath[MAX_PATH];
+      if (::GetTempPath(sizeof tmpPath,tmpPath) == 0)
+        return;
+      char tmpFileName[MAX_PATH];
+      if (::GetTempFileName(tmpPath,"mag",0,tmpFileName) == 0)
+        return;
+      m_strMusicPath = tmpFileName;
     }
-    return;
-  }
 
-  if (m_Perform == NULL)
-  {
-    if (FAILED(CoCreateInstance(CLSID_DirectMusicPerformance,NULL,CLSCTX_ALL,
-      IID_IDirectMusicPerformance,(void**)&m_Perform)))
+    FILE* f = fopen(m_strMusicPath,"wb");
+    if (f == NULL)
       return;
-    if (FAILED(m_Perform->Init(NULL,NULL,0)))
-      return;
-    if (FAILED(m_Perform->AddPort(NULL)))
-      return;
+    fwrite(pMidiData,1,iLength,f);
+    fclose(f);
+
+    // Play the MIDI data from the temporary file
+    CString cmd;
+    cmd.Format("open \"%s\" type sequencer alias music",(LPCSTR)m_strMusicPath);
+    MCIERROR err = mciSendString(cmd,NULL,0,0);
+    if (err == 0)
+    {
+      cmd.Format("set music tempo %d",iTempo);
+      mciSendString(cmd,NULL,0,0);
+      mciSendString("play music",NULL,0,0);
+    }
   }
-  else
-    m_Perform->Stop(NULL,NULL,0,0);
-
-  if (m_Segment != NULL)
-  {
-    m_Segment->SetParam(GUID_Unload,0xFFFFFFFF,0,0,(void*)m_Perform);
-    m_Segment.Release();
-  }
-
-  CComPtr<IDirectMusicLoader> loader;
-  if (FAILED(CoCreateInstance(CLSID_DirectMusicLoader,NULL,CLSCTX_ALL,
-    IID_IDirectMusicLoader,(LPVOID*)&loader)))
-    return;
-
-  DMUS_OBJECTDESC obj;
-  ZeroMemory(&obj,sizeof obj);
-  obj.dwSize = sizeof obj;
-  obj.dwValidData = DMUS_OBJ_CLASS|DMUS_OBJ_MEMORY;
-  obj.guidClass = CLSID_DirectMusicSegment;
-  obj.pbMemData = pMidiData;
-  obj.llMemLength = iLength;
-  if (FAILED(loader->GetObject(&obj,IID_IDirectMusicSegment,(void**)&m_Segment)))
-    return;
-
-  m_Segment->SetParam(GUID_StandardMIDIFile,0xFFFFFFFF,0,0,NULL);
-  if (FAILED(m_Segment->SetParam(GUID_Download,0xFFFFFFFF,0,0,(void*)m_Perform)))
-    return;
-
-  DMUS_TEMPO_PARAM tempo;
-  ZeroMemory(&tempo,sizeof tempo);
-  tempo.dblTempo = (double)iTempo;
-  m_Segment->SetParam(GUID_TempoParam,0xFFFFFFFF,0,0,&tempo);
-
-  m_Perform->PlaySegment(m_Segment,0,0,NULL);
 }
 
 CArray<int,int>& CMagneticView::GetPageTable(void)
@@ -1241,10 +1223,7 @@ BOOL CMagneticView::OpenGame(LPCTSTR lpszPathName)
     pApp->SetRedrawStatus(CMagneticApp::Redraw::EndOpcode);
 
   if (pView)
-  {
     pView->ClearAll();
-    pView->PlayMusic(NULL,0,0);
-  }
 
   CString strGfxName, strHntName, strSndName;
   MakeFilePath(strGfxName,lpszPathName,".gfx");

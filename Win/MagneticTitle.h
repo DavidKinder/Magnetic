@@ -94,9 +94,4 @@ protected:
 protected:
   void StartMusic(LPCTSTR pszGamePath);
   void StopMusic();
-  CWinThread* m_pMusicThread;
-
-  static UINT MusicThread(LPVOID pParam);
-  static CString m_strMusic;
-  static BOOL m_bMusicHalt;
 };
