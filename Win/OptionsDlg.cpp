@@ -28,7 +28,6 @@ COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/) : BaseDialog(COptionsDlg::IDD,
 {
   //{{AFX_DATA_INIT(COptionsDlg)
   m_dScaleFactor = 0.0;
-  m_dScaleTitles = 0.0;
   m_bPredict = FALSE;
   m_iSeed = 0;
   m_iShowPics = -1;
@@ -47,8 +46,6 @@ void COptionsDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_SEED_LABEL, m_SeedLabel);
   DDX_Text(pDX, IDC_SCALE, m_dScaleFactor);
   DDV_MinMaxDouble(pDX, m_dScaleFactor, 0.5, 5.);
-  DDX_Text(pDX, IDC_SCALET, m_dScaleTitles);
-  DDV_MinMaxDouble(pDX, m_dScaleTitles, 0.5, 5.);
   DDX_Check(pDX, IDC_PREDICT, m_bPredict);
   DDX_Text(pDX, IDC_SEED, m_iSeed);
   DDX_CBIndex(pDX, IDC_SHOWPIC, m_iShowPics);
@@ -79,9 +76,6 @@ BOOL COptionsDlg::OnInitDialog()
   if (m_Spin.SubclassDlgItem(IDC_SPIN,this) == FALSE)
     return FALSE;
   m_Spin.SetRange(1,5);
-  if (m_SpinTitles.SubclassDlgItem(IDC_SPINT,this) == FALSE)
-    return FALSE;
-  m_SpinTitles.SetRange(1,5);
   if (m_SpinGamma.SubclassDlgItem(IDC_SPING,this) == FALSE)
     return FALSE;
   m_SpinGamma.SetRange(1,5);
@@ -118,19 +112,16 @@ BOOL COptionsDlg::OnHelpInfo(HELPINFO* pHelpInfo)
     IDC_TEXT_LABEL,3,
     IDC_BACK,4,
     IDC_BACK_LABEL,4,
-    IDC_SCALET,5,
-    IDC_SCALET_LABEL,5,
-    IDC_SPINT,5,
-    IDC_GAMMA,6,
-    IDC_GAMMA_LABEL,6,
-    IDC_SPING,6,
-    IDC_GFX,7,
-    IDC_GFX_LABEL,7,
-    IDC_PREDICT,8,
-    IDC_SEED,8,
-    IDC_SEED_LABEL,8,
-    IDC_ANIM_WAIT,9,
-    IDC_HINT_WINDOW,10,
+    IDC_GAMMA,5,
+    IDC_GAMMA_LABEL,5,
+    IDC_SPING,5,
+    IDC_GFX,6,
+    IDC_GFX_LABEL,6,
+    IDC_PREDICT,7,
+    IDC_SEED,7,
+    IDC_SEED_LABEL,7,
+    IDC_ANIM_WAIT,8,
+    IDC_HINT_WINDOW,9,
     0,0
   };
 

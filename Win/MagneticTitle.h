@@ -9,18 +9,18 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "png.h"
-
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
+
+#include "ImagePNG.h"
+#include "Resource.h"
 
 class CMagneticTitleDlg : public CDialog
 {
 // Construction
 public:
   CMagneticTitleDlg(CWnd* pParent = NULL);   // standard constructor
-  ~CMagneticTitleDlg();
 
 // Dialog Data
   //{{AFX_DATA(CMagneticTitleDlg)
@@ -43,8 +43,6 @@ protected:
   afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
   afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
   afx_msg void OnPaint();
-  afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
-  afx_msg BOOL OnQueryNewPalette();
   //}}AFX_MSG
   afx_msg LRESULT OnDpiChanged(WPARAM, LPARAM);
   DECLARE_MESSAGE_MAP()
@@ -53,45 +51,11 @@ public:
   void ShowTitle(LPCTSTR pszGamePath);
 
 protected:
-  double GetScaleTitle(void);
-  void ScalePicture(double scale);
-  void CentreDialog(double scale);
-
-  png_bytep* m_pRowPointers;
-  BYTE* m_pPixels;
-  BITMAPINFOHEADER m_BitmapInfo;
-  HPALETTE m_hPalette;
-  HBITMAP m_hBitmap;
-  double m_dScaleX;
-  double m_dScaleY;
-  int m_dpi;
-
-protected:
-  HPALETTE CreateOctreePalette(HANDLE hImage, UINT nMaxColors, UINT nColorBits);
-
-  typedef struct _NODE
-  {
-    BOOL bIsLeaf;               // TRUE if node has no children
-    UINT nPixelCount;           // Number of pixels represented by this leaf
-    UINT nRedSum;               // Sum of red components
-    UINT nGreenSum;             // Sum of green components
-    UINT nBlueSum;              // Sum of blue components
-    struct _NODE* pChild[8];    // Pointers to child nodes
-    struct _NODE* pNext;        // Pointer to next reducible node
-  }
-  NODE;
-
-  int GetRightShiftCount(DWORD dwVal);
-  int GetLeftShiftCount(DWORD dwVal);
-  void AddColor(NODE** ppNode, BYTE r, BYTE g, BYTE b, UINT nColorBits,
-    UINT nLevel, UINT* pLeafCount, NODE** pReducibleNodes);
-  NODE* CreateNode(UINT nLevel, UINT nColorBits, UINT* pLeafCount,
-    NODE** pReducibleNodes);
-  void ReduceTree(UINT nColorBits, UINT* pLeafCount, NODE** pReducibleNodes);
-  void DeleteTree(NODE** ppNode);
-  void GetPaletteColors(NODE* pTree, PALETTEENTRY* pPalEntries, UINT* pIndex);
-
-protected:
+  void SizeTitle(void);
   void StartMusic(LPCTSTR pszGamePath);
   void StopMusic();
+
+  ImagePNG m_Picture;
+  ImagePNG m_ScaledPicture;
+  int m_dpi;
 };

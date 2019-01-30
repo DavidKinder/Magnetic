@@ -29,7 +29,6 @@ public:
   CEdit    m_Seed;
   CStatic  m_SeedLabel;
   double  m_dScaleFactor;
-  double  m_dScaleTitles;
   BOOL    m_bPredict;
   int      m_iSeed;
   int      m_iShowPics;
@@ -62,7 +61,7 @@ public:
   COLORREF GetGfxColour(void);
 
 protected:
-  CSpinButtonCtrl m_Spin, m_SpinTitles, m_SpinGamma;
+  CSpinButtonCtrl m_Spin, m_SpinGamma;
   ColourButton m_FColour, m_BColour, m_GColour;
   CButton m_FDefault, m_BDefault;
 };

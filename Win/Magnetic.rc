@@ -189,7 +189,7 @@ BEGIN
                     17,283,100
 END
 
-IDD_OPTIONS DIALOGEX 0, 0, 205, 203
+IDD_OPTIONS DIALOGEX 0, 0, 205, 188
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
 EXSTYLE WS_EX_CONTEXTHELP
@@ -207,32 +207,27 @@ BEGIN
     CONTROL         "Spin1",IDC_SPIN,"msctls_updown32",UDS_SETBUDDYINT | 
                     UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,133,30,11,
                     7
-    LTEXT           "Scale title pict&ures",IDC_SCALET_LABEL,15,44,65,8
-    EDITTEXT        IDC_SCALET,85,42,51,12,ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_SPINT,"msctls_updown32",UDS_SETBUDDYINT | 
-                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,133,45,11,
-                    7
-    LTEXT           "Gamma correction",IDC_GAMMA_LABEL,15,59,65,8
-    EDITTEXT        IDC_GAMMA,85,57,51,12,ES_AUTOHSCROLL
+    LTEXT           "Gamma correction",IDC_GAMMA_LABEL,15,45,65,8
+    EDITTEXT        IDC_GAMMA,85,42,51,12,ES_AUTOHSCROLL
     CONTROL         "Spin1",IDC_SPING,"msctls_updown32",UDS_SETBUDDYINT | 
-                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,134,60,11,
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,134,45,11,
                     7
-    GROUPBOX        "Colours",IDC_STATIC,4,76,142,47
-    RTEXT           "&Text",IDC_TEXT_LABEL,13,90,14,9
-    PUSHBUTTON      "",IDC_FORE,33,88,27,13
-    RTEXT           "&Background",IDC_BACK_LABEL,68,90,39,9
-    PUSHBUTTON      "",IDC_BACK,112,88,27,13
-    RTEXT           "Pictu&re background",IDC_GFX_LABEL,43,107,64,9
-    PUSHBUTTON      "",IDC_GFX,112,105,27,13
-    GROUPBOX        "Other",IDC_STATIC,4,125,142,73
+    GROUPBOX        "Colours",IDC_STATIC,4,59,142,47
+    RTEXT           "&Text",IDC_TEXT_LABEL,13,75,14,9
+    PUSHBUTTON      "",IDC_FORE,33,73,27,13
+    RTEXT           "&Background",IDC_BACK_LABEL,68,75,39,9
+    PUSHBUTTON      "",IDC_BACK,112,73,27,13
+    RTEXT           "Pictu&re background",IDC_GFX_LABEL,43,92,64,9
+    PUSHBUTTON      "",IDC_GFX,112,90,27,13
+    GROUPBOX        "Other",IDC_STATIC,4,110,142,73
     CONTROL         "Show &hints in a separate window",IDC_HINT_WINDOW,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,138,125,8
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,123,125,8
     CONTROL         "Scripts wait for animations",IDC_ANIM_WAIT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,17,151,109,8
+                    BS_AUTOCHECKBOX | WS_TABSTOP,17,136,109,8
     CONTROL         "Make randomness predictable",IDC_PREDICT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,17,164,117,8
-    LTEXT           "Random seed",IDC_SEED_LABEL,23,180,46,8
-    EDITTEXT        IDC_SEED,74,178,43,12,ES_AUTOHSCROLL
+                    BS_AUTOCHECKBOX | WS_TABSTOP,17,149,117,8
+    LTEXT           "Random seed",IDC_SEED_LABEL,23,165,46,8
+    EDITTEXT        IDC_SEED,74,163,43,12,ES_AUTOHSCROLL
 END
 
 IDD_TITLE DIALOGEX 0, 0, 189, 94

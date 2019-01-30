@@ -89,7 +89,6 @@ public:
   ShowGraphics GetShowGraphics(void);
   void SetShowGraphics(ShowGraphics Show);
   double GetScaleFactor(void);
-  double GetScaleTitles(void);
   BOOL GetUseHintWindow(void);
   BOOL GetAnimWait(void);
   BOOL GetPredictable(void);
@@ -126,7 +125,6 @@ protected:
   // Options dialog
   ShowGraphics m_ShowGfx;
   double m_dScaleFactor;
-  double m_dScaleTitles;
   COLORREF m_ForeColour;
   COLORREF m_BackColour;
   COLORREF m_GfxColour;
