@@ -40,10 +40,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="nafxcwd.lib libcmtd.lib winmm.lib"
+				AdditionalDependencies="scalegfx.lib winmm.lib nafxcwd.lib libcmtd.lib"
 				OutputFile=".\Debug/Magnetic.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="../../../Libraries/scalegfx"
 				DelayLoadDLLs="oleacc.dll"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/Magnetic.pdb"
@@ -99,10 +100,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="nafxcwd.lib libcmtd.lib winmm.lib"
+				AdditionalDependencies="scalegfx.lib winmm.lib nafxcwd.lib libcmtd.lib"
 				OutputFile=".\DebugLog/Magnetic.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="../../../Libraries/scalegfx"
 				DelayLoadDLLs="oleacc.dll"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\DebugLog/Magnetic.pdb"
@@ -158,10 +160,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="nafxcw.lib libcmt.lib winmm.lib"
+				AdditionalDependencies="scalegfx.lib winmm.lib nafxcw.lib libcmt.lib"
 				OutputFile=".\Release/Magnetic.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="../../../Libraries/scalegfx"
 				DelayLoadDLLs="oleacc.dll"
 				ProgramDatabaseFile=".\Release/Magnetic.pdb"
 				SubSystem="2"/>
@@ -718,6 +721,9 @@
 					RelativePath=".\HintDialog.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Libraries\mfc\ImagePNG.cpp">
+				</File>
+				<File
 					RelativePath=".\Magnetic.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
@@ -936,7 +942,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Compiling resources with SDK resource compiler..."
-						CommandLine="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\rc&quot; /d _DEBUG /l 0x809 /i $(ConfigurationName) /fo $(ConfigurationName)/$(InputName).res $(InputFileName)"
+						CommandLine="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\rc&quot; /d _DEBUG /l 0x809 /i $(ConfigurationName) /fo $(ConfigurationName)/$(InputName).res $(InputFileName)
+"
 						Outputs="$(ConfigurationName)/$(InputName).res"/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -944,7 +951,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Compiling resources with SDK resource compiler..."
-						CommandLine="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\rc&quot; /d _DEBUG /l 0x809 /i $(ConfigurationName) /fo $(ConfigurationName)/$(InputName).res $(InputFileName)"
+						CommandLine="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\rc&quot; /d _DEBUG /l 0x809 /i $(ConfigurationName) /fo $(ConfigurationName)/$(InputName).res $(InputFileName)
+"
 						Outputs="$(ConfigurationName)/$(InputName).res"/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -952,7 +960,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Compiling resources with SDK resource compiler..."
-						CommandLine="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\rc&quot; /d NDEBUG /l 0x809 /i $(ConfigurationName) /fo $(ConfigurationName)/$(InputName).res $(InputFileName)"
+						CommandLine="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\rc&quot; /d NDEBUG /l 0x809 /i $(ConfigurationName) /fo $(ConfigurationName)/$(InputName).res $(InputFileName)
+"
 						Outputs="$(ConfigurationName)/$(InputName).res"/>
 				</FileConfiguration>
 			</File>
