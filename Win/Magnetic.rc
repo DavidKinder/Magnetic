@@ -73,7 +73,6 @@ IDR_MAINFRAME           ICON                    "res\\magnetic.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
-IDB_TOOLBAR32           BITMAP                  "res\\Toolbar32.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

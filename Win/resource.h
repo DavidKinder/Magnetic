@@ -10,7 +10,7 @@
 #define IDD_OPTIONS                     132
 #define IDD_TITLE                       133
 #define IDD_HINTS                       134
-#define IDB_TOOLBAR32                   135
+#define IDR_TOOLBAR                     135
 #define IDC_COPY                        1000
 #define IDC_SHOWPIC                     1001
 #define IDC_SCALE                       1002

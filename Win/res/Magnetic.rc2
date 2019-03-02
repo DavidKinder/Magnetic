@@ -11,5 +11,6 @@
 // Add manually edited resources here...
 
 IDR_LOGO     PNG       "res\\Logo.png"
+IDR_TOOLBAR  PNG       "res\\Toolbar.png"
 
 /////////////////////////////////////////////////////////////////////////////
