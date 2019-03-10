@@ -73,7 +73,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
   if (MenuBarFrameWnd::OnCreate(lpCreateStruct) == -1)
     return -1;
-  if (!CreateBarDpi(IDR_MAINFRAME,IDR_TOOLBAR))
+  if (!CreateNewBar(IDR_MAINFRAME,IDR_TOOLBAR))
     return -1;
 
   if (!m_statusBar.Create(this) ||
