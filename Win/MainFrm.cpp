@@ -71,6 +71,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     MoveWindow(rPlace);
   }
 
+  m_menuBar.AddNoIconId(ID_FILE_RECORD);
+  m_menuBar.AddNoIconId(ID_FILE_PLAYBACK);
+  m_menuBar.AddNoIconId(ID_FILE_SCRIPT);
+
   if (MenuBarFrameWnd::OnCreate(lpCreateStruct) == -1)
     return -1;
   if (!CreateNewBar(IDR_MAINFRAME,IDR_TOOLBAR))
