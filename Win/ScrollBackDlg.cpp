@@ -106,7 +106,10 @@ void CScrollBackDlg::OnCopy()
 LRESULT CScrollBackDlg::OnDpiChanged(WPARAM, LPARAM)
 {
   Default();
-  PostMessage(WM_SAMESIZEASMAIN);
+
+  // Same monitor?
+  if (DPI::getMonitorRect(this) == DPI::getMonitorRect(AfxGetMainWnd()))
+    PostMessage(WM_SAMESIZEASMAIN);
   return 0;
 }
 
