@@ -67,9 +67,6 @@ BOOL CScrollBackDlg::OnInitDialog()
   // Change the window icon
   SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
 
-  // Don't automatically resize on a DPI change
-  DPI::disableDialogResize(this);
-
   // Resize the dialog
   CRect DialogRect;
   AfxGetMainWnd()->GetWindowRect(DialogRect);
