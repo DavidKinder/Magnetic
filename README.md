@@ -4,6 +4,6 @@ Magnetic is an interpreter for the games written between 1985 and 1991 by Magnet
 
 The Magnetic interpreter was written by Niclas Karlsson, with additional code by myself, Stefan Meier and Paul David Doherty.
 
-Extracting the game data from the original releases can be a complex process; for more information see the Magnetic page at Stefan's ![Magnetic Scrolls Memorial](https://msmemorial.if-legends.org/memorial.php).
+Extracting the game data from the original releases can be a complex process; for more information see the Magnetic page at Stefan's [Magnetic Scrolls Memorial](https://msmemorial.if-legends.org/memorial.php).
 
 ![Magnetic playing The Pawn](The%20Pawn.png)
