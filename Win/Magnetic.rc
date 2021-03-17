@@ -13,13 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.K.) resources
+// English (United Kingdom) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 #pragma code_page(1252)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -67,6 +65,7 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\magnetic.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
@@ -74,12 +73,13 @@ IDR_MAINFRAME           ICON                    "res\\magnetic.ico"
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Toolbar
 //
 
-IDR_MAINFRAME TOOLBAR  16, 15
+IDR_MAINFRAME TOOLBAR 16, 15
 BEGIN
     BUTTON      ID_FILE_OPEN
     BUTTON      ID_FILE_SCRIPT
@@ -97,7 +97,7 @@ END
 // Menu
 //
 
-IDR_MAINFRAME MENU 
+IDR_MAINFRAME MENU
 BEGIN
     POPUP "&File"
     BEGIN
@@ -134,7 +134,7 @@ END
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS 
+IDR_MAINFRAME ACCELERATORS
 BEGIN
     "F",            ID_VIEW_FONT,           VIRTKEY, CONTROL, NOINVERT
     "L",            ID_VIEW_SCROLLBACK,     VIRTKEY, CONTROL, NOINVERT
@@ -155,42 +155,31 @@ END
 //
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 278, 118
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
-    WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About Magnetic"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         129,IDC_LOGO,"Static",SS_OWNERDRAW | SS_SUNKEN,6,4,70,88,
-                    WS_EX_CLIENTEDGE
+    CONTROL         IDR_LOGO,IDC_LOGO,"Static",SS_OWNERDRAW | SS_SUNKEN,6,4,70,88,WS_EX_CLIENTEDGE
     GROUPBOX        "Credits",IDC_CREDITS,94,4,178,89
-    LTEXT           "Magnetic v2.3, an interpreter for Magnetic Scrolls games. Copyright © 1997-2008 Niclas Karlsson.",
-                    IDC_STATIC,99,16,165,16
-    LTEXT           "Magnetic is released under the terms of the GNU General Public License.",
-                    IDC_STATIC,100,35,160,16
-    LTEXT           "Magnetic was written by Niclas Karlsson,\nDavid Kinder, Stefan Meier and Paul David Doherty.",
-                    IDC_STATIC,99,54,171,16
-    LTEXT           "Magnetic for Windows Release 15.\nWindows version written by David Kinder.",
-                    IDC_STATIC,99,73,141,16
+    LTEXT           "Magnetic v2.3, an interpreter for Magnetic Scrolls games. Copyright © 1997-2008 Niclas Karlsson.",IDC_STATIC,99,16,165,16
+    LTEXT           "Magnetic is released under the terms of the GNU General Public License.",IDC_STATIC,100,35,160,16
+    LTEXT           "Magnetic was written by Niclas Karlsson,\nDavid Kinder, Stefan Meier and Paul David Doherty.",IDC_STATIC,99,54,171,16
+    LTEXT           "Magnetic for Windows Release 15.\nWindows version written by David Kinder.",IDC_STATIC,99,73,141,16
     DEFPUSHBUTTON   "OK",IDOK,159,98,48,14,WS_GROUP
 END
 
 IDD_SCROLLBACK DIALOGEX 0, 0, 288, 121
-STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | 
-    WS_THICKFRAME
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "Scrollback"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     PUSHBUTTON      "Close window",IDOK,2,2,65,13
     PUSHBUTTON      "Copy selected text to clipboard",IDC_COPY,73,2,111,13
-    CONTROL         "",IDC_TEXT,"RichEdit20A",TCS_HOTTRACK | TCS_VERTICAL | 
-                    TCS_RAGGEDRIGHT | TCS_FOCUSONBUTTONDOWN | 
-                    TCS_MULTISELECT | WS_BORDER | WS_VSCROLL | WS_TABSTOP,2,
-                    17,283,100
+    CONTROL         "",IDC_TEXT,"RichEdit20A",ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_TABSTOP,2,17,283,100
 END
 
 IDD_OPTIONS DIALOGEX 0, 0, 205, 188
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
-    WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CONTEXTHELP
 CAPTION "Options"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
@@ -199,18 +188,13 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,150,23,50,14
     GROUPBOX        "Graphics",IDC_STATIC,4,1,142,58
     LTEXT           "&Pictures",IDC_PIC_LABEL,15,13,28,8
-    COMBOBOX        IDC_SHOWPIC,61,11,75,46,CBS_DROPDOWNLIST | WS_VSCROLL | 
-                    WS_TABSTOP
+    COMBOBOX        IDC_SHOWPIC,61,11,75,46,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "S&cale pictures",IDC_SCALE_LABEL,15,29,49,8
     EDITTEXT        IDC_SCALE,85,27,51,12,ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_SPIN,"msctls_updown32",UDS_SETBUDDYINT | 
-                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,133,30,11,
-                    7
+    CONTROL         "Spin1",IDC_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,133,30,11,7
     LTEXT           "Gamma correction",IDC_GAMMA_LABEL,15,45,65,8
     EDITTEXT        IDC_GAMMA,85,42,51,12,ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_SPING,"msctls_updown32",UDS_SETBUDDYINT | 
-                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,134,45,11,
-                    7
+    CONTROL         "Spin1",IDC_SPING,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,134,45,11,7
     GROUPBOX        "Colours",IDC_STATIC,4,61,142,47
     RTEXT           "&Text",IDC_TEXT_LABEL,13,75,14,9
     PUSHBUTTON      "",IDC_FORE,33,73,27,13
@@ -221,10 +205,8 @@ BEGIN
     GROUPBOX        "Other",IDC_STATIC,4,110,142,73
     CONTROL         "Show &hints in a separate window",IDC_HINT_WINDOW,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,123,125,8
-    CONTROL         "Scripts wait for animations",IDC_ANIM_WAIT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,17,136,109,8
-    CONTROL         "Make randomness predictable",IDC_PREDICT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,17,149,117,8
+    CONTROL         "Scripts wait for animations",IDC_ANIM_WAIT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,136,109,8
+    CONTROL         "Make randomness predictable",IDC_PREDICT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,149,117,8
     LTEXT           "Random seed",IDC_SEED_LABEL,23,165,46,8
     EDITTEXT        IDC_SEED,74,163,43,12,ES_AUTOHSCROLL
 END
@@ -237,8 +219,7 @@ BEGIN
 END
 
 IDD_HINTS DIALOGEX 0, 0, 296, 140
-STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | 
-    WS_THICKFRAME
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "Game hints"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
@@ -246,9 +227,7 @@ BEGIN
     PUSHBUTTON      "Help",IDC_SHOWHINT,238,12,50,14
     PUSHBUTTON      "Topics",IDC_TOPICS,238,35,50,14
     PUSHBUTTON      "Previous",IDC_PREVIOUS,238,59,50,14
-    LISTBOX         IDC_HINTLIST,7,7,224,126,LBS_OWNERDRAWVARIABLE | 
-                    LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
-                    WS_HSCROLL | WS_TABSTOP
+    LISTBOX         IDC_HINTLIST,7,7,224,126,LBS_OWNERDRAWVARIABLE | LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
 END
 
 
@@ -258,8 +237,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,3,0,14
- PRODUCTVERSION 2,3,0,14
+ FILEVERSION 2,3,0,15
+ PRODUCTVERSION 2,3,0,15
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -277,12 +256,12 @@ BEGIN
             VALUE "Comments", "Windows version by David Kinder"
             VALUE "CompanyName", "Magnetic Scrolls"
             VALUE "FileDescription", "Magnetic Scrolls Interpreter"
-            VALUE "FileVersion", "2, 3, 0, 15"
+            VALUE "FileVersion", "2.3.0.15"
             VALUE "InternalName", "Magnetic"
             VALUE "LegalCopyright", "Copyright (C) 1997-2008 Niclas Karlsson"
             VALUE "OriginalFilename", "Magnetic.exe"
             VALUE "ProductName", "Magnetic Scrolls Interpreter"
-            VALUE "ProductVersion", "2, 3, 0, 15"
+            VALUE "ProductVersion", "2.3.0.15"
         END
     END
     BLOCK "VarFileInfo"
@@ -298,7 +277,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
@@ -365,18 +344,18 @@ IDR_MANIFEST            RT_MANIFEST             "res\\Magnetic.manifest"
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_MAINFRAME           "Magnetic Scrolls Interpreter\n\nMagnetic\n\n.mag\nMagnetic.Game\nMagnetic Scrolls Game"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_APP_TITLE       "Magnetic"
     AFX_IDS_IDLEMESSAGE     "Windows Magnetic"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INDICATOR_EXT        "EXT"
     ID_INDICATOR_CAPS       "CAP"
@@ -386,14 +365,14 @@ BEGIN
     ID_INDICATOR_REC        "REC"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
     ID_APP_EXIT             "Quit the interpreter\nExit"
     ID_HELP                 "Show help for Magnetic\nHelp"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_MRU_FILE1       "Open this game"
     ID_FILE_MRU_FILE2       "Open this game"
@@ -401,13 +380,13 @@ BEGIN
     ID_FILE_MRU_FILE4       "Open this game"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
     ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_SCSIZE          "Change the window size"
     AFX_IDS_SCMOVE          "Change the window position"
@@ -416,13 +395,13 @@ BEGIN
     AFX_IDS_SCCLOSE         "Close the window"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_SCRESTORE       "Restore the window to normal size"
     AFX_IDS_SCTASKLIST      "Activate Task List"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_FONT            "Change the display font\nChange Font"
     ID_HELP_TOPICS          "List help topics\nHelp Topics"
@@ -434,17 +413,17 @@ BEGIN
     ID_VIEW_OPTIONS         "Open the options dialog\nOptions"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_OPEN            "Open a Magnetic Scrolls game\nOpen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_UNTITLED        "Untitled"
 END
 
-#endif    // English (U.K.) resources
+#endif    // English (United Kingdom) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

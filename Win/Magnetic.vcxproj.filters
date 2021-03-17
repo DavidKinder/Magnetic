@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{42713229-87fa-490e-88f1-8aa922ee8ef6}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\LibPNG">
+      <UniqueIdentifier>{4303d1b6-97a5-4891-983d-633f59202173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ZLib">
+      <UniqueIdentifier>{4cf95a45-0fc7-4158-9d81-288c6414b8b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Windows">
+      <UniqueIdentifier>{e0a8c007-96cb-41a1-80ec-4b0bc9ba5668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{d0eb9adc-0a1c-4ada-a6ee-08eb19785420}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Help Files">
+      <UniqueIdentifier>{aa324153-ecf0-46bf-b861-ea805c62d9c5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Generic\defs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Generic\emu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\png.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngerror.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngget.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngmem.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngpread.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngread.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngrio.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngrtran.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngrutil.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngset.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\libpng\pngtrans.c">
+      <Filter>Source Files\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\adler32.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\crc32.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\inffast.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\inflate.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\inftrees.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\trees.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\uncompr.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\zlib\zutil.c">
+      <Filter>Source Files\ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\ColourButton.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\Dialogs.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\DpiFunctions.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="HintDialog.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\ImagePNG.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Magnetic.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="MagneticDoc.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="MagneticTitle.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="MagneticView.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\MenuBar.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsDlg.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="PictureWnd.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrollBackDlg.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\ScaleGfx.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Magnetic.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\Magnetic.manifest">
+      <Filter>Resource Files</Filter>
+    </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Magnetic.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="help\Magnetic.hhp">
+      <Filter>Help Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Magnetic.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
