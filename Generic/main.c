@@ -51,7 +51,8 @@ type8 ms_load_file(type8s *name, type8 *ptr, type16 size)
 		{
 			printf("Filename: ");
 		}
-		while (!gets(filename));
+		while (!fgets(filename,256,stdin));
+		filename[strlen(filename)-1] = 0;
 		realname = filename;
 	}
 	if (!(fh=fopen(realname,"rb")))
@@ -75,7 +76,8 @@ type8 ms_save_file(type8s *name, type8 *ptr, type16 size)
 		{
 			printf("Filename: ");
 		}
-		while (!gets(filename));
+		while (!fgets(filename,256,stdin));
+		filename[strlen(filename)-1] = 0;
 		realname = filename;
 	}
 	if (!(fh = fopen(realname,"wb")))
