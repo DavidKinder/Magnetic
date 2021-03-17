@@ -1,0 +1,6 @@
+*.chm
+*.user
+.vs/
+Win/Debug/
+Win/DebugLog/
+Win/Release/
