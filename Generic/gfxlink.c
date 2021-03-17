@@ -39,6 +39,9 @@
 #ifdef __GNUC__
 #include <sys/stat.h>
 #endif
+#ifdef _MSC_VER
+#include <io.h>
+#endif
 #ifndef S_IRUSR
 #define S_IRUSR 0400
 #define S_IWUSR 0200
