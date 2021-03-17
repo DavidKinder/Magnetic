@@ -852,14 +852,14 @@ void CMagneticView::AddOutChar(char c)
       {
       case 10:
         if (m_pFileScript)
-          fprintf(m_pFileScript,"%s\n",m_strScript);
+          fprintf(m_pFileScript,"%s\n",m_strScript.GetString());
         m_strScript.Empty();
         break;
       case ' ':
         if (m_strScript.GetLength() > SCRIPT_WIDTH)
         {
           if (m_pFileScript)
-            fprintf(m_pFileScript,"%s\n",m_strScript);
+            fprintf(m_pFileScript,"%s\n",m_strScript.GetString());
           m_strScript.Empty();
         }
         else
@@ -1457,7 +1457,7 @@ char CMagneticView::GetInput(bool& done, bool trans)
 
       // Input recording
       if ((pView->m_Recording == Recording::RecordingOn) && (pView->m_pFileRecord))
-          fprintf(pView->m_pFileRecord,"%s\n",strHistory);
+          fprintf(pView->m_pFileRecord,"%s\n",strHistory.GetString());
 
       // Scrollback buffer
       pView->m_Scrollback.GetScrollback() += strHistory;

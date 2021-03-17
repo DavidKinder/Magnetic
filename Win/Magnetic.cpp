@@ -134,8 +134,8 @@ BOOL CMagneticApp::InitInstance()
   CString path, type, key, value;
   AfxGetModuleShortFileName(AfxGetInstanceHandle(),path);
   pDocTemplate->GetDocString(type,CDocTemplate::regFileTypeId);
-  key.Format("%s\\DefaultIcon",type);
-  value.Format("%s,%d",path,0);
+  key.Format("%s\\DefaultIcon",type.GetString());
+  value.Format("%s,%d",path.GetString(),0);
   _AfxSetRegKey(key,value);
 
   // Notify the shell that associations have changed
