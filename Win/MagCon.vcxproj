@@ -67,6 +67,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/MagCon.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <Midl>
       <TypeLibraryName>.\Release/MagCon.tlb</TypeLibraryName>

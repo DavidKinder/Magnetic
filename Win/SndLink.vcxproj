@@ -94,6 +94,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/SndLink.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <Midl>
       <TypeLibraryName>.\Release/SndLink.tlb</TypeLibraryName>

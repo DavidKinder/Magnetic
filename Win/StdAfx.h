@@ -15,13 +15,11 @@
 #pragma once
 #define VC_EXTRALEAN
 #define _AFX_ALL_WARNINGS
+#define _AFX_NO_MFC_CONTROLS_IN_DIALOGS
 #define _CRT_NONSTDC_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 
-#define WINVER 0x0501         // Windows XP
-#define _WIN32_WINNT 0x0501
-#define _WIN32_WINDOWS 0x0501
-#define _WIN32_IE 0x0501      // Internet Explorer 5.5
+#define WINVER 0x0600
 
 #include <afxwin.h>
 #include <afxext.h>

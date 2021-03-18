@@ -90,6 +90,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/Xtract64.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <Midl>
       <TypeLibraryName>.\Release/Xtract64.tlb</TypeLibraryName>

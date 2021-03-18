@@ -66,6 +66,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/GfxLink.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <Midl>
       <TypeLibraryName>.\Release/GfxLink.tlb</TypeLibraryName>
