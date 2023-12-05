@@ -302,6 +302,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\DarkMode.cpp" />
     <ClCompile Include="..\..\..\Libraries\mfc\Dialogs.cpp" />
     <ClCompile Include="..\..\..\Libraries\mfc\DpiFunctions.cpp" />
     <ClCompile Include="..\..\..\Libraries\mfc\ImagePNG.cpp" />

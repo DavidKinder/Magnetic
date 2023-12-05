@@ -136,6 +136,9 @@
     <ClCompile Include="..\..\..\Libraries\mfc\ScaleGfx.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\DarkMode.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Magnetic.ico">
