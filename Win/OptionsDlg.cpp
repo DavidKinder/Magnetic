@@ -89,9 +89,10 @@ BOOL COptionsDlg::OnInitDialog()
     return FALSE;
 
   // Set the colours
-  m_FColour.SetCurrentColour(pApp->GetForeColour());
-  m_BColour.SetCurrentColour(pApp->GetBackColour());
-  m_GColour.SetCurrentColour(pApp->GetGfxColour());
+  DarkMode* dark = DarkMode::GetActive(this);
+  m_FColour.SetCurrentColour(pApp->GetForeColour(dark));
+  m_BColour.SetCurrentColour(pApp->GetBackColour(dark));
+  m_GColour.SetCurrentColour(pApp->GetGfxColour(dark));
 
   m_Seed.EnableWindow(m_bPredict == TRUE);
   return TRUE;

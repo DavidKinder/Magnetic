@@ -58,6 +58,7 @@ BEGIN_MESSAGE_MAP(CMagneticView, CView)
   ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
   ON_UPDATE_COMMAND_UI(ID_VIEW_OPTIONS, OnUpdateViewOptions)
   ON_WM_ERASEBKGND()
+  ON_WM_NCPAINT()
   ON_WM_TIMER()
   ON_UPDATE_COMMAND_UI(ID_VIEW_SCROLLBACK, OnUpdateScrollback)
   ON_COMMAND(ID_TOGGLE_GFX, OnToggleGfx)
@@ -155,6 +156,8 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
   CRect TextClient(Client);
   CSize Margins(GetMargins());
 
+  DarkMode* dark = DarkMode::GetActive(this);
+
   if (m_bStatusBar)
   {
     TextClient.top += iFontHeight;
@@ -162,10 +165,10 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
     // Display the status line
     LONG lStatSpace = (LONG)(Client.Width()*0.075);
     SolidRect(&BitmapDC,CRect(Client.left,0,Client.right,iFontHeight),
-      pApp->GetForeColour());
+      pApp->GetForeColour(dark));
 
-    BitmapDC.SetTextColor(pApp->GetBackColour());
-    BitmapDC.SetBkColor(pApp->GetForeColour());
+    BitmapDC.SetTextColor(pApp->GetBackColour(dark));
+    BitmapDC.SetBkColor(pApp->GetForeColour(dark));
     
     BitmapDC.TextOut(lStatSpace,0,m_strStatLocation,m_strStatLocation.GetLength());
     BitmapDC.TextOut(lStatSpace*10,0,m_strStatScore,m_strStatScore.GetLength());
@@ -184,14 +187,14 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
       int iOffset = m_bStatusBar ? iFontHeight : 0;
 
       BitmapDC.FillSolidRect(Client.left,Client.top+iOffset,Client.Width(),
-        iPicHeight,pApp->GetGfxColour());
+        iPicHeight,pApp->GetGfxColour(dark));
       CRect PicArea((Client.Width()-iPicWidth)/2,iOffset,
         (Client.Width()+iPicWidth)/2,iOffset+iPicHeight);
       m_Picture.Paint(&BitmapDC,PicArea,m_AnimFrames);
     }
   }
 
-  BitmapDC.FillSolidRect(TextClient,pApp->GetBackColour());
+  BitmapDC.FillSolidRect(TextClient,pApp->GetBackColour(dark));
   int y = TextClient.top;
 
   // Repaginate if necessary
@@ -204,8 +207,8 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
   }
   LPCSTR lpszOutput = m_strOutput;
 
-  BitmapDC.SetTextColor(pApp->GetForeColour());
-  BitmapDC.SetBkColor(pApp->GetBackColour());
+  BitmapDC.SetTextColor(pApp->GetForeColour(dark));
+  BitmapDC.SetBkColor(pApp->GetBackColour(dark));
 
   // Work out the number of lines of text to draw
   m_iMaxLines = (TextClient.Height()-(2*Margins.cy)) / iFontHeight;
@@ -260,7 +263,7 @@ void CMagneticView::OnDraw(CDC* pDrawDC)
       m_PageTable[i]-m_PageTable[i-1]-1);
     LastLine.left += TextLen.cx + Margins.cx;
 
-    SolidRect(&BitmapDC,LastLine,pApp->GetBackColour());
+    SolidRect(&BitmapDC,LastLine,pApp->GetBackColour(dark));
   }
 
   // Remove the font
@@ -461,9 +464,26 @@ BOOL CMagneticView::OnEraseBkgnd(CDC* pDC)
   GetClientRect(Background);
 
   if (pApp->GetGameLoaded() == 0)
-    pDC->FillSolidRect(Background,pApp->GetBackColour());
+  {
+    DarkMode* dark = DarkMode::GetActive(this);
+    pDC->FillSolidRect(Background,pApp->GetBackColour(dark));
+  }
 
   return 1;
+}
+
+void CMagneticView::OnNcPaint()
+{
+  DarkMode* dark = DarkMode::GetActive(this);
+  if (dark)
+  {
+    CWindowDC dc(this);
+    CRect r = dark->PrepareNonClientBorder(this,dc);
+    dc.FillSolidRect(r,dark->GetColour(DarkMode::Dark3));
+    dc.SelectClipRgn(NULL);
+  }
+  else
+    Default();
 }
 
 void CMagneticView::OnToggleGfx() 

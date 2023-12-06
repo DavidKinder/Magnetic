@@ -90,6 +90,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   pApp->GetControlBars(bToolBar,bStatusBar);
   ShowControlBar(&m_toolBar,bToolBar,TRUE);
   ShowControlBar(&m_statusBar,bStatusBar,TRUE);
+
+  // Turn on dark mode, if needed
+  SetDarkMode(DarkMode::GetEnabled(DARKMODE_REGISTRY));
   return 0;
 }
 

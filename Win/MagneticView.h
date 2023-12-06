@@ -134,6 +134,7 @@ protected:
   afx_msg void OnEditPaste();
   afx_msg void OnUpdateViewOptions(CCmdUI* pCmdUI);
   afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+  afx_msg void OnNcPaint();
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnUpdateScrollback(CCmdUI* pCmdUI);
   afx_msg void OnToggleGfx();

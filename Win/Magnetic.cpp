@@ -141,6 +141,10 @@ BOOL CMagneticApp::InitInstance()
   // Notify the shell that associations have changed
   ::SHChangeNotify(SHCNE_ASSOCCHANGED,SHCNF_IDLIST,0,0);
 
+  // Turn on dark mode for the application, if necessary
+  if (DarkMode::IsEnabled(DARKMODE_REGISTRY))
+    DarkMode::SetAppDarkMode();
+
   // Create file dialog for loading games
   m_pNewGameDialog = new SimpleFileDialog(TRUE,NULL,
     GetProfileString("Settings","Last File",""),
@@ -353,36 +357,51 @@ CMagneticApp::Redraw CMagneticApp::GetRedrawStatus(void)
   return Return;
 }
 
-COLORREF CMagneticApp::GetForeColour(void)
+COLORREF CMagneticApp::GetForeColour(DarkMode* dark)
 {
   COLORREF Colour;
 
   if (m_ForeColour == ~0)
-    Colour = GetSysColor(COLOR_WINDOWTEXT);
+  {
+    if (dark)
+      Colour = dark->GetColour(DarkMode::Fore);
+    else
+      Colour = GetSysColor(COLOR_WINDOWTEXT);
+  }
   else
     Colour = m_ForeColour;
 
   return Colour;
 }
 
-COLORREF CMagneticApp::GetBackColour(void)
+COLORREF CMagneticApp::GetBackColour(DarkMode* dark)
 {
   COLORREF Colour;
 
   if (m_BackColour == ~0)
-    Colour = GetSysColor(COLOR_WINDOW);
+  {
+    if (dark)
+      Colour = dark->GetColour(DarkMode::Back);
+    else
+      Colour = GetSysColor(COLOR_WINDOW);
+  }
   else
     Colour = m_BackColour;
 
   return Colour;
 }
 
-COLORREF CMagneticApp::GetGfxColour(void)
+COLORREF CMagneticApp::GetGfxColour(DarkMode* dark)
 {
   COLORREF Colour;
 
   if (m_GfxColour == ~0)
-    Colour = GetSysColor(COLOR_APPWORKSPACE);
+  {
+    if (dark)
+      Colour = dark->GetColour(DarkMode::Darkest);
+    else
+      Colour = GetSysColor(COLOR_APPWORKSPACE);
+  }
   else
     Colour = m_GfxColour;
 

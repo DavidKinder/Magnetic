@@ -17,6 +17,7 @@
   #error include 'stdafx.h' before including this file for PCH
 #endif
 
+#include "DarkMode.h"
 #include "DpiFunctions.h"
 #include "resource.h"
 
@@ -69,9 +70,9 @@ public:
 
   LOGFONT* GetLogFont(void);
   int GetFontPoints(void);
-  COLORREF GetForeColour(void);
-  COLORREF GetBackColour(void);
-  COLORREF GetGfxColour(void);
+  COLORREF GetForeColour(DarkMode* dark);
+  COLORREF GetBackColour(DarkMode* dark);
+  COLORREF GetGfxColour(DarkMode* dark);
   CRect GetScreenSize(void);
 
   void SetRedrawStatus(Redraw Status);
