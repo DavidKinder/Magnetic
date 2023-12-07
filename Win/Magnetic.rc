@@ -159,7 +159,7 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSM
 CAPTION "About Magnetic"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         IDR_LOGO,IDC_LOGO,"Static",SS_OWNERDRAW | SS_SUNKEN,6,4,70,88,WS_EX_CLIENTEDGE
+    CONTROL         "",IDC_LOGO,"Static",SS_OWNERDRAW | WS_BORDER,6,4,70,88
     GROUPBOX        "Credits",IDC_CREDITS,94,4,178,89
     LTEXT           "Magnetic v2.3, an interpreter for Magnetic Scrolls games. Copyright © 1997-2008 Niclas Karlsson.",IDC_STATIC,99,16,165,16
     LTEXT           "Magnetic is released under the terms of the GNU General Public License.",IDC_STATIC,100,35,160,16
@@ -300,7 +300,6 @@ BEGIN
         LEFTMARGIN, 4
         RIGHTMARGIN, 200
         TOPMARGIN, 1
-        BOTTOMMARGIN, 198
     END
 
     IDD_TITLE, DIALOG
@@ -337,6 +336,17 @@ END
 //
 
 IDR_MANIFEST            RT_MANIFEST             "res\\Magnetic.manifest"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_ABOUTBOX AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
 
 
 /////////////////////////////////////////////////////////////////////////////

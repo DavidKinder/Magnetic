@@ -64,6 +64,10 @@ BOOL CScrollBackDlg::OnInitDialog()
   if (m_RichEdit.SubclassDlgItem(IDC_TEXT,this) == FALSE)
     return FALSE;
 
+  // Subclass the buttons
+  m_CopyButton.SubclassDlgItem(IDC_COPY,this);
+  m_CloseButton.SubclassDlgItem(IDOK,this);
+
   // Change the window icon
   SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
 
@@ -133,6 +137,14 @@ void CScrollBackDlg::ResizeRichEdit(void)
     m_RichEdit.MoveWindow(0,editRect.top,
       clientRect.Width(),clientRect.Height()-editRect.top);
   }
+}
+
+void CScrollBackDlg::SetDarkMode(DarkMode* dark)
+{
+  BaseDialog::SetDarkMode(dark);
+
+  if (GetSafeHwnd() != 0)
+    m_RichEdit.SetDarkMode(dark,DarkMode::Back);
 }
 
 CString& CScrollBackDlg::GetScrollback(void)

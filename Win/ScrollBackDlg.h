@@ -49,9 +49,12 @@ protected:
   DECLARE_MESSAGE_MAP()
 
 public:
+  void SetDarkMode(DarkMode* dark);
   CString& GetScrollback(void);
 
 protected:
   CString m_strScrollback;
-  CRichEditCtrl m_RichEdit;
+  DarkModeRichEditCtrl m_RichEdit;
+  DarkModeButton m_CopyButton;
+  DarkModeButton m_CloseButton;
 };

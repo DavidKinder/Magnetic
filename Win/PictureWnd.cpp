@@ -332,6 +332,9 @@ BOOL CPictureWnd::CreatePicWnd(CWnd* pParent)
     return FALSE;
   SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
 
+  DarkMode* dark = DarkMode::GetActive(pParent);
+  DarkMode::SetDarkTitle(this,dark != NULL);
+
   // Restore the window position from DPI neutral values
   CRect rPlace(pApp->GetPicTopLeft(),CSize(0,0));
   {

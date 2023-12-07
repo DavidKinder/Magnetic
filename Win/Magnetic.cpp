@@ -513,10 +513,18 @@ class CLogoStatic : public CStatic
 public:
   virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
+protected:
+  afx_msg void OnNcPaint();
+  DECLARE_MESSAGE_MAP()
+
 private:
   ImagePNG m_baseLogo;
   ImagePNG m_scaledLogo;
 };
+
+BEGIN_MESSAGE_MAP(CLogoStatic, CStatic)
+  ON_WM_NCPAINT()
+END_MESSAGE_MAP()
 
 void CLogoStatic::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
@@ -535,6 +543,20 @@ void CLogoStatic::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   }
   if (m_scaledLogo.Pixels())
     m_scaledLogo.Draw(dc,r.TopLeft());
+}
+
+void CLogoStatic::OnNcPaint()
+{
+  DarkMode* dark = DarkMode::GetActive(this);
+  if (dark)
+  {
+    CWindowDC dc(this);
+    CRect r = dark->PrepareNonClientBorder(this,dc);
+    dc.FillSolidRect(r,dark->GetColour(DarkMode::Dark2));
+    dc.SelectClipRgn(NULL);
+  }
+  else
+    Default();
 }
 
 class CAboutDlg : public BaseDialog
@@ -562,6 +584,8 @@ protected:
   DECLARE_MESSAGE_MAP()
 
   CLogoStatic m_logo;
+  DarkModeGroupBox m_credits;
+  DarkModeButton m_ok;
 };
 
 CAboutDlg::CAboutDlg() : BaseDialog(CAboutDlg::IDD)
@@ -595,10 +619,13 @@ BOOL CAboutDlg::OnInitDialog()
   ScreenToClient(logoRect);
   double aspect = ((double)logoRect.Width())/logoRect.Height();
 
+  // Subclass the controls for dark mode
+  m_credits.SubclassDlgItem(IDC_CREDITS,this);
+  m_ok.SubclassDlgItem(IDOK,this);
+
   // Get the credits group control
   CRect creditsRect;
-  CWnd* creditsWnd = GetDlgItem(IDC_CREDITS);
-  creditsWnd->GetWindowRect(creditsRect);
+  m_credits.GetWindowRect(creditsRect);
   ScreenToClient(creditsRect);
 
   // Resize the logo
