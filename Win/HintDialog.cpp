@@ -42,6 +42,7 @@ void CHintDialog::DoDataExchange(CDataExchange* pDX)
 {
   BaseDialog::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CHintDialog)
+  DDX_Control(pDX, IDOK, m_doneButton);
   DDX_Control(pDX, IDC_TOPICS, m_topicButton);
   DDX_Control(pDX, IDC_SHOWHINT, m_hintButton);
   DDX_Control(pDX, IDC_PREVIOUS, m_prevButton);
@@ -61,9 +62,12 @@ BEGIN_MESSAGE_MAP(CHintDialog, BaseDialog)
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHintDialog message handlers
-/////////////////////////////////////////////////////////////////////////////
+void CHintDialog::SetDarkMode(DarkMode* dark)
+{
+  BaseDialog::SetDarkMode(dark);
+  if (GetSafeHwnd() != 0)
+    m_hintList.SetDarkMode(dark);
+}
 
 void CHintDialog::SetHints(struct ms_hint* hints) 
 {
@@ -169,6 +173,10 @@ BOOL CHintDialog::DestroyWindow()
   return BaseDialog::DestroyWindow();
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// CHintDialog message handlers
+/////////////////////////////////////////////////////////////////////////////
+
 BOOL CHintDialog::OnInitDialog() 
 {
   BaseDialog::OnInitDialog();
@@ -260,8 +268,6 @@ void CHintDialog::OnDblClkHints()
 // Implementation of the CHintListBox control
 /////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC(CHintListBox, CListBox)
-
 CHintListBox::CHintListBox()
 {
 }
@@ -270,7 +276,7 @@ CHintListBox::~CHintListBox()
 {
 }
 
-BEGIN_MESSAGE_MAP(CHintListBox, CListBox)
+BEGIN_MESSAGE_MAP(CHintListBox, DarkModeListBox)
 END_MESSAGE_MAP()
 
 void CHintListBox::SetItemHeights(void)
@@ -323,15 +329,33 @@ void CHintListBox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 void CHintListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
   CDC* dc = CDC::FromHandle(lpDrawItemStruct->hDC);
+  DarkMode* dark = DarkMode::GetActive(this);
+
   if (lpDrawItemStruct->itemState & ODS_SELECTED)
   {
-    dc->FillSolidRect(&lpDrawItemStruct->rcItem,::GetSysColor(COLOR_HIGHLIGHT));
-    dc->SetTextColor(::GetSysColor(COLOR_HIGHLIGHTTEXT));
+    if (dark)
+    {
+      dc->FillSolidRect(&lpDrawItemStruct->rcItem,dark->GetColour(DarkMode::Dark1));
+      dc->SetTextColor(dark->GetColour(DarkMode::Back));
+    }
+    else
+    {
+      dc->FillSolidRect(&lpDrawItemStruct->rcItem,::GetSysColor(COLOR_HIGHLIGHT));
+      dc->SetTextColor(::GetSysColor(COLOR_HIGHLIGHTTEXT));
+    }
   }
   else
   {
-    dc->FillSolidRect(&lpDrawItemStruct->rcItem,::GetSysColor(COLOR_WINDOW));
-    dc->SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
+    if (dark)
+    {
+      dc->FillSolidRect(&lpDrawItemStruct->rcItem,dark->GetColour(DarkMode::Darkest));
+      dc->SetTextColor(dark->GetColour(DarkMode::Fore));
+    }
+    else
+    {
+      dc->FillSolidRect(&lpDrawItemStruct->rcItem,::GetSysColor(COLOR_WINDOW));
+      dc->SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
+    }
   }
 
   if (lpDrawItemStruct->itemID != -1)

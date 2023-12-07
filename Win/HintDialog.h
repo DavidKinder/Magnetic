@@ -16,10 +16,8 @@
 #endif // _MSC_VER > 1000
 
 // Listbox for displaying hints
-class CHintListBox : public CListBox
+class CHintListBox : public DarkModeListBox
 {
-  DECLARE_DYNAMIC(CHintListBox)
-
 public:
   CHintListBox();
   virtual ~CHintListBox();
@@ -45,9 +43,10 @@ public:
 // Dialog Data
   //{{AFX_DATA(CHintDialog)
   enum { IDD = IDD_HINTS };
-  CButton  m_topicButton;
-  CButton  m_hintButton;
-  CButton  m_prevButton;
+  DarkModeButton m_doneButton;
+  DarkModeButton m_topicButton;
+  DarkModeButton m_hintButton;
+  DarkModeButton m_prevButton;
   CHintListBox m_hintList;
   //}}AFX_DATA
 
@@ -76,19 +75,17 @@ protected:
   DECLARE_MESSAGE_MAP()
 
 public:
-    void SetHints(struct ms_hint* hints);
+  void SetDarkMode(DarkMode* dark);
+  void SetHints(struct ms_hint* hints);
 
 protected:
   int LoadHintSet(int element);
   void UpdateHintList(void);
+  void LayoutControls(void);
 
   struct ms_hint* m_allHints;
   int m_currHint;
   int m_visibleHints;
 
-protected:
-  void LayoutControls(void);
-
-  CHintListBox m_hintControl;
   CRect m_btnSize;
 };
