@@ -41,9 +41,6 @@ void COptionsDlg::DoDataExchange(CDataExchange* pDX)
 {
   BaseDialog::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(COptionsDlg)
-  DDX_Control(pDX, IDC_PREDICT, m_Predict);
-  DDX_Control(pDX, IDC_SEED, m_Seed);
-  DDX_Control(pDX, IDC_SEED_LABEL, m_SeedLabel);
   DDX_Text(pDX, IDC_SCALE, m_dScaleFactor);
   DDV_MinMaxDouble(pDX, m_dScaleFactor, 0.5, 5.);
   DDX_Check(pDX, IDC_PREDICT, m_bPredict);
@@ -86,6 +83,28 @@ BOOL COptionsDlg::OnInitDialog()
   if (m_BColour.SubclassDlgItem(IDC_BACK,this) == FALSE)
     return FALSE;
   if (m_GColour.SubclassDlgItem(IDC_GFX,this) == FALSE)
+    return FALSE;
+
+  // Subclass the controls for dark mode
+  if (m_OK.SubclassDlgItem(IDOK,this) == FALSE)
+    return FALSE;
+  if (m_Cancel.SubclassDlgItem(IDCANCEL,this) == FALSE)
+    return FALSE;
+  if (m_GrahicsGroup.SubclassDlgItem(IDC_GRAPHICS_GROUP,this) == FALSE)
+    return FALSE;
+  if (m_ColoursGroup.SubclassDlgItem(IDC_COLOURS_GROUP,this) == FALSE)
+    return FALSE;
+  if (m_OtherGroup.SubclassDlgItem(IDC_OTHER_GROUP,this) == FALSE)
+    return FALSE;
+  if (m_ShowPicsCombo.SubclassDlgItem(IDC_SHOWPIC,this) == FALSE)
+    return FALSE;
+  if (m_HintCheck.SubclassDlgItem(IDC_HINT_WINDOW,this,IDR_DARK_CHECK) == FALSE)
+    return FALSE;
+  if (m_AnimWaitCheck.SubclassDlgItem(IDC_ANIM_WAIT,this,IDR_DARK_CHECK) == FALSE)
+    return FALSE;
+  if (m_PredictCheck.SubclassDlgItem(IDC_PREDICT,this,IDR_DARK_CHECK) == FALSE)
+    return FALSE;
+  if (m_Seed.SubclassDlgItem(IDC_SEED,this) == FALSE)
     return FALSE;
 
   // Set the colours
@@ -150,7 +169,7 @@ BOOL COptionsDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 
 void COptionsDlg::OnChangePredict() 
 {
-  m_Seed.EnableWindow(m_Predict.GetCheck() == 1);
+  m_Seed.EnableWindow(m_PredictCheck.GetCheck() == 1);
 }
 
 COLORREF COptionsDlg::GetForeColour(void)

@@ -295,14 +295,28 @@ void CMagneticApp::OnViewOptions()
     m_iSeed = Options.m_iSeed;
 
     m_ForeColour = Options.GetForeColour();
-    if (m_ForeColour == GetSysColor(COLOR_WINDOWTEXT))
-      m_ForeColour = (COLORREF)~0;
     m_BackColour = Options.GetBackColour();
-    if (m_BackColour == GetSysColor(COLOR_WINDOW))
-      m_BackColour = (COLORREF)~0;
     m_GfxColour = Options.GetGfxColour();
-    if (m_GfxColour == GetSysColor(COLOR_APPWORKSPACE))
-      m_GfxColour = (COLORREF)~0;
+
+    DarkMode* dark = DarkMode::GetActive(AfxGetMainWnd());
+    if (dark)
+    {
+      if (m_ForeColour == dark->GetColour(DarkMode::Fore))
+        m_ForeColour = (COLORREF)~0;
+      if (m_BackColour == dark->GetColour(DarkMode::Back))
+        m_BackColour = (COLORREF)~0;
+      if (m_GfxColour == dark->GetColour(DarkMode::Darkest))
+        m_GfxColour = (COLORREF)~0;
+    }
+    else
+    {
+      if (m_ForeColour == GetSysColor(COLOR_WINDOWTEXT))
+        m_ForeColour = (COLORREF)~0;
+      if (m_BackColour == GetSysColor(COLOR_WINDOW))
+        m_BackColour = (COLORREF)~0;
+      if (m_GfxColour == GetSysColor(COLOR_APPWORKSPACE))
+        m_GfxColour = (COLORREF)~0;
+    }
 
     CMagneticView* pView = CMagneticView::GetView();
     if (pView)

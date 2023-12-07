@@ -25,13 +25,11 @@ public:
 // Dialog Data
   //{{AFX_DATA(COptionsDlg)
   enum { IDD = IDD_OPTIONS };
-  CButton  m_Predict;
-  CEdit    m_Seed;
-  CStatic  m_SeedLabel;
+  CButton m_Predict;
   double  m_dScaleFactor;
   BOOL    m_bPredict;
-  int      m_iSeed;
-  int      m_iShowPics;
+  int     m_iSeed;
+  int     m_iShowPics;
   double  m_dGamma;
   BOOL    m_bAnimWait;
   BOOL    m_bHintWindow;
@@ -61,7 +59,11 @@ public:
   COLORREF GetGfxColour(void);
 
 protected:
+  DarkModeButton m_OK, m_Cancel;
+  DarkModeGroupBox m_GrahicsGroup, m_ColoursGroup, m_OtherGroup;
+  DarkModeComboBox m_ShowPicsCombo;
   CSpinButtonCtrl m_Spin, m_SpinGamma;
   ColourButton m_FColour, m_BColour, m_GColour;
-  CButton m_FDefault, m_BDefault;
+  DarkModeCheckButton m_HintCheck, m_AnimWaitCheck, m_PredictCheck;
+  DarkModeEdit m_Seed;
 };

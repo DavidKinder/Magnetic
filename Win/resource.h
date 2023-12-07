@@ -11,6 +11,7 @@
 #define IDD_TITLE                       133
 #define IDD_HINTS                       134
 #define IDR_TOOLBAR                     135
+#define IDR_DARK_CHECK                  136
 #define IDC_COPY                        1000
 #define IDC_SHOWPIC                     1001
 #define IDC_SCALE                       1002
@@ -38,6 +39,9 @@
 #define IDC_HINTLIST                    1024
 #define IDC_LOGO                        1025
 #define IDC_CREDITS                     1026
+#define IDC_GRAPHICS_GROUP              1027
+#define IDC_COLOURS_GROUP               1028
+#define IDC_OTHER_GROUP                 1029
 #define ID_VIEW_FONT                    32770
 #define ID_HELP_TOPICS                  32771
 #define ID_FILE_RECORD                  32772

@@ -1,5 +1,6 @@
 *.chm
 *.user
+*.aps
 .vs/
 Win/Debug/
 Win/DebugLog/
