@@ -12,6 +12,7 @@
 #include "StdAfx.h"
 
 #include "Magnetic.h"
+#include "MagneticDlg.h"
 #include "MagneticDoc.h"
 #include "MagneticView.h"
 #include "MainFrm.h"
@@ -35,6 +36,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, MenuBarFrameWnd)
   ON_COMMAND(ID_HELP, OnHelpFinder)
   ON_WM_PALETTECHANGED()
   ON_WM_QUERYNEWPALETTE()
+  ON_WM_SETTINGCHANGE()
   //}}AFX_MSG_MAP
   ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 END_MESSAGE_MAP()
@@ -46,12 +48,17 @@ static UINT indicators[] =
   ID_INDICATOR_NUM,
 };
 
-CMainFrame::CMainFrame() : m_dpi(96)
+CMainFrame::CMainFrame() : m_dpi(96), m_modalDialog(NULL)
 {
 }
 
 CMainFrame::~CMainFrame()
 {
+}
+
+void CMainFrame::SetModalDialog(CWnd* dialog)
+{
+  m_modalDialog = dialog;
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -147,6 +154,32 @@ BOOL CMainFrame::OnQueryNewPalette()
   int iColours = pView->GetPicture().SetPalette(pDC,this);
   ReleaseDC(pDC);
   return iColours;
+}
+
+void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
+{
+  MenuBarFrameWnd::OnSettingChange(uFlags,lpszSection);
+
+  if ((m_dark != NULL) != DarkMode::IsEnabled(DARKMODE_REGISTRY))
+  {
+    SetDarkMode(DarkMode::GetEnabled(DARKMODE_REGISTRY));
+    if (m_modalDialog != NULL)
+    {
+      if (m_modalDialog->IsKindOf(RUNTIME_CLASS(CMagneticDlg)))
+        ((CMagneticDlg*)m_modalDialog)->SetDarkMode(DarkMode::GetActive(m_modalDialog));
+    }
+
+    CMagneticView* pView = CMagneticView::GetView();
+    if (pView)
+    {
+      CPictureWnd& PicWnd = pView->GetPictureWindow();
+      if (PicWnd.GetSafeHwnd() != 0)
+        DarkMode::SetDarkTitle(&PicWnd,m_dark != NULL);
+    }
+
+    if (m_dark != NULL)
+      DarkMode::SetAppDarkMode();
+  }
 }
 
 LRESULT CMainFrame::OnDpiChanged(WPARAM wparam, LPARAM lparam)

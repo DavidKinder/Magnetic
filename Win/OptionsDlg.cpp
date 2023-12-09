@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 // Implementation of the COptionsDlg dialog
 /////////////////////////////////////////////////////////////////////////////
 
-COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/) : BaseDialog(COptionsDlg::IDD, pParent)
+COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/) : CMagneticDlg(COptionsDlg::IDD, pParent)
 {
   //{{AFX_DATA_INIT(COptionsDlg)
   m_dScaleFactor = 0.0;
@@ -39,7 +39,7 @@ COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/) : BaseDialog(COptionsDlg::IDD,
 
 void COptionsDlg::DoDataExchange(CDataExchange* pDX)
 {
-  BaseDialog::DoDataExchange(pDX);
+  CMagneticDlg::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(COptionsDlg)
   DDX_Text(pDX, IDC_SCALE, m_dScaleFactor);
   DDV_MinMaxDouble(pDX, m_dScaleFactor, 0.5, 5.);
@@ -53,7 +53,7 @@ void COptionsDlg::DoDataExchange(CDataExchange* pDX)
   //}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(COptionsDlg, BaseDialog)
+BEGIN_MESSAGE_MAP(COptionsDlg, CMagneticDlg)
   //{{AFX_MSG_MAP(COptionsDlg)
   ON_WM_HELPINFO()
   ON_BN_CLICKED(IDC_PREDICT, OnChangePredict)
@@ -66,7 +66,7 @@ END_MESSAGE_MAP()
 
 BOOL COptionsDlg::OnInitDialog() 
 {
-  BaseDialog::OnInitDialog();
+  CMagneticDlg::OnInitDialog();
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
   
   // Subclass the spin controls

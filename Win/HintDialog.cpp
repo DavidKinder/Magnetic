@@ -28,7 +28,7 @@ static char THIS_FILE[] = __FILE__;
 // Implementation of the CHintDialog dialog
 /////////////////////////////////////////////////////////////////////////////
 
-CHintDialog::CHintDialog(CWnd* pParent) :  BaseDialog(CHintDialog::IDD,pParent)
+CHintDialog::CHintDialog(CWnd* pParent) :  CMagneticDlg(CHintDialog::IDD,pParent)
 {
   //{{AFX_DATA_INIT(CHintDialog)
   //}}AFX_DATA_INIT
@@ -40,7 +40,7 @@ CHintDialog::CHintDialog(CWnd* pParent) :  BaseDialog(CHintDialog::IDD,pParent)
 
 void CHintDialog::DoDataExchange(CDataExchange* pDX)
 {
-  BaseDialog::DoDataExchange(pDX);
+  CMagneticDlg::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CHintDialog)
   DDX_Control(pDX, IDOK, m_doneButton);
   DDX_Control(pDX, IDC_TOPICS, m_topicButton);
@@ -50,7 +50,7 @@ void CHintDialog::DoDataExchange(CDataExchange* pDX)
   //}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CHintDialog, BaseDialog)
+BEGIN_MESSAGE_MAP(CHintDialog, CMagneticDlg)
   //{{AFX_MSG_MAP(CHintDialog)
   ON_WM_SIZE()
   ON_WM_GETMINMAXINFO()
@@ -64,7 +64,7 @@ END_MESSAGE_MAP()
 
 void CHintDialog::SetDarkMode(DarkMode* dark)
 {
-  BaseDialog::SetDarkMode(dark);
+  CMagneticDlg::SetDarkMode(dark);
   if (GetSafeHwnd() != 0)
     m_hintList.SetDarkMode(dark);
 }
@@ -170,7 +170,7 @@ BOOL CHintDialog::DestroyWindow()
   }
   pApp->GetHintsRect() = Place.rcNormalPosition;
 
-  return BaseDialog::DestroyWindow();
+  return CMagneticDlg::DestroyWindow();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ BOOL CHintDialog::DestroyWindow()
 
 BOOL CHintDialog::OnInitDialog() 
 {
-  BaseDialog::OnInitDialog();
+  CMagneticDlg::OnInitDialog();
 
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
   SetIcon(pApp->LoadIcon(IDR_MAINFRAME),TRUE);
@@ -211,7 +211,7 @@ BOOL CHintDialog::OnInitDialog()
 
 void CHintDialog::OnSize(UINT nType, int cx, int cy)
 {
-  BaseDialog::OnSize(nType,cx,cy);
+  CMagneticDlg::OnSize(nType,cx,cy);
   if (GetDlgItem(IDOK)->GetSafeHwnd())
     LayoutControls();
 }

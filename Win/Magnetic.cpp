@@ -559,7 +559,7 @@ void CLogoStatic::OnNcPaint()
     Default();
 }
 
-class CAboutDlg : public BaseDialog
+class CAboutDlg : public CMagneticDlg
 {
 public:
   CAboutDlg();
@@ -588,7 +588,7 @@ protected:
   DarkModeButton m_ok;
 };
 
-CAboutDlg::CAboutDlg() : BaseDialog(CAboutDlg::IDD)
+CAboutDlg::CAboutDlg() : CMagneticDlg(CAboutDlg::IDD)
 {
   //{{AFX_DATA_INIT(CAboutDlg)
   //}}AFX_DATA_INIT
@@ -596,12 +596,12 @@ CAboutDlg::CAboutDlg() : BaseDialog(CAboutDlg::IDD)
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-  BaseDialog::DoDataExchange(pDX);
+  CMagneticDlg::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CAboutDlg)
   //}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, BaseDialog)
+BEGIN_MESSAGE_MAP(CAboutDlg, CMagneticDlg)
   //{{AFX_MSG_MAP(CAboutDlg)
     // No message handlers
   //}}AFX_MSG_MAP
@@ -609,7 +609,7 @@ END_MESSAGE_MAP()
 
 BOOL CAboutDlg::OnInitDialog() 
 {
-  BaseDialog::OnInitDialog();
+  CMagneticDlg::OnInitDialog();
 
   // Subclass the static logo bitmap control
   if (m_logo.SubclassDlgItem(IDC_LOGO,this) == FALSE)

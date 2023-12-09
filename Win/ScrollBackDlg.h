@@ -9,13 +9,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "Dialogs.h"
+#include "MagneticDlg.h"
 
 #if _MSC_VER >= 1000
 #pragma once
 #endif // _MSC_VER >= 1000
 
-class CScrollBackDlg : public BaseDialog
+class CScrollBackDlg : public CMagneticDlg
 {
 // Construction
 public:

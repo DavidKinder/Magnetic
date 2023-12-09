@@ -28,6 +28,7 @@ public:
 
 // Operations
 public:
+  void SetModalDialog(CWnd* dialog);
 
 // Overrides
   // ClassWizard generated virtual function overrides
@@ -53,10 +54,12 @@ protected:  // control bar embedded members
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
   afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
   afx_msg BOOL OnQueryNewPalette();
+  afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
   //}}AFX_MSG
   afx_msg LRESULT OnDpiChanged(WPARAM, LPARAM);
 
   DECLARE_MESSAGE_MAP()
 
   int m_dpi;
+  CWnd* m_modalDialog;
 };

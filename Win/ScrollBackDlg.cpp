@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #define WM_SAMESIZEASMAIN (WM_APP+1)
 
 CScrollBackDlg::CScrollBackDlg(CWnd* pParent /*=NULL*/)
-  : BaseDialog(CScrollBackDlg::IDD, pParent)
+  : CMagneticDlg(CScrollBackDlg::IDD, pParent)
 {
   //{{AFX_DATA_INIT(CScrollBackDlg)
     // NOTE: the ClassWizard will add member initialization here
@@ -36,13 +36,13 @@ CScrollBackDlg::CScrollBackDlg(CWnd* pParent /*=NULL*/)
 
 void CScrollBackDlg::DoDataExchange(CDataExchange* pDX)
 {
-  BaseDialog::DoDataExchange(pDX);
+  CMagneticDlg::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CScrollBackDlg)
     // NOTE: the ClassWizard will add DDX and DDV calls here
   //}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CScrollBackDlg, BaseDialog)
+BEGIN_MESSAGE_MAP(CScrollBackDlg, CMagneticDlg)
   //{{AFX_MSG_MAP(CScrollBackDlg)
   ON_WM_SIZE()
   ON_BN_CLICKED(IDC_COPY, OnCopy)
@@ -57,7 +57,7 @@ END_MESSAGE_MAP()
 
 BOOL CScrollBackDlg::OnInitDialog() 
 {
-  BaseDialog::OnInitDialog();
+  CMagneticDlg::OnInitDialog();
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
   
   // Subclass the text control
@@ -95,7 +95,7 @@ BOOL CScrollBackDlg::OnInitDialog()
 
 void CScrollBackDlg::OnSize(UINT nType, int cx, int cy) 
 {
-  BaseDialog::OnSize(nType, cx, cy);
+  CMagneticDlg::OnSize(nType, cx, cy);
   ResizeRichEdit();
 }
 
@@ -141,7 +141,7 @@ void CScrollBackDlg::ResizeRichEdit(void)
 
 void CScrollBackDlg::SetDarkMode(DarkMode* dark)
 {
-  BaseDialog::SetDarkMode(dark);
+  CMagneticDlg::SetDarkMode(dark);
 
   if (GetSafeHwnd() != 0)
     m_RichEdit.SetDarkMode(dark,DarkMode::Back);

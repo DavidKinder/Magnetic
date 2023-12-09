@@ -416,6 +416,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="MagneticDlg.cpp" />
     <ClCompile Include="MagneticDoc.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>

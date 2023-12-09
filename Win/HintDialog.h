@@ -9,7 +9,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "Dialogs.h"
+#include "MagneticDlg.h"
 
 #if _MSC_VER > 1000
 #pragma once
@@ -34,7 +34,7 @@ public:
 };
 
 // Dialog for showing hints
-class CHintDialog : public BaseDialog
+class CHintDialog : public CMagneticDlg
 {
 // Construction
 public:
