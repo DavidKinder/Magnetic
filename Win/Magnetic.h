@@ -70,10 +70,14 @@ public:
 
   LOGFONT* GetLogFont(void);
   int GetFontPoints(void);
+  CRect GetScreenSize(void);
+
   COLORREF GetForeColour(DarkMode* dark);
   COLORREF GetBackColour(DarkMode* dark);
   COLORREF GetGfxColour(DarkMode* dark);
-  CRect GetScreenSize(void);
+  static COLORREF GetDefaultForeColour(DarkMode* dark);
+  static COLORREF GetDefaultBackColour(DarkMode* dark);
+  static COLORREF GetDefaultGfxColour(DarkMode* dark);
 
   void SetRedrawStatus(Redraw Status);
   Redraw GetRedrawStatus(void);

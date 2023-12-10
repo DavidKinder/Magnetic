@@ -54,6 +54,8 @@ protected:
   DECLARE_MESSAGE_MAP()
 
 public:
+  void SetDarkMode(DarkMode* dark);
+
   COLORREF GetForeColour(void);
   COLORREF GetBackColour(void);
   COLORREF GetGfxColour(void);
@@ -66,4 +68,6 @@ protected:
   ColourButton m_FColour, m_BColour, m_GColour;
   DarkModeCheckButton m_HintCheck, m_AnimWaitCheck, m_PredictCheck;
   DarkModeEdit m_Seed;
+
+  COLORREF m_DefaultFColour, m_DefaultBColour, m_DefaultGColour;
 };

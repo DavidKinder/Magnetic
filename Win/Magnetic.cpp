@@ -373,53 +373,44 @@ CMagneticApp::Redraw CMagneticApp::GetRedrawStatus(void)
 
 COLORREF CMagneticApp::GetForeColour(DarkMode* dark)
 {
-  COLORREF Colour;
-
   if (m_ForeColour == ~0)
-  {
-    if (dark)
-      Colour = dark->GetColour(DarkMode::Fore);
-    else
-      Colour = GetSysColor(COLOR_WINDOWTEXT);
-  }
-  else
-    Colour = m_ForeColour;
-
-  return Colour;
+    return GetDefaultForeColour(dark);
+  return m_ForeColour;
 }
 
 COLORREF CMagneticApp::GetBackColour(DarkMode* dark)
 {
-  COLORREF Colour;
-
   if (m_BackColour == ~0)
-  {
-    if (dark)
-      Colour = dark->GetColour(DarkMode::Back);
-    else
-      Colour = GetSysColor(COLOR_WINDOW);
-  }
-  else
-    Colour = m_BackColour;
-
-  return Colour;
+    return GetDefaultBackColour(dark);
+  return m_BackColour;
 }
 
 COLORREF CMagneticApp::GetGfxColour(DarkMode* dark)
 {
-  COLORREF Colour;
-
   if (m_GfxColour == ~0)
-  {
-    if (dark)
-      Colour = dark->GetColour(DarkMode::Darkest);
-    else
-      Colour = GetSysColor(COLOR_APPWORKSPACE);
-  }
-  else
-    Colour = m_GfxColour;
+    return GetDefaultGfxColour(dark);
+  return m_GfxColour;
+}
 
-  return Colour;
+COLORREF CMagneticApp::GetDefaultForeColour(DarkMode* dark)
+{
+  if (dark)
+    return dark->GetColour(DarkMode::Fore);
+  return GetSysColor(COLOR_WINDOWTEXT);
+}
+
+COLORREF CMagneticApp::GetDefaultBackColour(DarkMode* dark)
+{
+  if (dark)
+    return dark->GetColour(DarkMode::Back);
+  return GetSysColor(COLOR_WINDOW);
+}
+
+COLORREF CMagneticApp::GetDefaultGfxColour(DarkMode* dark)
+{
+  if (dark)
+    return dark->GetColour(DarkMode::Darkest);
+  return GetSysColor(COLOR_APPWORKSPACE);
 }
 
 CRect& CMagneticApp::GetWindowRect(void)

@@ -35,6 +35,10 @@ COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/) : CMagneticDlg(COptionsDlg::ID
   m_bAnimWait = FALSE;
   m_bHintWindow = FALSE;
   //}}AFX_DATA_INIT
+
+  m_DefaultFColour = 0;
+  m_DefaultBColour = 0;
+  m_DefaultGColour = 0;
 }
 
 void COptionsDlg::DoDataExchange(CDataExchange* pDX)
@@ -109,6 +113,9 @@ BOOL COptionsDlg::OnInitDialog()
 
   // Set the colours
   DarkMode* dark = DarkMode::GetActive(this);
+  m_DefaultFColour = pApp->GetDefaultForeColour(dark);
+  m_DefaultBColour = pApp->GetDefaultBackColour(dark);
+  m_DefaultGColour = pApp->GetDefaultGfxColour(dark);
   m_FColour.SetCurrentColour(pApp->GetForeColour(dark));
   m_BColour.SetCurrentColour(pApp->GetBackColour(dark));
   m_GColour.SetCurrentColour(pApp->GetGfxColour(dark));
@@ -170,6 +177,26 @@ BOOL COptionsDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 void COptionsDlg::OnChangePredict() 
 {
   m_Seed.EnableWindow(m_PredictCheck.GetCheck() == 1);
+}
+
+void COptionsDlg::SetDarkMode(DarkMode* dark)
+{
+  CMagneticDlg::SetDarkMode(dark);
+
+  // Adjust the colours, if set to default values
+  CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
+  COLORREF DefaultFColour = pApp->GetDefaultForeColour(dark);
+  COLORREF DefaultBColour = pApp->GetDefaultBackColour(dark);
+  COLORREF DefaultGColour = pApp->GetDefaultGfxColour(dark);
+  if (m_FColour.GetCurrentColour() == m_DefaultFColour)
+    m_FColour.SetCurrentColour(DefaultFColour);
+  if (m_BColour.GetCurrentColour() == m_DefaultBColour)
+    m_BColour.SetCurrentColour(DefaultBColour);
+  if (m_GColour.GetCurrentColour() == m_DefaultGColour)
+    m_GColour.SetCurrentColour(DefaultGColour);
+  m_DefaultFColour = DefaultFColour;
+  m_DefaultBColour = DefaultBColour;
+  m_DefaultGColour = DefaultGColour;
 }
 
 COLORREF COptionsDlg::GetForeColour(void)
