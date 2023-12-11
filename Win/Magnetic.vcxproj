@@ -72,7 +72,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\generic;..\..\..\Libraries\libpng;..\..\..\Libraries\zlib;..\..\..\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -106,7 +106,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\generic;..\..\..\Libraries\libpng;..\..\..\Libraries\zlib;..\..\..\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;LOGGFX;LOGGFX_EXT;LOG_FILE="c:\\temp\\mag.log";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -140,7 +140,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\generic;..\..\..\Libraries\libpng;..\..\..\Libraries\zlib;..\..\..\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -297,11 +297,7 @@
       </PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Level1</WarningLevel>
     </ClCompile>
-    <ClCompile Include="..\..\..\Libraries\mfc\ColourButton.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\mfc\ColourButton.cpp" />
     <ClCompile Include="..\..\..\Libraries\mfc\DarkMode.cpp" />
     <ClCompile Include="..\..\..\Libraries\mfc\Dialogs.cpp" />
     <ClCompile Include="..\..\..\Libraries\mfc\DpiFunctions.cpp" />
@@ -411,56 +407,22 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="HintDialog.cpp" />
-    <ClCompile Include="Magnetic.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="Magnetic.cpp" />
     <ClCompile Include="MagneticDlg.cpp" />
-    <ClCompile Include="MagneticDoc.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="MagneticDoc.cpp" />
     <ClCompile Include="MagneticTitle.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">_DEBUG;WIN32;_WINDOWS;LOGGFX;LOGGFX_EXT;LOG_FILE="c:\\temp\\mag.log";__NT__</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_DEBUG;WIN32;_WINDOWS;__NT__</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NDEBUG;WIN32;_WINDOWS;__NT__</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="MagneticView.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClCompile Include="MainFrm.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClCompile Include="OptionsDlg.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClCompile Include="PictureWnd.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClCompile Include="ScrollBackDlg.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="MagneticView.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="OptionsDlg.cpp" />
+    <ClCompile Include="PictureWnd.cpp" />
+    <ClCompile Include="ScrollBackDlg.cpp" />
     <ClCompile Include="StdAfx.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugLog|Win32'">Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\generic;\Programs\Libraries\libpng;\Programs\Libraries\zlib;\Programs\Libraries\mfc</AdditionalIncludeDirectories>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
