@@ -15,14 +15,14 @@
 #define IDC_COPY                        1000
 #define IDC_SHOWPIC                     1001
 #define IDC_SCALE                       1002
-#define IDC_SPIN                        1003
+#define IDC_SPINSCALE                   1003
 #define IDC_TEXT                        1004
 #define IDC_SEED                        1005
 #define IDC_FORE                        1006
 #define IDC_BACK                        1007
 #define IDC_GFX                         1008
 #define IDC_GAMMA                       1009
-#define IDC_SPING                       1010
+#define IDC_SPINGAMMA                   1010
 #define IDC_SCALE_LABEL                 1011
 #define IDC_TEXT_LABEL                  1012
 #define IDC_BACK_LABEL                  1013

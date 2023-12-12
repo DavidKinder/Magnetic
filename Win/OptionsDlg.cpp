@@ -74,10 +74,10 @@ BOOL COptionsDlg::OnInitDialog()
   CMagneticApp* pApp = (CMagneticApp*)AfxGetApp();
   
   // Subclass the spin controls
-  if (m_Spin.SubclassDlgItem(IDC_SPIN,this) == FALSE)
+  if (m_SpinScale.SubclassDlgItem(IDC_SPINSCALE,this) == FALSE)
     return FALSE;
-  m_Spin.SetRange(1,5);
-  if (m_SpinGamma.SubclassDlgItem(IDC_SPING,this) == FALSE)
+  m_SpinScale.SetRange(1,5);
+  if (m_SpinGamma.SubclassDlgItem(IDC_SPINGAMMA,this) == FALSE)
     return FALSE;
   m_SpinGamma.SetRange(1,5);
   
@@ -102,6 +102,12 @@ BOOL COptionsDlg::OnInitDialog()
     return FALSE;
   if (m_ShowPicsCombo.SubclassDlgItem(IDC_SHOWPIC,this) == FALSE)
     return FALSE;
+  if (m_Scale.SubclassDlgItem(IDC_SCALE,this) == FALSE)
+    return FALSE;
+  m_Scale.SetOverlapWnd(&m_SpinScale);
+  if (m_Gamma.SubclassDlgItem(IDC_GAMMA,this) == FALSE)
+    return FALSE;
+  m_Gamma.SetOverlapWnd(&m_SpinGamma);
   if (m_HintCheck.SubclassDlgItem(IDC_HINT_WINDOW,this,IDR_DARK_CHECK) == FALSE)
     return FALSE;
   if (m_AnimWaitCheck.SubclassDlgItem(IDC_ANIM_WAIT,this,IDR_DARK_CHECK) == FALSE)
@@ -134,14 +140,14 @@ BOOL COptionsDlg::OnHelpInfo(HELPINFO* pHelpInfo)
     IDC_PIC_LABEL,1,
     IDC_SCALE,2,
     IDC_SCALE_LABEL,2,
-    IDC_SPIN,2,
+    IDC_SPINSCALE,2,
     IDC_FORE,3,
     IDC_TEXT_LABEL,3,
     IDC_BACK,4,
     IDC_BACK_LABEL,4,
     IDC_GAMMA,5,
     IDC_GAMMA_LABEL,5,
-    IDC_SPING,5,
+    IDC_SPINGAMMA,5,
     IDC_GFX,6,
     IDC_GFX_LABEL,6,
     IDC_PREDICT,7,

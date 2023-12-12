@@ -64,7 +64,8 @@ protected:
   DarkModeButton m_OK, m_Cancel;
   DarkModeGroupBox m_GrahicsGroup, m_ColoursGroup, m_OtherGroup;
   DarkModeComboBox m_ShowPicsCombo;
-  CSpinButtonCtrl m_Spin, m_SpinGamma;
+  DarkModeEdit m_Scale, m_Gamma;
+  DarkModeSpinButtonCtrl m_SpinScale, m_SpinGamma;
   ColourButton m_FColour, m_BColour, m_GColour;
   DarkModeCheckButton m_HintCheck, m_AnimWaitCheck, m_PredictCheck;
   DarkModeEdit m_Seed;
