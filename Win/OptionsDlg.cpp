@@ -104,10 +104,10 @@ BOOL COptionsDlg::OnInitDialog()
     return FALSE;
   if (m_Scale.SubclassDlgItem(IDC_SCALE,this) == FALSE)
     return FALSE;
-  m_Scale.SetOverlapWnd(&m_SpinScale);
+  m_Scale.SetSpinButton(&m_SpinScale);
   if (m_Gamma.SubclassDlgItem(IDC_GAMMA,this) == FALSE)
     return FALSE;
-  m_Gamma.SetOverlapWnd(&m_SpinGamma);
+  m_Gamma.SetSpinButton(&m_SpinGamma);
   if (m_HintCheck.SubclassDlgItem(IDC_HINT_WINDOW,this,IDR_DARK_CHECK) == FALSE)
     return FALSE;
   if (m_AnimWaitCheck.SubclassDlgItem(IDC_ANIM_WAIT,this,IDR_DARK_CHECK) == FALSE)
