@@ -154,17 +154,17 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 278, 118
+IDD_ABOUTBOX DIALOGEX 0, 0, 282, 118
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About Magnetic"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_LOGO,"Static",SS_OWNERDRAW | WS_BORDER,6,4,70,88
-    GROUPBOX        "Credits",IDC_CREDITS,94,4,178,89
-    LTEXT           "Magnetic v2.3, an interpreter for Magnetic Scrolls games. Copyright © 1997-2008 Niclas Karlsson.",IDC_STATIC,99,16,165,16
+    GROUPBOX        "Credits",IDC_CREDITS,94,4,182,89
+    LTEXT           "Magnetic v2.3.1, an interpreter for Magnetic Scrolls games. Copyright © 1997-2023 Niclas Karlsson.",IDC_STATIC,99,16,170,16
     LTEXT           "Magnetic is released under the terms of the GNU General Public License.",IDC_STATIC,100,35,160,16
     LTEXT           "Magnetic was written by Niclas Karlsson,\nDavid Kinder, Stefan Meier and Paul David Doherty.",IDC_STATIC,99,54,171,16
-    LTEXT           "Magnetic for Windows Release 15.\nWindows version written by David Kinder.",IDC_STATIC,99,73,141,16
+    LTEXT           "Magnetic for Windows Release 16.\nWindows version written by David Kinder.",IDC_STATIC,99,73,141,16
     DEFPUSHBUTTON   "OK",IDOK,159,98,48,14,WS_GROUP
 END
 
@@ -237,8 +237,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,3,0,15
- PRODUCTVERSION 2,3,0,15
+ FILEVERSION 2,3,1,16
+ PRODUCTVERSION 2,3,1,16
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -256,12 +256,12 @@ BEGIN
             VALUE "Comments", "Windows version by David Kinder"
             VALUE "CompanyName", "Magnetic Scrolls"
             VALUE "FileDescription", "Magnetic Scrolls Interpreter"
-            VALUE "FileVersion", "2.3.0.15"
+            VALUE "FileVersion", "2.3.1.16"
             VALUE "InternalName", "Magnetic"
-            VALUE "LegalCopyright", "Copyright (C) 1997-2008 Niclas Karlsson"
+            VALUE "LegalCopyright", "Copyright (C) 1997-2023 Niclas Karlsson"
             VALUE "OriginalFilename", "Magnetic.exe"
             VALUE "ProductName", "Magnetic Scrolls Interpreter"
-            VALUE "ProductVersion", "2.3.0.15"
+            VALUE "ProductVersion", "2.3.1.16"
         END
     END
     BLOCK "VarFileInfo"

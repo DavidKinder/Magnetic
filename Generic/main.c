@@ -7,7 +7,7 @@
 *            Stefan Meier <Stefan.Meier@if-legends.org> and
 *            Paul David Doherty <pdd@if-legends.org>
 *
-* Copyright (C) 1997-2008  Niclas Karlsson
+* Copyright (C) 1997-2023  Niclas Karlsson
 *
 *     This program is free software; you can redistribute it and/or modify
 *     it under the terms of the GNU General Public License as published by
@@ -342,7 +342,7 @@ main(int argc, char **argv)
 	}
 	if (!gamename)
 	{
-		printf("Magnetic 2.3 - a Magnetic Scrolls interpreter\n\n");
+		printf("Magnetic 2.3.1 - a Magnetic Scrolls interpreter\n\n");
 		printf("Usage: %s [options] game [gfxfile] [hintfile]\n\n"
 			"Where the options are:\n"
 			" -dn    activate register dump (after n instructions)\n"
