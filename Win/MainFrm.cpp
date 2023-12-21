@@ -177,8 +177,7 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
         DarkMode::SetDarkTitle(&PicWnd,m_dark != NULL);
     }
 
-    if (m_dark != NULL)
-      DarkMode::SetAppDarkMode();
+    DarkMode::SetAppDarkMode(m_dark);
   }
 }
 
