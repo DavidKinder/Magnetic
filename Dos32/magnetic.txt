@@ -2,7 +2,7 @@
 
 	Magnetic: An interpreter for Magnetic Scrolls adventures
 		Written by Niclas Karlsson
-			Version 2.3
+			Version 2.3.1
 
 
     Magnetic is an interpreter for the games written between 1985 and

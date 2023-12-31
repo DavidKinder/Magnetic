@@ -19,8 +19,8 @@
  */
 
 /*
- * Glk interface for Magnetic Scrolls 2.3
- * --------------------------------------
+ * Glk interface for Magnetic Scrolls 2.3.1
+ * ----------------------------------------
  *
  * This module contains the the Glk porting layer for the Magnetic
  * Scrolls interpreter.  It defines the Glk arguments list structure,
@@ -2545,7 +2545,7 @@ gms_status_update (void)
            */
           game_name = gms_gameid_get_game_name ();
           glk_put_string (game_name ? (char *) game_name
-                                    : "Glk Magnetic version 2.3");
+                                    : "Glk Magnetic version 2.3.1");
         }
 
       glk_set_window (gms_main_window);
@@ -6027,7 +6027,7 @@ gms_main (void)
   gms_gameid_identify_game (text_file);
 
   /* Print out a short banner. */
-  gms_header_string ("\nMagnetic Scrolls Interpreter, version 2.3\n");
+  gms_header_string ("\nMagnetic Scrolls Interpreter, version 2.3.1\n");
   gms_banner_string ("Written by Niclas Karlsson\n"
                      "Glk interface by Simon Baldwin\n\n");
 

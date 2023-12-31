@@ -482,7 +482,7 @@ struct NewMenu NewMenus[] =
   { NM_ITEM,"Quit","Q",0,0,0 },
   { NM_END,0,0,0,0,0 }};
 
-char Version[] = "$VER:Magnetic 2.3 (24.10.2010)";
+char Version[] = "$VER:Magnetic 2.3.1 (19.12.2023)";
 char TitleBar[] = "Magnetic Scrolls";
 
 #define HISTORY_LINES 20
