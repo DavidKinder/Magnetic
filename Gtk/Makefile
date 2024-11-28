@@ -69,7 +69,7 @@ endif
 
 #######################################################################
 
-LIBS = $(GTK_LIBS) $(SOUND_LIBS)
+LIBS = $(GTK_LIBS) $(SOUND_LIBS) -lm
 
 gtkmagnetic: $(OBJS)
 	$(CC) -o gtkmagnetic $(OBJS) $(LIBS)
