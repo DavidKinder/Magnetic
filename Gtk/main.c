@@ -304,7 +304,7 @@ gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
     if (applicationExiting)
 	return FALSE;
 
-    if (!ms_init ((type8s *) game_filename, (type8s *) graphics_filename, (type8s *) hints_filename), NULL)
+    if (!ms_init ((type8s *) game_filename, (type8s *) graphics_filename, (type8s *) hints_filename, NULL))
     {
 	GtkWidget *error;
 	gchar *basename;
