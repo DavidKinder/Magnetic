@@ -35,16 +35,35 @@
 *       correct number of bits on your system !!!
 \*****************************************************************************/
 
+/*****************************************************************************\
+* Use stdint.h type definitions with modern C compilers
+\*****************************************************************************/
+
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+
 #include <stdint.h>
 
 typedef uint8_t type8;
 typedef int8_t type8s;
-
 typedef uint16_t type16;
 typedef int16_t type16s;
-
 typedef uint32_t type32;
 typedef int32_t type32s;
+
+/*****************************************************************************\
+* Fall back to legacy integer types for pre-C99 compilers
+\*****************************************************************************/
+
+#else
+
+typedef unsigned char  type8;
+typedef signed   char  type8s;
+typedef unsigned short type16;
+typedef signed   short type16s;
+typedef unsigned long  type32;
+typedef signed   long  type32s;
+
+#endif
 
 /****************************************************************************\
 * Compile time switches 
