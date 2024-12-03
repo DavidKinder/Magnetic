@@ -27,7 +27,7 @@ void stop_main_loop (void);
 
 gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
 			 gchar *splash_filename, gchar *music_filename,
-			 gchar *hints_filename);
+			 gchar *hints_filename, gchar *sound_filename);
 
 void do_about (void);
 void close_application (GtkWidget *widget, gpointer user_data);

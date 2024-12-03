@@ -20,7 +20,10 @@
 #ifndef _SOUND_H
 #define _SOUND_H
 
+#include "../Generic/defs.h"
+
 void sound_start_music (gchar *filename);
 void sound_stop_music (void);
+void sound_play_midi (type8 *midi_data, type32 length, type16 tempo);
 
 #endif
