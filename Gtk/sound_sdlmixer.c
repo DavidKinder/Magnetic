@@ -24,37 +24,15 @@
  */
 
 #include <gtk/gtk.h>
-#include "SDL.h"
-#include "SDL_mixer.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_mixer.h"
 
 #include "sound.h"
 
-/*
- * REALLY GROSS HACK:
- * 
- * To mix sounds from several sources together, SDL_mixer first has to
- * convert them all to the audio device's expected format. Unfortunately the
- * frequency converter is atrociously bad. It can only multiply or divide
- * the source data's frequency by 2, until it reaches something it believes
- * is close enough.
- *
- * So we basically have to know the sample frequency of the MP3:s, or it will
- * sound horrible. Yuck!
- *
- * There are plans to rewrite SDL_mixer to fix this, and also remove the
- * somewhat artificial distinction between sound and music, but at the time
- * of writing this work has not yet begun.
- */
-
-#define SDLMIXER_BAD_FREQUENCY_CONVERTER
-
-#ifdef SDLMIXER_BAD_FREQUENCY_CONVERTER
-#   define MIXER_FREQUENCY    16000
-#else
-#   define MIXER_FREQUENCY    44100
-#endif
+#define MIXER_FREQUENCY    44100
 
 static Mix_Music *mp3 = NULL;
+static Mix_Music *midi = NULL;
 
 void sound_start_music (gchar *filename)
 {
@@ -82,9 +60,55 @@ void sound_start_music (gchar *filename)
 
 void sound_stop_music ()
 {
+    Mix_HaltMusic ();
     if (mp3)
     {
-	Mix_FreeMusic (mp3);
-	SDL_Quit ();
+       Mix_FreeMusic (mp3);
+       mp3 = NULL;
+    }
+    if (midi) {
+       Mix_FreeMusic (midi);
+       midi = NULL;
+    }
+    Mix_CloseAudio ();
+    SDL_QuitSubSystem (SDL_INIT_AUDIO);
+}
+void sound_play_midi (type8 *midi_data, type32 length, type16 tempo)
+{
+    SDL_RWops *rw;
+
+    if (midi) {
+    sound_stop_music();
+    }
+
+    if (!SDL_WasInit (SDL_INIT_AUDIO)) {
+        if (SDL_Init (SDL_INIT_AUDIO) < 0)
+            return;
+
+        if (Mix_OpenAudio (MIXER_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
+            SDL_Quit ();
+            return;
+        }
+    }
+
+    rw = SDL_RWFromMem(midi_data, length);
+
+    midi = Mix_LoadMUS_RW(rw, 1);
+
+    if (Mix_PlayMusic (midi, 1) == -1) {
+        Mix_FreeMusic (midi);
+        midi = NULL;
+        return;
     }
 }
+
+void sound_clear()
+{
+    sound_stop_music();
+
+    if (SDL_WasInit (SDL_INIT_AUDIO)) {
+        Mix_CloseAudio();
+        SDL_QuitSubSystem (SDL_INIT_AUDIO);
+    }
+}
+

@@ -28,6 +28,7 @@
 #include "text.h"
 #include "graphics.h"
 #include "hints.h"
+#include "sound.h"
 #include "util.h"
 
 static gboolean main_loop (gpointer data);
@@ -179,6 +180,9 @@ void ms_fatal (type8s *txt)
 
 void ms_playmusic(type8 * midi_data, type32 length, type16 tempo)
 {
+    #ifdef SDL_MIXER
+    sound_play_midi (midi_data, length, tempo);
+    #endif
 }
 
 void do_about ()
@@ -257,7 +261,7 @@ static gchar *change_file_extension (gchar *filename, gchar *extension)
 
 gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
 			 gchar *splash_filename, gchar *music_filename,
-			 gchar *hints_filename)
+			 gchar *hints_filename, gchar *sound_filename)
 {
     const gchar *filters[] =
 	{
@@ -295,6 +299,9 @@ gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
     if (!hints_filename)
 	hints_filename = change_file_extension (game_filename, "hnt");
 
+    if (!sound_filename)
+    sound_filename = change_file_extension (game_filename, "snd");
+
     display_splash_screen (splash_filename, music_filename);
 
     text_clear ();
@@ -304,7 +311,7 @@ gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
     if (applicationExiting)
 	return FALSE;
 
-    if (!ms_init ((type8s *) game_filename, (type8s *) graphics_filename, (type8s *) hints_filename, NULL))
+    if (!ms_init ((type8s *) game_filename, (type8s *) graphics_filename, (type8s *) hints_filename, (type8s *) sound_filename))
     {
 	GtkWidget *error;
 	gchar *basename;
@@ -329,6 +336,7 @@ gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
     g_free (splash_filename);
     g_free (music_filename);
     g_free (hints_filename);
+    g_free (sound_filename);
     
     gtk_widget_grab_focus (Gui.text_view);
     return TRUE;
@@ -341,6 +349,7 @@ int main (int argc, char *argv[])
     gchar *splash_filename = NULL;
     gchar *music_filename = NULL;
     gchar *hints_filename = NULL;
+    gchar *sound_filename = NULL;
 
     gtk_init (&argc, &argv);
 
@@ -350,6 +359,8 @@ int main (int argc, char *argv[])
 
     read_config_file ();
 
+    if (argc >= 7)
+    sound_filename = g_strdup (argv[6]);
     if (argc >= 6)
 	hints_filename = g_strdup (argv[5]);
     if (argc >= 5)
@@ -367,7 +378,8 @@ int main (int argc, char *argv[])
 			graphics_filename,
 			splash_filename,
 			music_filename,
-			hints_filename))
+			hints_filename,
+			sound_filename))
 	gtk_main ();
 
     return 0;  

@@ -51,7 +51,7 @@ void gui_refresh ()
 
 static void do_open ()
 {
-    start_new_game (NULL, NULL, NULL, NULL, NULL);
+    start_new_game (NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 static void do_quit ()

@@ -17,8 +17,8 @@
 
 ########################################################################
 
-SOUND_SYSTEM = SMPEG
-# SOUND_SYSTEM = SDL_MIXER
+# SOUND_SYSTEM = SMPEG
+SOUND_SYSTEM = SDL_MIXER
 # SOUND_SYSTEM = XMMS
 # SOUND_SYSTEM = NONE
 
@@ -54,7 +54,8 @@ endif
 
 ifeq ($(SOUND_SYSTEM),SDL_MIXER)
 	OBJS += sound_sdlmixer.o
-	SOUND_LIBS = `sdl-config --libs` -lSDL_mixer
+	SOUND_LIBS = `sdl2-config --libs` -lSDL2_mixer
+	CFLAGS += -DSDL_MIXER
 endif
 
 ifeq ($(SOUND_SYSTEM),XMMS)
@@ -93,7 +94,7 @@ sound_smpeg.o: sound_smpeg.c sound.h
 	$(CC) -c $(CFLAGS) `sdl-config --cflags` sound_smpeg.c
 
 sound_sdlmixer.o: sound_sdlmixer.c sound.h
-	$(CC) -c $(CFLAGS) `sdl-config --cflags` sound_sdlmixer.c
+	$(CC) -c $(CFLAGS) `sdl2-config --cflags` sound_sdlmixer.c
 
 sound_xmms.o: sound_xmms.c sound.h
 	$(CC) -c $(CFLAGS) `xmms-config --cflags` sound_xmms.c

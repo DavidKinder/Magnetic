@@ -1,3 +1,13 @@
+2024-12-XX - 1.6 addendum (The "I ATE'NT DEAD" release.)
+
+Bugfixes
+
+- Switched SDL sound backend to SDL 2 so it actually works.
+
+Other changes
+
+- Wonderland can now play in-game music from a sound file.
+
 2005-08-XX - 1.6 (The "Syncing feeling" release.)
 
 Re-sync with GtkLevel9 1.3:
