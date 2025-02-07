@@ -94,13 +94,53 @@ void graphics_clear ()
     currentMode = -1;
 }
 
+#ifdef GTK3
+static GtkCssProvider *graphics_bg_provider = NULL;
+
+void graphics_refresh ()
+{
+    GdkRGBA colour;
+    GtkWidget *viewport;
+    GtkStyleContext *style_context;
+    gchar *css;
+
+    graphics_init ();
+
+    if (currentPicture != -1 && currentMode != -1)
+	ms_showpic (currentPicture, currentMode);
+
+    viewport = gtk_widget_get_parent (Gui.picture);
+    style_context = gtk_widget_get_style_context (viewport);
+
+    if (graphics_bg_provider) {
+        gtk_style_context_remove_provider(style_context,
+                GTK_STYLE_PROVIDER (graphics_bg_provider));
+        g_object_unref (graphics_bg_provider);
+        graphics_bg_provider = NULL;
+    }
+
+    if (Config.graphics_bg && gdk_rgba_parse (
+    &colour, Config.graphics_bg))
+    {
+        graphics_bg_provider = gtk_css_provider_new ();
+        css = g_strdup_printf (
+	"viewport { background-color: %s; }", Config.graphics_bg);
+        gtk_css_provider_load_from_data (
+	graphics_bg_provider, css, -1, NULL);
+        gtk_style_context_add_provider (style_context,
+                GTK_STYLE_PROVIDER (graphics_bg_provider),
+                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_free (css);
+    }
+}
+#else
 void graphics_refresh ()
 {
     GdkColor colour;
     GtkWidget *viewport;
 
     graphics_init ();
-    
+
     if (currentPicture != -1 && currentMode != -1)
 	ms_showpic (currentPicture, currentMode);
 
@@ -115,6 +155,7 @@ void graphics_refresh ()
     else
 	gtk_widget_modify_bg (viewport, GTK_STATE_NORMAL, NULL);
 }
+#endif
 
 /* ------------------------------------------------------------------------- *
  * Still pictures.                                                           *
@@ -573,10 +614,29 @@ void display_splash_screen (gchar *splash_filename, gchar *music_filename)
 
 	if (Config.graphics_bg)
 	{
+#ifdef GTK3
+	    GdkRGBA colour;
+
+	    if (gdk_rgba_parse (&colour, Config.graphics_bg))
+	    {
+		GtkStyleContext *style_context =
+		gtk_widget_get_style_context (viewport);
+		GtkCssProvider *provider = gtk_css_provider_new ();
+		gchar *css = g_strdup_printf (
+		"viewport { background-color: %s; }", Config.graphics_bg);
+		gtk_css_provider_load_from_data (provider, css, -1, NULL);
+		gtk_style_context_add_provider (style_context,
+                    GTK_STYLE_PROVIDER (provider),
+		    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+		g_object_unref (provider);
+		g_free (css);
+	    }
+#else
 	    GdkColor colour;
 
 	    if (gdk_color_parse (Config.graphics_bg, &colour))
 		gtk_widget_modify_bg (viewport, GTK_STATE_NORMAL, &colour);
+#endif
 	}
 	
 	gtk_widget_show_all (Gui.main_window);

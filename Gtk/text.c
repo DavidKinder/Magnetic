@@ -46,6 +46,15 @@ static gulong hSigKeypress = 0;
 
 static GString *bufferedText = NULL;
 
+#ifdef GTK3
+static GtkCssProvider *text_fg_provider = NULL;
+static GtkCssProvider *text_bg_provider = NULL;
+static GtkCssProvider *status_fg_provider = NULL;
+static GtkCssProvider *status_bg_provider = NULL;
+static GtkCssProvider *text_font_provider = NULL;
+static GtkCssProvider *status_font_provider = NULL;
+#endif
+
 static void set_input_pending (gboolean pending);
 
 static void sig_insert (GtkTextBuffer *buffer, GtkTextIter *arg1,
@@ -101,6 +110,173 @@ void text_clear (void)
     clear_input_buffer ();
 }
 
+#ifdef GTK3
+void text_refresh (void)
+{
+    GdkRGBA colour;
+    gchar *css;
+
+    if (Config.text_font)
+    {
+        PangoFontDescription *font_desc;
+        const char *family;
+        int size;
+        PangoWeight weight;
+        PangoStyle style;
+
+        font_desc = pango_font_description_from_string (Config.text_font);
+        family = pango_font_description_get_family (font_desc);
+        size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
+        weight = pango_font_description_get_weight (font_desc);
+        style = pango_font_description_get_style (font_desc);
+
+        text_font_provider = gtk_css_provider_new ();
+        css = g_strdup_printf (
+        "textview {font-family: '%s'; font-size: %dpt; font-weight: %s; font-style: %s; }",
+        family, size,
+        (weight >= PANGO_WEIGHT_BOLD) ? "bold" : "normal",
+        (style == PANGO_STYLE_ITALIC || style == PANGO_STYLE_OBLIQUE) ?
+        "italic" : "normal");
+        gtk_css_provider_load_from_data (text_font_provider, css, -1, NULL);
+        gtk_style_context_add_provider (
+        gtk_widget_get_style_context (Gui.text_view),
+        GTK_STYLE_PROVIDER (text_font_provider),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        if (!Config.status_font)
+        {
+            gtk_style_context_add_provider (
+            gtk_widget_get_style_context (Gui.statusline.left),
+            GTK_STYLE_PROVIDER (text_font_provider),
+            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+            gtk_style_context_add_provider (
+            gtk_widget_get_style_context (Gui.statusline.right),
+            GTK_STYLE_PROVIDER (text_font_provider),
+            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
+    g_free (css);
+    pango_font_description_free (font_desc);
+    }
+
+    if (Config.status_font)
+    {
+        PangoFontDescription *font_desc;
+        const char *family;
+        int size;
+
+        font_desc = pango_font_description_from_string (Config.status_font);
+        family = pango_font_description_get_family (font_desc);
+        size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
+
+        status_font_provider = gtk_css_provider_new ();
+        css = g_strdup_printf (
+        "label { font-family: '%s'; font-size: %dpt; }", family, size);
+        gtk_css_provider_load_from_data (status_font_provider, css, -1, NULL);
+        gtk_style_context_add_provider (
+        gtk_widget_get_style_context (Gui.statusline.left),
+        GTK_STYLE_PROVIDER (status_font_provider),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        gtk_style_context_add_provider (
+        gtk_widget_get_style_context (Gui.statusline.right),
+        GTK_STYLE_PROVIDER (status_font_provider),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_free (css);
+        pango_font_description_free (font_desc);
+    }
+
+    if (text_fg_provider)
+    {
+        gtk_style_context_remove_provider (
+        gtk_widget_get_style_context (Gui.text_view),
+        GTK_STYLE_PROVIDER (text_fg_provider));
+        g_object_unref (text_fg_provider);
+        text_fg_provider = NULL;
+    }
+
+    if (Config.text_fg && gdk_rgba_parse (&colour, Config.text_fg))
+    {
+        text_fg_provider = gtk_css_provider_new ();
+        css = g_strdup_printf ("textview text { color: %s; caret-color: %s; }",
+        Config.text_fg, Config.text_fg);
+        gtk_css_provider_load_from_data (text_fg_provider, css, -1, NULL);
+        gtk_style_context_add_provider (
+        gtk_widget_get_style_context (Gui.text_view),
+        GTK_STYLE_PROVIDER (text_fg_provider),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_free (css);
+    }
+
+    if (text_bg_provider)
+    {
+        gtk_style_context_remove_provider (
+        gtk_widget_get_style_context (Gui.text_view),
+        GTK_STYLE_PROVIDER (text_bg_provider));
+        g_object_unref (text_bg_provider);
+        text_bg_provider = NULL;
+    }
+
+    if (Config.text_bg && gdk_rgba_parse (&colour, Config.text_bg))
+    {
+    	text_bg_provider = gtk_css_provider_new ();
+    	css = g_strdup_printf (
+    	"textview text { background-color: %s; }", Config.text_bg);
+    	gtk_css_provider_load_from_data (text_bg_provider, css, -1, NULL);
+    	gtk_style_context_add_provider (
+    	gtk_widget_get_style_context (Gui.text_view),
+    	GTK_STYLE_PROVIDER (text_bg_provider),
+    	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    	g_free (css);
+    }
+
+    if (status_fg_provider)
+    {
+        gtk_style_context_remove_provider (
+        gtk_widget_get_style_context (Gui.statusline.left),
+        GTK_STYLE_PROVIDER (status_fg_provider));
+        gtk_style_context_remove_provider (
+        gtk_widget_get_style_context (Gui.statusline.right),
+            GTK_STYLE_PROVIDER (status_fg_provider));
+        g_object_unref (status_fg_provider);
+        status_fg_provider = NULL;
+    }
+
+    if (Config.status_fg && gdk_rgba_parse (&colour, Config.status_fg))
+    {
+    	status_fg_provider = gtk_css_provider_new ();
+    	css = g_strdup_printf ("label { color: %s; }", Config.status_fg);
+    	gtk_css_provider_load_from_data (status_fg_provider, css, -1, NULL);
+    	gtk_style_context_add_provider (
+    	gtk_widget_get_style_context (Gui.statusline.left),
+    	GTK_STYLE_PROVIDER (status_fg_provider),
+    	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    	gtk_style_context_add_provider (
+    	gtk_widget_get_style_context (Gui.statusline.right),
+    	GTK_STYLE_PROVIDER (status_fg_provider),
+    	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    	g_free (css);
+    }
+
+    if (status_bg_provider)
+    {
+    	gtk_style_context_remove_provider (
+    	gtk_widget_get_style_context (Gui.statusline.viewport),
+    	GTK_STYLE_PROVIDER (status_bg_provider));
+    	g_object_unref (status_bg_provider);
+    	status_bg_provider = NULL;
+    }
+
+    if (Config.status_bg && gdk_rgba_parse (&colour, Config.status_bg))
+    {
+    	status_bg_provider = gtk_css_provider_new ();
+    	css = g_strdup_printf ("* { background-color: %s; }", Config.status_bg);
+    	gtk_css_provider_load_from_data (status_bg_provider, css, -1, NULL);
+    	gtk_style_context_add_provider (
+    	gtk_widget_get_style_context (Gui.statusline.viewport),
+    	GTK_STYLE_PROVIDER (status_bg_provider),
+    	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    	g_free (css);
+    }
+}
+#else
 void text_refresh (void)
 {
     GdkColor colour;
@@ -113,7 +289,7 @@ void text_refresh (void)
     if (Config.text_font)
     {
 	PangoFontDescription *font_desc;
-	
+
 	font_desc = pango_font_description_from_string (Config.text_font);
 	gtk_widget_modify_font (GTK_WIDGET (Gui.text_view), font_desc);
 	if (!Config.status_font)
@@ -129,7 +305,7 @@ void text_refresh (void)
     if (Config.status_font)
     {
 	PangoFontDescription *font_desc;
-	
+
 	font_desc = pango_font_description_from_string (Config.status_font);
 	gtk_widget_modify_font (GTK_WIDGET (Gui.statusline.left), font_desc);
 	gtk_widget_modify_font (GTK_WIDGET (Gui.statusline.right), font_desc);
@@ -187,6 +363,7 @@ void text_refresh (void)
     else
 	gtk_widget_modify_bg (Gui.statusline.viewport, GTK_STATE_NORMAL, NULL);
 }
+#endif
 
 /* ------------------------------------------------------------------------- *
  * Command history. I would have liked to use GList or some other GLib data  *
@@ -552,18 +729,18 @@ static gboolean sig_keypress (GtkWidget *widget, GdkEventKey *event,
 
     switch (event->keyval)
     {
-	case GDK_KP_Enter:
-	case GDK_Return:
+	case GDK_KEY_KP_Enter:
+	case GDK_KEY_Return:
 	    fetch_command_at_prompt ();
 	    gtk_main_quit ();
 	    return TRUE;
 
-	case GDK_Up:
-	case GDK_KP_Up:
+	case GDK_KEY_Up:
+	case GDK_KEY_KP_Up:
 	    return do_history (-1);
 
-	case GDK_Down:
-	case GDK_KP_Down:
+	case GDK_KEY_Down:
+	case GDK_KEY_KP_Down:
 	    return do_history (1);
 	    
 	default:

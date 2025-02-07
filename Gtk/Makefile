@@ -17,6 +17,9 @@
 
 ########################################################################
 
+GTK_VERSION = GTK3
+# GTK_VERSION = GTK2
+
 # SOUND_SYSTEM = SMPEG
 SOUND_SYSTEM = SDL_MIXER
 # SOUND_SYSTEM = XMMS
@@ -35,13 +38,19 @@ MAGNETIC = ../Generic
 CC = gcc
 
 OBJS = emu.o main.o config.o gui.o text.o graphics.o util.o hints.o
+ifeq ($(GTK_VERSION),GTK2)
+DEF_CFLAGS = -Wall `pkg-config --cflags gtk+-2.0` -I$(MAGNETIC) -DGTK2
+GTK_LIBS = `pkg-config --libs gtk+-2.0`
+endif
 
-DEF_CFLAGS = -Wall `pkg-config --cflags gtk+-2.0` -I$(MAGNETIC)
+ifeq ($(GTK_VERSION),GTK3)
+DEF_CFLAGS = -Wall `pkg-config --cflags gtk+-3.0` -I$(MAGNETIC) -DGTK3
+GTK_LIBS = `pkg-config --libs gtk+-3.0`
+endif
 
 EMU_CFLAGS = $(DEF_CFLAGS) $(OPTIMIZE_CFLAGS) $(EXTRA_CFLAGS)
 CFLAGS = $(EMU_CFLAGS) -ansi
 
-GTK_LIBS = `pkg-config --libs gtk+-2.0`
 
 #######################################################################
 
@@ -81,7 +90,7 @@ clean:
 emu.o:
 	$(CC) -c $(EMU_CFLAGS) $(MAGNETIC)/emu.c
 
-main.o: main.c main.h version.h config.h gui.h text.h graphics.h hints.h util.h
+main.o: main.c main.h config.h gui.h text.h graphics.h hints.h util.h
 config.o: config.c config.h gui.h text.h graphics.h
 gui.o: gui.c main.h config.h gui.h
 text.o: text.c main.h config.h gui.h text.h util.h

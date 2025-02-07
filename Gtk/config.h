@@ -42,6 +42,7 @@
 
 #define MAX_INSTRUCTIONS 20
 
+#ifdef GTK2
 /*
  * We insert "dummy" spaces to make sure that the editable region is never
  * empty, otherwise GTK+ will remove it completely. To keep this space from
@@ -61,6 +62,7 @@
  */
 
 #define USE_CURSOR_COLOUR_HACK
+#endif
 
 typedef struct
 {
@@ -88,6 +90,9 @@ typedef struct
     gchar *graphics_bg;
     gboolean animate_images;
     gint animation_delay;
+#ifdef GTK3
+    gboolean horizontal_split;
+#endif
 } Configuration;
 
 extern Configuration Config;

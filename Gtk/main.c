@@ -22,7 +22,6 @@
 
 #include "defs.h"
 #include "main.h"
-#include "version.h"
 #include "config.h"
 #include "gui.h"
 #include "text.h"
@@ -204,14 +203,16 @@ void do_about ()
 	"Magnetic Scrolls Interpreter",
 	
 	"version",
-	"v2.3",
+	"v2.3.1",
 	
 	"copyright",
-	"Copyright (C) 1997-2008 Niclas Karlsson",
+	"Copyright (C) 1997-2023 Niclas Karlsson",
 
 	"comments",
-	"GTK+ 2.6 interface v" MAGNETIC_VERSION_GUI
-	" by Torbj\303\266rn Andersson <d91tan@Update.UU.SE>",
+#ifdef GTK3
+	"GTK 3.24 interface v2.0 by thr <r@sledinmay.com> ported from\n"
+#endif
+	"GTK+ 2.6 interface v1.6 by Torbj\303\266rn Andersson <d91tan@Update.UU.SE>",
 
 	"authors",
 	authors,

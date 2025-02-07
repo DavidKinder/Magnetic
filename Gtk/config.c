@@ -57,7 +57,12 @@ Configuration Config =
     1.0,                    /* blue gamma                           */
     NULL,                   /* graphics background colour           */
     TRUE,                   /* animate images                       */
+#ifdef GTK3
+    100,                    /* animation delay (ms)                 */
+    FALSE                   /* horizontal split                     */
+#else
     100                     /* animation delay (ms)                 */
+#endif
 };
 
 /* ------------------------------------------------------------------------- *
@@ -108,6 +113,9 @@ void write_config_file ()
 	    "      <width>%d</width>\n"
 	    "      <height>%d</height>\n"
 	    "      <split>%d</split>\n"
+#ifdef GTK3
+	    "      <horizontal_split>%s</horizontal_split>\n"
+#endif
 	    "    </main_window>\n\n"
 	    
 	    "    <hints_window>\n"
@@ -148,6 +156,9 @@ void write_config_file ()
 	    Config.window_width,
 	    Config.window_height,
 	    Config.window_split,
+#ifdef GTK3
+	    Config.horizontal_split ? "TRUE" : "FALSE",
+#endif
 	    Config.hints_width,
 	    Config.hints_height,
 	    Config.text_font ? Config.text_font : "",
@@ -281,6 +292,10 @@ static void config_parse_start_element (GMarkupParseContext *context,
 		parserInt = &(Config.window_height);
 	    else if (strcmp (element_name, "split") == 0)
 		parserInt = &(Config.window_split);
+#ifdef GTK3
+	    else if (strcmp (element_name, "horizontal_split") == 0)
+		parserBool = & (Config.horizontal_split);
+#endif
 	    break;
 
 	case CONFIG_PARSE_LAYOUT_HINTS_WINDOW:
@@ -489,12 +504,19 @@ static GtkWidget *add_font_button (GtkWidget *tab, gchar *text, gchar *title)
     GtkWidget *font_button;
 
     label = gtk_label_new (text);
+#ifdef GTK3
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_yalign (GTK_LABEL (label), 0.5);
+#else
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+#endif
     gtk_box_pack_start (GTK_BOX (tab), label, TRUE, TRUE, 0);
 
     font_button = gtk_font_button_new ();
+#ifdef GTK2
     gtk_font_button_set_use_font (GTK_FONT_BUTTON (font_button), TRUE);
     gtk_font_button_set_use_size (GTK_FONT_BUTTON (font_button), TRUE);
+#endif
     gtk_font_button_set_title (GTK_FONT_BUTTON (font_button), title);
     gtk_box_pack_start (GTK_BOX (tab), font_button, TRUE, TRUE, 0);
 
@@ -508,10 +530,20 @@ static GtkWidget *add_scale (GtkWidget *tab, gchar *text, gdouble min,
     GtkWidget *label;
 
     label = gtk_label_new (text);
+#ifdef GTK3
+    gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+    gtk_label_set_yalign (GTK_LABEL (label), 0.5);
+#else
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+#endif
     gtk_box_pack_start (GTK_BOX (tab), label, TRUE, TRUE, 0);
     
+#ifdef GTK3
+    scale = gtk_scale_new_with_range (
+    GTK_ORIENTATION_HORIZONTAL, min, max, step);
+#else
     scale = gtk_hscale_new_with_range (min, max, step);
+#endif
     gtk_scale_set_digits (GTK_SCALE (scale), 2);
     gtk_scale_set_value_pos (GTK_SCALE (scale), GTK_POS_RIGHT);
     gtk_range_set_value (GTK_RANGE (scale), value);
@@ -532,6 +564,15 @@ static void update_colour_setting (gchar **colour, ColourSetting *s)
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (s->checkbox)))
     {
+#ifdef GTK3
+	GdkRGBA rgba;
+
+	gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (s->button), &rgba);
+	*colour = g_strdup_printf ("#%02X%02X%02X",
+				   (int) (rgba.red * 255),
+				   (int) (rgba.green * 255),
+				   (int) (rgba.blue * 255));
+#else
 	GdkColor c;
 
 	gtk_color_button_get_color (GTK_COLOR_BUTTON (s->button), &c);
@@ -539,6 +580,7 @@ static void update_colour_setting (gchar **colour, ColourSetting *s)
 				   c.red / 256,
 				   c.green / 256,
 				   c.blue / 256);
+#endif
     } else
 	*colour = NULL;
 }
@@ -547,8 +589,11 @@ static ColourSetting *add_colour_setting (GtkWidget *tab, gchar *text,
 					  gchar *title, gchar *colour_name)
 {
     ColourSetting *s;
+#ifdef GTK3
+    GdkRGBA colour;
+#else
     GdkColor colour;
-
+#endif
     s = g_new (ColourSetting, 1);
 
     s->checkbox = gtk_check_button_new_with_label (text);
@@ -558,12 +603,21 @@ static ColourSetting *add_colour_setting (GtkWidget *tab, gchar *text,
     gtk_box_pack_start (GTK_BOX (tab), s->button, TRUE, TRUE, 0);
     gtk_color_button_set_title (GTK_COLOR_BUTTON (s->button), title);
 
+#ifdef GTK3
+    if (colour_name && gdk_rgba_parse (&colour, colour_name))
+    {
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (s->checkbox), TRUE);
+	gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (s->button), &colour);
+    } else
+	gtk_widget_set_sensitive (GTK_WIDGET (s->button), FALSE);
+#else
     if (colour_name && gdk_color_parse (colour_name, &colour))
     {
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (s->checkbox), TRUE);
 	gtk_color_button_set_color (GTK_COLOR_BUTTON (s->button), &colour);
     } else
 	gtk_widget_set_sensitive (GTK_WIDGET (s->button), FALSE);
+#endif
 
     g_signal_connect (
 	G_OBJECT (s->checkbox), "toggled", G_CALLBACK (toggle_sensitivity),
@@ -660,6 +714,9 @@ void do_config ()
     GtkWidget *text_font;
     GtkWidget *status_font;
     GtkWidget *constant_height;
+#ifdef GTK3
+    GtkWidget *horizontal_split;
+#endif
     GtkWidget *red_gamma;
     GtkWidget *green_gamma;
     GtkWidget *blue_gamma;
@@ -680,9 +737,9 @@ void do_config ()
 	"Preferences",
 	GTK_WINDOW (Gui.main_window),
 	GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-	GTK_STOCK_OK,
+	"_OK",
 	GTK_RESPONSE_ACCEPT,
-	GTK_STOCK_CANCEL,
+	"_Cancel",
 	GTK_RESPONSE_REJECT,
 	NULL);
 
@@ -692,14 +749,25 @@ void do_config ()
 
     tabs = gtk_notebook_new ();
     gtk_box_pack_start (
+#ifdef GTK3
+	GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG(dialog))),
+	tabs, TRUE, TRUE, 0);
+
+    colour_tab = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+#else
 	GTK_BOX (GTK_DIALOG (dialog)->vbox), tabs, TRUE, TRUE, 0);
 
     colour_tab = gtk_vbox_new (FALSE, 3);
+#endif
     gtk_container_set_border_width (GTK_CONTAINER (colour_tab), 5);
     gtk_notebook_append_page (GTK_NOTEBOOK (tabs), colour_tab,
 			      gtk_label_new ("Text and Colour"));
 
+#ifdef GTK3
+    graphics_tab = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
+#else
     graphics_tab = gtk_vbox_new (FALSE, 1);
+#endif
     gtk_container_set_border_width (GTK_CONTAINER (graphics_tab), 5);
     gtk_notebook_append_page (GTK_NOTEBOOK (tabs), graphics_tab,
 			      gtk_label_new ("Graphics"));
@@ -710,6 +778,26 @@ void do_config ()
     status_font =
 	add_font_button (colour_tab, "Status font:", "Select status font");
 
+#ifdef GTK3
+    if (!Config.text_font)
+    {
+	const gchar *font_name;
+	font_name = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (text_font));
+	gtk_font_chooser_set_font (
+	    GTK_FONT_CHOOSER (text_font), font_name);
+    } else {
+        gtk_font_chooser_set_font (
+	    GTK_FONT_CHOOSER (text_font), Config.text_font);
+    }
+
+    if (!Config.status_font)
+    gtk_font_chooser_set_font (
+    GTK_FONT_CHOOSER (status_font),
+    gtk_font_chooser_get_font (GTK_FONT_CHOOSER (text_font)));
+    else
+    gtk_font_chooser_set_font (
+	    GTK_FONT_CHOOSER (status_font), Config.status_font);
+#else
     if (!Config.text_font)
     {
 	GtkStyle *style;
@@ -732,10 +820,11 @@ void do_config ()
     else
 	gtk_font_button_set_font_name (
 	    GTK_FONT_BUTTON (status_font), Config.status_font);
+#endif
     
     text_fg = add_colour_setting (
 	colour_tab, "Override text foreground colour",
-	"Select text coreground colour", Config.text_fg);
+	"Select text foreground colour", Config.text_fg);
     text_bg = add_colour_setting (
 	colour_tab, "Override text background colour",
 	"Select text background colour", Config.text_bg);
@@ -743,7 +832,7 @@ void do_config ()
 	colour_tab, "Override statusline foreground colour",
 	"Select statusline foreground colour", Config.status_fg);
     status_bg = add_colour_setting (
-	colour_tab, "Override statusline backgorund colour",
+	colour_tab, "Override statusline background colour",
 	"Select statusline background colour", Config.status_bg);
     graphics_bg = add_colour_setting (
 	colour_tab, "Override picture background colour",
@@ -763,11 +852,20 @@ void do_config ()
 	G_CALLBACK (toggle_constant_height), NULL);
 
     imageScaleLabel = gtk_label_new (NULL);
+#ifdef GTK3
+    gtk_label_set_xalign (GTK_LABEL (imageScaleLabel), 0.0);
+    gtk_label_set_yalign (GTK_LABEL (imageScaleLabel), 0.5);
+#else
     gtk_misc_set_alignment (GTK_MISC (imageScaleLabel), 0.0, 0.5);
+#endif
     gtk_box_pack_start (
 	GTK_BOX (graphics_tab), imageScaleLabel, TRUE, TRUE, 0);
 
+#ifdef GTK3
+    imageScale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, NULL);
+#else
     imageScale = gtk_hscale_new (NULL);
+#endif
     gtk_scale_set_value_pos (GTK_SCALE (imageScale), GTK_POS_RIGHT);
     gtk_box_pack_start (GTK_BOX (graphics_tab), imageScale, TRUE, TRUE, 0);
 
@@ -781,23 +879,41 @@ void do_config ()
     toggle_constant_height (GTK_TOGGLE_BUTTON (constant_height), NULL);
 
     dummy = gtk_label_new ("Interpolation mode:");
+#ifdef GTK3
+    gtk_label_set_xalign (GTK_LABEL (dummy), 0.0);
+    gtk_label_set_yalign (GTK_LABEL (dummy), 0.5);
+#else
     gtk_misc_set_alignment (GTK_MISC (dummy), 0.0, 0.5);
+#endif
     gtk_box_pack_start (GTK_BOX (graphics_tab), dummy, TRUE, TRUE, 0);
 
+#ifdef GTK3
+    image_filter = gtk_combo_box_text_new ();
+#else
     image_filter = gtk_combo_box_new_text ();
+#endif
     gtk_box_pack_start (GTK_BOX (graphics_tab), image_filter, TRUE, TRUE, 0);
 
     for (i = 0; i < G_N_ELEMENTS (imageFilters); i++)
     {
+#ifdef GTK3
+	gtk_combo_box_text_append_text(
+	    GTK_COMBO_BOX_TEXT (image_filter), imageFilters[i].description);
+#else
 	gtk_combo_box_append_text (
 	    GTK_COMBO_BOX (image_filter), imageFilters[i].description);
+#endif
     }
 
     gtk_combo_box_set_active (
 	GTK_COMBO_BOX (image_filter),
 	get_interp_type_index (Config.image_filter));
 
+#ifdef GTK3
+    dummy = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+#else
     dummy = gtk_hseparator_new ();
+#endif
     gtk_box_pack_start (GTK_BOX (graphics_tab), dummy, TRUE, TRUE, 8);
 
     red_gamma = add_scale (
@@ -807,7 +923,11 @@ void do_config ()
     blue_gamma = add_scale (
 	graphics_tab, "Blue gamma:", 0.1, 5.0, 0.1, Config.blue_gamma);
 
+#ifdef GTK3
+    dummy = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+#else
     dummy = gtk_hseparator_new ();
+#endif
     gtk_box_pack_start (GTK_BOX (graphics_tab), dummy, TRUE, TRUE, 8);
 
     animate_images = gtk_check_button_new_with_label ("Animate images");
@@ -826,20 +946,42 @@ void do_config ()
     g_signal_connect (
 	G_OBJECT (animate_images), "toggled", G_CALLBACK (toggle_sensitivity),
 	animation_delay);
-    
+
     /* Run the dialog */
+#ifdef GTK3
+    dummy = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+    gtk_box_pack_start (GTK_BOX (graphics_tab), dummy, TRUE, TRUE, 8);
 
+    horizontal_split = gtk_check_button_new_with_mnemonic ("_Horizontal split");
+    gtk_toggle_button_set_active (
+        GTK_TOGGLE_BUTTON (horizontal_split), Config.horizontal_split);
+    gtk_box_pack_start (GTK_BOX (graphics_tab), horizontal_split, TRUE, TRUE, 0);
+#else
     gtk_widget_show_all (GTK_WIDGET (GTK_DIALOG (dialog)->vbox));
+#endif
 
+#ifdef GTK3
+    gtk_widget_show_all (gtk_dialog_get_content_area (GTK_DIALOG (dialog)));
+#endif
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     {
 	g_free (Config.text_font);
+#ifdef GTK3
+	Config.text_font = g_strdup (
+	    gtk_font_chooser_get_font (GTK_FONT_CHOOSER (text_font)));
+#else
 	Config.text_font = g_strdup (
 	    gtk_font_button_get_font_name (GTK_FONT_BUTTON (text_font)));
+#endif
 
 	g_free (Config.status_font);
+#ifdef GTK3
+	Config.status_font = g_strdup (
+	    gtk_font_chooser_get_font (GTK_FONT_CHOOSER (status_font)));
+#else
 	Config.status_font = g_strdup (
 	    gtk_font_button_get_font_name (GTK_FONT_BUTTON (status_font)));
+#endif
 
 	update_colour_setting (&(Config.text_fg), text_fg);
 	update_colour_setting (&(Config.text_bg), text_bg);
@@ -866,6 +1008,10 @@ void do_config ()
 	else
 	    Config.image_filter = GDK_INTERP_BILINEAR;
 	
+#ifdef GTK3
+	Config.horizontal_split =
+	    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (horizontal_split));
+#endif
 	write_config_file ();
 
 	/* Apply settings */
@@ -882,4 +1028,3 @@ void do_config ()
     g_free (status_bg);
     g_free (graphics_bg);
 }
-
