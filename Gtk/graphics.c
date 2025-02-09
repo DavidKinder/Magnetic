@@ -94,7 +94,6 @@ void graphics_clear ()
     currentMode = -1;
 }
 
-#ifdef GTK3
 static GtkCssProvider *graphics_bg_provider = NULL;
 
 void graphics_refresh ()
@@ -133,29 +132,6 @@ void graphics_refresh ()
         g_free (css);
     }
 }
-#else
-void graphics_refresh ()
-{
-    GdkColor colour;
-    GtkWidget *viewport;
-
-    graphics_init ();
-
-    if (currentPicture != -1 && currentMode != -1)
-	ms_showpic (currentPicture, currentMode);
-
-    /*
-     * The picture's parent widget is, I believe, an automagically created
-     * viewport thingy, so we don't have any handle to it.
-     */
-    viewport = gtk_widget_get_parent (Gui.picture);
-
-    if (Config.graphics_bg && gdk_color_parse (Config.graphics_bg, &colour))
-	gtk_widget_modify_bg (viewport, GTK_STATE_NORMAL, &colour);
-    else
-	gtk_widget_modify_bg (viewport, GTK_STATE_NORMAL, NULL);
-}
-#endif
 
 /* ------------------------------------------------------------------------- *
  * Still pictures.                                                           *
@@ -614,7 +590,6 @@ void display_splash_screen (gchar *splash_filename, gchar *music_filename)
 
 	if (Config.graphics_bg)
 	{
-#ifdef GTK3
 	    GdkRGBA colour;
 
 	    if (gdk_rgba_parse (&colour, Config.graphics_bg))
@@ -631,12 +606,6 @@ void display_splash_screen (gchar *splash_filename, gchar *music_filename)
 		g_object_unref (provider);
 		g_free (css);
 	    }
-#else
-	    GdkColor colour;
-
-	    if (gdk_color_parse (Config.graphics_bg, &colour))
-		gtk_widget_modify_bg (viewport, GTK_STATE_NORMAL, &colour);
-#endif
 	}
 	
 	gtk_widget_show_all (Gui.main_window);

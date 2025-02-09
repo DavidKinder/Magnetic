@@ -209,9 +209,7 @@ void do_about ()
 	"Copyright (C) 1997-2023 Niclas Karlsson",
 
 	"comments",
-#ifdef GTK3
 	"GTK 3.24 interface v2.0 by thr <r@sledinmay.com> ported from\n"
-#endif
 	"GTK+ 2.6 interface v1.6 by Torbj\303\266rn Andersson <d91tan@Update.UU.SE>",
 
 	"authors",

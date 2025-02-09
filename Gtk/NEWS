@@ -1,7 +1,6 @@
-2025-02-XX - 2.0 (The "Have your cake and eat it too" release.)
+2025-02-XX - 2.0 (The "Can't have your cake and eat it" release.)
 
-Port to GTK 3. The old GTK 2 version is kept as a build option
-for the time being.
+Port to GTK 3.
 
 Other changes
 

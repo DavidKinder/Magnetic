@@ -46,14 +46,12 @@ static gulong hSigKeypress = 0;
 
 static GString *bufferedText = NULL;
 
-#ifdef GTK3
 static GtkCssProvider *text_fg_provider = NULL;
 static GtkCssProvider *text_bg_provider = NULL;
 static GtkCssProvider *status_fg_provider = NULL;
 static GtkCssProvider *status_bg_provider = NULL;
 static GtkCssProvider *text_font_provider = NULL;
 static GtkCssProvider *status_font_provider = NULL;
-#endif
 
 static void set_input_pending (gboolean pending);
 
@@ -110,7 +108,6 @@ void text_clear (void)
     clear_input_buffer ();
 }
 
-#ifdef GTK3
 void text_refresh (void)
 {
     GdkRGBA colour;
@@ -276,94 +273,6 @@ void text_refresh (void)
     	g_free (css);
     }
 }
-#else
-void text_refresh (void)
-{
-    GdkColor colour;
-
-#ifdef USE_CURSOR_COLOUR_HACK
-    GdkColor *cursor_colour;
-    char buffer[256];
-#endif
-
-    if (Config.text_font)
-    {
-	PangoFontDescription *font_desc;
-
-	font_desc = pango_font_description_from_string (Config.text_font);
-	gtk_widget_modify_font (GTK_WIDGET (Gui.text_view), font_desc);
-	if (!Config.status_font)
-	{
-	    gtk_widget_modify_font (
-		GTK_WIDGET (Gui.statusline.left), font_desc);
-	    gtk_widget_modify_font (
-		GTK_WIDGET (Gui.statusline.right), font_desc);
-	}
-	pango_font_description_free (font_desc);
-    }
-
-    if (Config.status_font)
-    {
-	PangoFontDescription *font_desc;
-
-	font_desc = pango_font_description_from_string (Config.status_font);
-	gtk_widget_modify_font (GTK_WIDGET (Gui.statusline.left), font_desc);
-	gtk_widget_modify_font (GTK_WIDGET (Gui.statusline.right), font_desc);
-	pango_font_description_free (font_desc);
-    }
-
-#ifdef USE_CURSOR_COLOUR_HACK
-    if (Config.text_fg && gdk_color_parse (Config.text_fg, &colour))
-    {
-	gtk_widget_modify_text (Gui.text_view, GTK_STATE_NORMAL, &colour);
-	cursor_colour = &colour;
-    } else {
-	GtkRcStyle *style;
-
-	gtk_widget_set_style (Gui.text_view, NULL);
-	gtk_widget_modify_text (Gui.text_view, GTK_STATE_NORMAL, NULL);
-
-	style = gtk_widget_get_modifier_style (Gui.text_view);
-	cursor_colour = &style->text[GTK_STATE_NORMAL];
-    }
-
-    sprintf(buffer,
-	    "style \"level9-style\" {\n"
-	    "  GtkTextView::cursor-color = { %d, %d, %d }\n"
-	    "}\n"
-	    "\n"
-	    "class \"GtkTextView\" style \"level9-style\"\n",
-	    cursor_colour->red, cursor_colour->green, cursor_colour->blue);
-    gtk_rc_parse_string (buffer);
-#else
-    if (Config.text_fg && gdk_color_parse (Config.text_fg, &colour))
-	gtk_widget_modify_text (Gui.text_view, GTK_STATE_NORMAL, &colour);
-    else
-	gtk_widget_modify_text (Gui.text_view, GTK_STATE_NORMAL, NULL);
-#endif
-
-    if (Config.text_bg && gdk_color_parse (Config.text_bg, &colour))
-	gtk_widget_modify_base (Gui.text_view, GTK_STATE_NORMAL, &colour);
-    else
-	gtk_widget_modify_base (Gui.text_view, GTK_STATE_NORMAL, NULL);
-
-    if (Config.status_fg && gdk_color_parse (Config.status_fg, &colour))
-    {
-	gtk_widget_modify_fg (Gui.statusline.left, GTK_STATE_NORMAL, &colour);
-	gtk_widget_modify_fg (Gui.statusline.right, GTK_STATE_NORMAL, &colour);
-    } else
-    {
-	gtk_widget_modify_fg (Gui.statusline.left, GTK_STATE_NORMAL, NULL);
-	gtk_widget_modify_fg (Gui.statusline.right, GTK_STATE_NORMAL, NULL);
-    }
-
-    if (Config.status_bg && gdk_color_parse (Config.status_bg, &colour))
-	gtk_widget_modify_bg (Gui.statusline.viewport, GTK_STATE_NORMAL,
-			      &colour);
-    else
-	gtk_widget_modify_bg (Gui.statusline.viewport, GTK_STATE_NORMAL, NULL);
-}
-#endif
 
 /* ------------------------------------------------------------------------- *
  * Command history. I would have liked to use GList or some other GLib data  *
