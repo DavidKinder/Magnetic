@@ -42,26 +42,6 @@
 
 #define MAX_INSTRUCTIONS 20
 
-/*
- * We insert "dummy" spaces to make sure that the editable region is never
- * empty, otherwise GTK+ will remove it completely. To keep this space from
- * showing, we can use the "invisible" attribute.
- *
- * GTK+ 2.6.2 still complains that this attribute is not yet supported, but it
- * appears to work well enough for this purpose. If it doesn't work for you,
- * or the warning message bothers you, you can disable the use of it here.
- */
-
-#define USE_INVISIBLE_TEXT
-
-/*
- * GTK+ 2.6.8 still doesn't have any sensible way of changing the cursor
- * colour, and GtkTextView will use black by default no matter what the current
- * background colour is. Define this to use an ugly hack which seems to work.
- */
-
-#define USE_CURSOR_COLOUR_HACK
-
 typedef struct
 {
     gint window_width;
@@ -88,6 +68,7 @@ typedef struct
     gchar *graphics_bg;
     gboolean animate_images;
     gint animation_delay;
+    gboolean horizontal_split;
 } Configuration;
 
 extern Configuration Config;

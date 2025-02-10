@@ -1,3 +1,13 @@
+2025-02-XX - 2.0 (The "Can't have your cake and eat it" release.)
+
+Port to GTK 3.
+
+Other changes
+
+- There's now a toggle in the options for horizontal viewscreen split.
+
+- There's now a proper application icon.
+
 2024-12-XX - 1.6 addendum (The "I ATE'NT DEAD" release.)
 
 Bugfixes

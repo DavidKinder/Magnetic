@@ -36,12 +36,12 @@ CC = gcc
 
 OBJS = emu.o main.o config.o gui.o text.o graphics.o util.o hints.o
 
-DEF_CFLAGS = -Wall `pkg-config --cflags gtk+-2.0` -I$(MAGNETIC)
+DEF_CFLAGS = -Wall `pkg-config --cflags gtk+-3.0` -I$(MAGNETIC)
 
 EMU_CFLAGS = $(DEF_CFLAGS) $(OPTIMIZE_CFLAGS) $(EXTRA_CFLAGS)
 CFLAGS = $(EMU_CFLAGS) -ansi
 
-GTK_LIBS = `pkg-config --libs gtk+-2.0`
+GTK_LIBS = `pkg-config --libs gtk+-3.0`
 
 #######################################################################
 
@@ -81,7 +81,7 @@ clean:
 emu.o:
 	$(CC) -c $(EMU_CFLAGS) $(MAGNETIC)/emu.c
 
-main.o: main.c main.h version.h config.h gui.h text.h graphics.h hints.h util.h
+main.o: main.c main.h config.h gui.h text.h graphics.h hints.h util.h
 config.o: config.c config.h gui.h text.h graphics.h
 gui.o: gui.c main.h config.h gui.h
 text.o: text.c main.h config.h gui.h text.h util.h

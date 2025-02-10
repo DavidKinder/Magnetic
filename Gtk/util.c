@@ -40,8 +40,8 @@ gchar *file_selector (gboolean save, gchar *name, const gchar *filters[],
     dialog = gtk_file_chooser_dialog_new (
 	title, GTK_WINDOW (Gui.main_window),
 	save ? GTK_FILE_CHOOSER_ACTION_SAVE : GTK_FILE_CHOOSER_ACTION_OPEN,
-	GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-	save ? GTK_STOCK_SAVE : GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+	"_Cancel", GTK_RESPONSE_CANCEL,
+	save ? "_Save" : "_Open", GTK_RESPONSE_ACCEPT,
 	NULL);
 
     gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
