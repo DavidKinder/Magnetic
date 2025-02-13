@@ -309,7 +309,7 @@ void text_init ()
      * ENTER or Up/Down-arrow, and to make sure the text at the command prompt
      * stays editable.
      */
-    
+
     hSigInsert = g_signal_connect_after (
 	G_OBJECT (Gui.text_buffer), "insert-text",
 	G_CALLBACK (sig_insert), NULL);
@@ -655,7 +655,7 @@ static gboolean sig_keypress (GtkWidget *widget, GdkEventKey *event,
 	default:
 	    break;
     }
-    
+
     return FALSE;
 }
 
@@ -923,6 +923,10 @@ void ms_flush ()
 	    Gui.text_buffer, &end, line_count - MAX_SCROLLBACK);
 
 	gtk_text_buffer_delete (Gui.text_buffer, &start, &end);
+
+	gtk_widget_queue_draw (Gui.text_view);
+	while (gtk_events_pending ())
+	    gtk_main_iteration_do (FALSE);
     }
 
     set_input_pending (TRUE);
@@ -957,6 +961,7 @@ type8 ms_getchar (type8 trans)
 	     * It's not quite a substitute for a "more" prompt, but it will
 	     * have to do for now.
 	     */
+	    gtk_text_buffer_get_end_iter (Gui.text_buffer, &iter);
 	    gtk_text_view_scroll_to_mark (
 		GTK_TEXT_VIEW (Gui.text_view), inputMark,
 		0.0, TRUE, 0.0, 0.0);
