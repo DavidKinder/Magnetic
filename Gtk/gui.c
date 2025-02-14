@@ -151,12 +151,19 @@ void gui_init ()
     Gui.main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (Gui.main_window), "GtkMagnetic");
 
-    icon = gdk_pixbuf_new_from_file  ("gtkmagnetic.png", NULL);
+    GtkIconTheme *theme = gtk_icon_theme_get_default ();
+    icon = gtk_icon_theme_load_icon (theme, "gtkmagnetic", 32, 0, NULL);
+
+    if (!icon) {
+	icon = gdk_pixbuf_new_from_file ("gtkmagnetic.png", NULL);
+    }
+
     if (icon) {
         gtk_window_set_icon (GTK_WINDOW (Gui.main_window), icon);
         gtk_window_set_default_icon (icon);
         g_object_unref (icon);
     }
+
     gtk_widget_set_size_request (Gui.main_window, MIN_WINDOW_WIDTH,
 				 MIN_WINDOW_HEIGHT);
 
@@ -230,8 +237,8 @@ void gui_init ()
 	Gui.text_buffer, "magnetic-old-input", "weight", PANGO_WEIGHT_BOLD,
 	"editable", FALSE, NULL);
     gtk_text_buffer_create_tag (
-    Gui.text_buffer, "magnetic-input-padding",
-    "weight", PANGO_WEIGHT_BOLD, "editable", TRUE, NULL);
+	Gui.text_buffer, "magnetic-input-padding",
+	"weight", PANGO_WEIGHT_BOLD, "editable", TRUE, NULL);
 
     Gui.text_view = gtk_text_view_new_with_buffer (Gui.text_buffer);
     gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (Gui.text_view), GTK_WRAP_WORD);

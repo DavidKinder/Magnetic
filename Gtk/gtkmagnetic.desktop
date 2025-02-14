@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Magnetic
+GenericName=Magnetic Scrolls interpreter
+Comment=An interpreter for games from the British text adventure company Magnetic Scrolls
+Exec=gtkmagnetic %U
+Icon=gtkmagnetic
+Terminal=false
+Categories=GTK;Application;Game;
+StartupNotify=true
+MimeType=application/x-magscroll;
