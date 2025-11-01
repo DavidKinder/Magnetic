@@ -1,3 +1,47 @@
+2025-11-XX - 2.1 ("The other castle" release.)
+
+Bugfixes
+
+- Fixed unresponsive input after loading a new game when the previous
+  game session was ended with the "quit" command.
+
+- Fixed parsing of floating-point numbers in the configuration file to
+  avoid issues with system locales using commas as decimal separators.
+
+- Enforced a minimum fifty-pixel gap between the movable viewport
+  divider and the window edge to prevent accidentally collapsing either
+  pane to zero width or height during window resizing.
+
+Other changes
+
+- Improved font rendering quality with antialiasing, light hinting
+  and subpixel rendering.
+
+- Adjusted text margins and line spacing for readability and made them
+  user-configurable.
+
+- Added a graphics scaling option to dynamically fit the viewport size,
+  and made it the default for new configs.
+
+- The graphics pane can now be positioned above, below, to the left or
+  to the right side of the text, or hidden completely for a text-only
+  mode. This replaces the previous horizontal split feature.
+
+- Reworked the preferences dialog with live preview, keyboard mnemonics,
+  and reset buttons.
+
+- Added a quit confirmation dialog.
+
+- Added an option to enable graphics for Magnetic Windows games
+  (Wonderland and Collection games) at game startup, so it's no longer
+  necessary to manually enter "graphics on" at the prompt.
+
+- Migrated the configuration file to XDG .config directory. Old config
+  found in user's home directory will be automatically copied over.
+
+- "Image height" and "Scale factor" were both duplicating a similar
+  feature, so they've been reworked into a single "Custom scale" option.
+
 2025-02-XX - 2.0 (The "Can't have your cake and eat it" release.)
 
 Port to GTK 3.

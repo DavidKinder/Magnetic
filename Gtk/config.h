@@ -52,6 +52,8 @@ typedef struct
     gint hints_height;
     
     gchar *text_font;
+    gint text_margin;
+    gdouble text_leading;
     gchar *text_fg;
     gchar *text_bg;
     gchar *status_font;
@@ -59,6 +61,7 @@ typedef struct
     gchar *status_bg;
     
     gboolean image_constant_height;
+    gboolean fit_to_window;
     gdouble image_scale;
     gint image_height;
     gint image_filter;     /* Should really be GdkInterpType, not gint */
@@ -68,7 +71,8 @@ typedef struct
     gchar *graphics_bg;
     gboolean animate_images;
     gint animation_delay;
-    gboolean horizontal_split;
+    gint graphics_position;
+    gboolean auto_graphics_magwin;
 } Configuration;
 
 extern Configuration Config;

@@ -44,43 +44,108 @@ void gui_refresh ()
     GTK_WINDOW (Gui.main_window), Config.window_width,
     Config.window_height);
 
-    GtkWidget *child1 = gtk_paned_get_child1 (GTK_PANED (Gui.partition));
-    GtkWidget *child2 = gtk_paned_get_child2 (GTK_PANED (Gui.partition));
+    GtkWidget *graphics_widget = Gui.picture_area;
+    GtkWidget *text_widget = gtk_widget_get_parent(Gui.text_view);
 
-    if (child1) g_object_ref (child1);
-    if (child2) g_object_ref (child2);
+    if (graphics_widget) {
+	GtkWidget *parent = gtk_widget_get_parent (graphics_widget);
+	if (parent) {
+	    g_object_ref (graphics_widget);
+	    gtk_container_remove (GTK_CONTAINER (parent), graphics_widget);
+	}
+    }
+    if (text_widget) {
+	GtkWidget *parent = gtk_widget_get_parent (text_widget);
+	if (parent) {
+	    g_object_ref (text_widget);
+	    gtk_container_remove (GTK_CONTAINER (parent), text_widget);
+	}
+    }
 
-    if (child1) gtk_container_remove (GTK_CONTAINER (Gui.partition), child1);
-    if (child2) gtk_container_remove (GTK_CONTAINER (Gui.partition), child2);
-
+    gboolean is_horizontal = (
+	Config.graphics_position == 2 || Config.graphics_position == 3);
     GtkWidget *new_partition = gtk_paned_new (
-    Config.horizontal_split ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
+	is_horizontal ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
 
-    if (Config.horizontal_split) {
-    gtk_widget_set_size_request (new_partition, MIN_WINDOW_WIDTH, -1);
-    if (child1) gtk_widget_set_size_request (child1, MIN_WINDOW_WIDTH/3, -1);
-    if (child2) gtk_widget_set_size_request (child2, MIN_WINDOW_WIDTH/3, -1);
+    if (is_horizontal) {
+	gtk_widget_set_size_request (new_partition, MIN_WINDOW_WIDTH, -1);
+	if (graphics_widget) gtk_widget_set_size_request (graphics_widget, 50, -1);
+	if (text_widget) gtk_widget_set_size_request (text_widget, 50, -1);
     } else {
-    gtk_widget_set_size_request (new_partition, -1, MIN_WINDOW_HEIGHT);
-    if (child1) gtk_widget_set_size_request (child1, -1, MIN_WINDOW_HEIGHT/3);
-    if (child2) gtk_widget_set_size_request (child2, -1, MIN_WINDOW_HEIGHT/3);
+	gtk_widget_set_size_request (new_partition, -1, MIN_WINDOW_HEIGHT);
+	if (graphics_widget) gtk_widget_set_size_request (graphics_widget, -1, 50);
+	if (text_widget) gtk_widget_set_size_request (text_widget, -1, 50);
     }
 
     gtk_container_remove (GTK_CONTAINER (Gui.main_box), Gui.partition);
     Gui.partition = new_partition;
     gtk_box_pack_start (GTK_BOX (Gui.main_box), Gui.partition, TRUE, TRUE, 0);
 
-    if (child1) {
-    gtk_paned_add1 (GTK_PANED(Gui.partition), child1);
-    g_object_unref (child1);
-    }
-    if (child2) {
-    gtk_paned_add2 (GTK_PANED (Gui.partition), child2);
-    g_object_unref (child2);
+    if (graphics_widget && text_widget) {
+	switch (Config.graphics_position) {
+	    case 0:
+		gtk_paned_pack1 (
+		    GTK_PANED (Gui.partition), graphics_widget, TRUE, FALSE);
+		gtk_paned_pack2 (
+		    GTK_PANED (Gui.partition), text_widget, TRUE, FALSE);
+		break;
+	    case 1:
+		gtk_paned_pack1 (
+		    GTK_PANED (Gui.partition), text_widget, TRUE, FALSE);
+		gtk_paned_pack2 (
+		    GTK_PANED (Gui.partition), graphics_widget, TRUE, FALSE);
+		break;
+	    case 2:
+		gtk_paned_pack1 (
+		    GTK_PANED (Gui.partition), graphics_widget, TRUE, FALSE);
+		gtk_paned_pack2 (
+		    GTK_PANED (Gui.partition), text_widget, TRUE, FALSE);
+		break;
+	    case 3:
+		gtk_paned_pack1 (
+		    GTK_PANED (Gui.partition), text_widget, TRUE, FALSE);
+		gtk_paned_pack2 (
+		    GTK_PANED (Gui.partition), graphics_widget, TRUE, FALSE);
+		break;
+	    case 4:
+		gtk_paned_pack1 (
+		    GTK_PANED (Gui.partition), graphics_widget, TRUE, FALSE);
+		gtk_paned_pack2 (
+		    GTK_PANED (Gui.partition), text_widget, TRUE, FALSE);
+		break;
+	}
     }
 
-    gtk_paned_set_position (GTK_PANED (Gui.partition), Config.window_split);
+    if (graphics_widget) g_object_unref (graphics_widget);
+    if (text_widget) g_object_unref (text_widget);
+
+    gtk_paned_set_position (GTK_PANED (Gui.partition), 
+	Config.graphics_position == 4 ? 0 : Config.window_split);
     gtk_widget_show_all (Gui.partition);
+
+    if (Config.graphics_position == 4 && graphics_widget) {
+	gtk_widget_hide (graphics_widget);
+	gtk_widget_set_size_request (graphics_widget, 1, 1);
+	gtk_paned_set_position (GTK_PANED (Gui.partition), 0);
+	GtkStyleContext *context = gtk_widget_get_style_context (Gui.partition);
+	gtk_style_context_add_class (context, "hidden-handle");
+	gtk_widget_set_can_focus (Gui.partition, FALSE);
+    } else if (Config.graphics_position != 4 && graphics_widget) {
+	if (gtk_orientable_get_orientation (
+	    GTK_ORIENTABLE (Gui.partition)) == GTK_ORIENTATION_HORIZONTAL) {
+	    gtk_widget_set_size_request (graphics_widget, 50, -1);
+	} else {
+	    gtk_widget_set_size_request (graphics_widget, -1, 50);
+	}
+
+	gtk_paned_set_position (
+	    GTK_PANED (Gui.partition), Config.window_split);
+	GtkStyleContext *context =
+	    gtk_widget_get_style_context (Gui.partition);
+	gtk_style_context_remove_class (context, "hidden-handle");
+	gtk_widget_set_can_focus (Gui.partition, TRUE);
+	gtk_widget_show (graphics_widget);
+    }
 
     GtkWidget *scrolled_window = gtk_widget_get_parent (Gui.text_view);
     gtk_scrolled_window_set_policy (
@@ -89,7 +154,7 @@ void gui_refresh ()
     GTK_POLICY_AUTOMATIC
     );
 
-    gtk_widget_grab_focus(Gui.text_view);
+    gtk_widget_grab_focus (Gui.text_view);
 }
 
 static void do_open ()
@@ -97,9 +162,35 @@ static void do_open ()
     start_new_game (NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
+static gboolean confirm_quit (void)
+{
+    GtkWidget *dialog = gtk_message_dialog_new (
+	GTK_WINDOW (Gui.main_window),
+	GTK_DIALOG_MODAL,
+	GTK_MESSAGE_QUESTION,
+	GTK_BUTTONS_YES_NO,
+	NULL
+    );
+
+    gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
+	"\nDo you want to quit?");
+
+    gboolean quit = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES);
+    gtk_widget_destroy (dialog);
+
+    return quit;
+}
+
 static void do_quit ()
 {
+    if (confirm_quit ())
     close_application (NULL, NULL);
+}
+
+static gboolean on_delete_event (
+    GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+    return !confirm_quit ();
 }
 
 static void create_menus (GtkWidget *main_box)
@@ -159,9 +250,9 @@ void gui_init ()
     }
 
     if (icon) {
-        gtk_window_set_icon (GTK_WINDOW (Gui.main_window), icon);
-        gtk_window_set_default_icon (icon);
-        g_object_unref (icon);
+	gtk_window_set_icon (GTK_WINDOW (Gui.main_window), icon);
+	gtk_window_set_default_icon (icon);
+	g_object_unref (icon);
     }
 
     gtk_widget_set_size_request (Gui.main_window, MIN_WINDOW_WIDTH,
@@ -171,6 +262,8 @@ void gui_init ()
 		      G_CALLBACK (close_application), NULL);
     g_signal_connect (G_OBJECT (Gui.main_window), "configure-event",
 		      G_CALLBACK (configure_window), NULL);
+    g_signal_connect (G_OBJECT (Gui.main_window), "delete-event",
+		      G_CALLBACK (on_delete_event), NULL);
 
     /* The main "box" */
 
@@ -206,9 +299,10 @@ void gui_init ()
     
     /* The game area; picture and text */
     
-    Gui.partition = gtk_paned_new (Config.horizontal_split ?
-                                 GTK_ORIENTATION_HORIZONTAL :
-                                 GTK_ORIENTATION_VERTICAL);
+    gboolean is_horizontal = (
+	Config.graphics_position == 2 || Config.graphics_position == 3);
+    Gui.partition = gtk_paned_new (
+	is_horizontal ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (Gui.main_box), Gui.partition, TRUE, TRUE, 0);
 
     Gui.picture_area = gtk_scrolled_window_new (NULL, NULL);

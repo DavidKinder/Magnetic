@@ -29,7 +29,10 @@ void stop_replaying (gboolean silent);
 
 void text_init (void);
 void text_clear (void);
+void text_block_input (void);
 void text_refresh (void);
 void text_insert (gchar *fmt, ...) G_GNUC_PRINTF (1, 2);
+void text_send_command (const gchar *cmd);
+void text_set_magwin_graphics (void);
 
 #endif
