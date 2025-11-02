@@ -145,13 +145,13 @@ void write_config_file ()
 	    "  <graphics>\n"
 	    "    <constant_height>%s</constant_height>\n"
 	    "    <fit_to_window>%s</fit_to_window>\n"
-	    "    <scale>%f</scale>\n"
+	    "    <scale>%.2f</scale>\n"
 	    "    <height>%d</height>\n"
 	    "    <filter>%d</filter>\n"
 	    "    <gamma>\n"
-	    "      <red>%f</red>\n"
-	    "      <green>%f</green>\n"
-	    "      <blue>%f</blue>\n"
+	    "      <red>%.2f</red>\n"
+	    "      <green>%.2f</green>\n"
+	    "      <blue>%.2f</blue>\n"
 	    "    </gamma>\n"
 	    "    <background>%s</background>\n"
 	    "    <animate>%s</animate>\n"
@@ -441,8 +441,15 @@ static void config_parse_text (GMarkupParseContext *context,
 	*parserBool = (strcmp (text, "TRUE") == 0) ? TRUE : FALSE;
     else if (parserInt)
 	*parserInt = (gint) g_ascii_strtod (text, NULL);
-    else if (parserFloat)
-	*parserFloat = g_ascii_strtod (text, NULL);
+    else if (parserFloat) {
+	gchar *text_copy = g_strdup (text);
+	gchar *p;
+	for (p = text_copy; *p; p++) {
+	    if (*p == ',') *p = '.';
+	}
+	*parserFloat = g_ascii_strtod (text_copy, NULL);
+	g_free (text_copy);
+    }
     else if (parserChar)
     {
 	if (*parserChar)
