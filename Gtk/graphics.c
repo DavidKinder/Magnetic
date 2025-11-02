@@ -72,6 +72,42 @@ static guchar r_colour256[8];
 static guchar g_colour256[8];
 static guchar b_colour256[8];
 
+static gint currentPicture = -1;
+static gint currentMode = -1;
+static guint refresh_timeout_id = 0;
+static gint last_allocation_width = 0;
+static gint last_allocation_height = 0;
+
+static gboolean refresh_graphics_callback (gpointer user_data)
+{
+    refresh_timeout_id = 0;
+    if (currentPicture != -1 && currentMode != -1)
+	graphics_refresh ();
+    return FALSE;
+}
+
+static void on_picture_area_size_allocate (
+    GtkWidget *widget, GtkAllocation *allocation, gpointer data)
+{
+    if (Config.fit_to_window && currentPicture != -1 && currentMode != -1)
+    {
+	if (allocation->width != last_allocation_width ||
+	    allocation->height != last_allocation_height)
+	{
+	    last_allocation_width = allocation->width;
+	    last_allocation_height = allocation->height;
+
+	    if (refresh_timeout_id != 0)
+	    {
+		g_source_remove (refresh_timeout_id);
+		refresh_timeout_id = 0;
+	    }
+
+	    refresh_timeout_id = g_timeout_add (2, refresh_graphics_callback, NULL);
+	}
+    }
+}
+
 void graphics_init ()
 {
     gint i;
@@ -82,16 +118,23 @@ void graphics_init ()
 	g_colour256[i] = apply_gamma (colour256[i], Config.green_gamma);
 	b_colour256[i] = apply_gamma (colour256[i], Config.blue_gamma);
     }
-}
 
-static gint currentPicture = -1;
-static gint currentMode = -1;
+    g_signal_connect (Gui.picture_area, "size-allocate",
+	G_CALLBACK (on_picture_area_size_allocate), NULL);
+}
 
 void graphics_clear ()
 {
+    if (refresh_timeout_id != 0)
+    {
+	g_source_remove (refresh_timeout_id);
+	refresh_timeout_id = 0;
+    }
     ms_showpic (0, 0);
     currentPicture = -1;
     currentMode = -1;
+    last_allocation_width = 0;
+    last_allocation_height = 0;
 }
 
 static GtkCssProvider *graphics_bg_provider = NULL;
@@ -112,24 +155,24 @@ void graphics_refresh ()
     style_context = gtk_widget_get_style_context (viewport);
 
     if (graphics_bg_provider) {
-        gtk_style_context_remove_provider(style_context,
-                GTK_STYLE_PROVIDER (graphics_bg_provider));
-        g_object_unref (graphics_bg_provider);
-        graphics_bg_provider = NULL;
+	gtk_style_context_remove_provider(style_context,
+		GTK_STYLE_PROVIDER (graphics_bg_provider));
+	g_object_unref (graphics_bg_provider);
+	graphics_bg_provider = NULL;
     }
 
     if (Config.graphics_bg && gdk_rgba_parse (
     &colour, Config.graphics_bg))
     {
-        graphics_bg_provider = gtk_css_provider_new ();
-        css = g_strdup_printf (
+	graphics_bg_provider = gtk_css_provider_new ();
+	css = g_strdup_printf (
 	"viewport { background-color: %s; }", Config.graphics_bg);
-        gtk_css_provider_load_from_data (
+	gtk_css_provider_load_from_data (
 	graphics_bg_provider, css, -1, NULL);
-        gtk_style_context_add_provider (style_context,
-                GTK_STYLE_PROVIDER (graphics_bg_provider),
-                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        g_free (css);
+	gtk_style_context_add_provider (style_context,
+		GTK_STYLE_PROVIDER (graphics_bg_provider),
+		GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_free (css);
     }
 }
 
@@ -202,7 +245,25 @@ static void display_picture (struct picture *picture)
 	picture->rgb_data, GDK_COLORSPACE_RGB, FALSE, 8, picture->width,
 	picture->height, 3 * picture->width, NULL, NULL);
 
-    if ((Config.image_constant_height &&
+    if (Config.fit_to_window)
+    {
+	GdkPixbuf *scaled_pixbuf;
+	GtkAllocation allocation;
+	gtk_widget_get_allocation (Gui.picture_area, &allocation);
+	gdouble width_scale = (gdouble) allocation.width / picture->width;
+	gdouble height_scale = (gdouble) allocation.height / picture->height;
+	gdouble scale_factor = MIN (width_scale, height_scale);
+
+	scaled_pixbuf = gdk_pixbuf_scale_simple (
+	    picture->pixbuf,
+	    MAX ((gint) ((gdouble) picture->width * scale_factor + 0.5), 1),
+	    MAX ((gint) ((gdouble) picture->height * scale_factor + 0.5), 1),
+	    Config.image_filter);
+
+	g_object_unref (picture->pixbuf);
+	picture->pixbuf = scaled_pixbuf;
+    }
+    else if ((Config.image_constant_height &&
 	 Config.image_height != picture->height) ||
 	(!Config.image_constant_height &&
 	 Config.image_scale != 1.0))
@@ -601,7 +662,7 @@ void display_splash_screen (gchar *splash_filename, gchar *music_filename)
 		"viewport { background-color: %s; }", Config.graphics_bg);
 		gtk_css_provider_load_from_data (provider, css, -1, NULL);
 		gtk_style_context_add_provider (style_context,
-                    GTK_STYLE_PROVIDER (provider),
+		    GTK_STYLE_PROVIDER (provider),
 		    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 		g_object_unref (provider);
 		g_free (css);

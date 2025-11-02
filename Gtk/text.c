@@ -33,6 +33,7 @@
 static GtkTextMark *inputMark = NULL;
 static gchar *inputBuffer = NULL;
 static gchar *inputPtr = NULL;
+static gboolean need_magwin_graphics = FALSE;
 
 static gboolean promptingForSeed = FALSE;
 
@@ -104,8 +105,25 @@ void text_clear (void)
     gtk_text_buffer_get_bounds (Gui.text_buffer, &start, &end);
     gtk_text_buffer_delete (Gui.text_buffer, &start, &end);
 
+    if (inputMark)
+    {
+	gtk_text_buffer_delete_mark (Gui.text_buffer, inputMark);
+	inputMark = NULL;
+    }
+
     promptingForSeed = FALSE;
+    need_magwin_graphics = FALSE;
     clear_input_buffer ();
+}
+
+void text_block_input (void)
+{
+    set_input_pending (FALSE);
+}
+
+void text_set_magwin_graphics (void)
+{
+    need_magwin_graphics = TRUE;
 }
 
 void text_refresh (void)
@@ -115,100 +133,100 @@ void text_refresh (void)
 
     if (Config.text_font)
     {
-        PangoFontDescription *font_desc;
-        const char *family;
-        int size;
-        PangoWeight weight;
-        PangoStyle style;
+	PangoFontDescription *font_desc;
+	const char *family;
+	int size;
+	PangoWeight weight;
+	PangoStyle style;
 
-        font_desc = pango_font_description_from_string (Config.text_font);
-        family = pango_font_description_get_family (font_desc);
-        size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
-        weight = pango_font_description_get_weight (font_desc);
-        style = pango_font_description_get_style (font_desc);
+	font_desc = pango_font_description_from_string (Config.text_font);
+	family = pango_font_description_get_family (font_desc);
+	size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
+	weight = pango_font_description_get_weight (font_desc);
+	style = pango_font_description_get_style (font_desc);
 
-        text_font_provider = gtk_css_provider_new ();
-        css = g_strdup_printf (
-        "textview {font-family: '%s'; font-size: %dpt; font-weight: %s; font-style: %s; }",
-        family, size,
-        (weight >= PANGO_WEIGHT_BOLD) ? "bold" : "normal",
-        (style == PANGO_STYLE_ITALIC || style == PANGO_STYLE_OBLIQUE) ?
-        "italic" : "normal");
-        gtk_css_provider_load_from_data (text_font_provider, css, -1, NULL);
-        gtk_style_context_add_provider (
-        gtk_widget_get_style_context (Gui.text_view),
-        GTK_STYLE_PROVIDER (text_font_provider),
-        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        if (!Config.status_font)
-        {
-            gtk_style_context_add_provider (
-            gtk_widget_get_style_context (Gui.statusline.left),
-            GTK_STYLE_PROVIDER (text_font_provider),
-            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-            gtk_style_context_add_provider (
-            gtk_widget_get_style_context (Gui.statusline.right),
-            GTK_STYLE_PROVIDER (text_font_provider),
-            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        }
+	text_font_provider = gtk_css_provider_new ();
+	css = g_strdup_printf (
+	"textview {font-family: '%s'; font-size: %dpt; font-weight: %s; font-style: %s; }",
+	family, size,
+	(weight >= PANGO_WEIGHT_BOLD) ? "bold" : "normal",
+	(style == PANGO_STYLE_ITALIC || style == PANGO_STYLE_OBLIQUE) ?
+	"italic" : "normal");
+	gtk_css_provider_load_from_data (text_font_provider, css, -1, NULL);
+	gtk_style_context_add_provider (
+	gtk_widget_get_style_context (Gui.text_view),
+	GTK_STYLE_PROVIDER (text_font_provider),
+	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	if (!Config.status_font)
+	{
+	    gtk_style_context_add_provider (
+	    gtk_widget_get_style_context (Gui.statusline.left),
+	    GTK_STYLE_PROVIDER (text_font_provider),
+	    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	    gtk_style_context_add_provider (
+	    gtk_widget_get_style_context (Gui.statusline.right),
+	    GTK_STYLE_PROVIDER (text_font_provider),
+	    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	}
     g_free (css);
     pango_font_description_free (font_desc);
     }
 
     if (Config.status_font)
     {
-        PangoFontDescription *font_desc;
-        const char *family;
-        int size;
+	PangoFontDescription *font_desc;
+	const char *family;
+	int size;
 
-        font_desc = pango_font_description_from_string (Config.status_font);
-        family = pango_font_description_get_family (font_desc);
-        size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
+	font_desc = pango_font_description_from_string (Config.status_font);
+	family = pango_font_description_get_family (font_desc);
+	size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
 
-        status_font_provider = gtk_css_provider_new ();
-        css = g_strdup_printf (
-        "label { font-family: '%s'; font-size: %dpt; }", family, size);
-        gtk_css_provider_load_from_data (status_font_provider, css, -1, NULL);
-        gtk_style_context_add_provider (
-        gtk_widget_get_style_context (Gui.statusline.left),
-        GTK_STYLE_PROVIDER (status_font_provider),
-        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        gtk_style_context_add_provider (
-        gtk_widget_get_style_context (Gui.statusline.right),
-        GTK_STYLE_PROVIDER (status_font_provider),
-        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        g_free (css);
-        pango_font_description_free (font_desc);
+	status_font_provider = gtk_css_provider_new ();
+	css = g_strdup_printf (
+	"label { font-family: '%s'; font-size: %dpt; }", family, size);
+	gtk_css_provider_load_from_data (status_font_provider, css, -1, NULL);
+	gtk_style_context_add_provider (
+	gtk_widget_get_style_context (Gui.statusline.left),
+	GTK_STYLE_PROVIDER (status_font_provider),
+	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	gtk_style_context_add_provider (
+	gtk_widget_get_style_context (Gui.statusline.right),
+	GTK_STYLE_PROVIDER (status_font_provider),
+	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_free (css);
+	pango_font_description_free (font_desc);
     }
 
     if (text_fg_provider)
     {
-        gtk_style_context_remove_provider (
-        gtk_widget_get_style_context (Gui.text_view),
-        GTK_STYLE_PROVIDER (text_fg_provider));
-        g_object_unref (text_fg_provider);
-        text_fg_provider = NULL;
+	gtk_style_context_remove_provider (
+	gtk_widget_get_style_context (Gui.text_view),
+	GTK_STYLE_PROVIDER (text_fg_provider));
+	g_object_unref (text_fg_provider);
+	text_fg_provider = NULL;
     }
 
     if (Config.text_fg && gdk_rgba_parse (&colour, Config.text_fg))
     {
-        text_fg_provider = gtk_css_provider_new ();
-        css = g_strdup_printf ("textview text { color: %s; caret-color: %s; }",
-        Config.text_fg, Config.text_fg);
-        gtk_css_provider_load_from_data (text_fg_provider, css, -1, NULL);
-        gtk_style_context_add_provider (
-        gtk_widget_get_style_context (Gui.text_view),
-        GTK_STYLE_PROVIDER (text_fg_provider),
-        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        g_free (css);
+	text_fg_provider = gtk_css_provider_new ();
+	css = g_strdup_printf ("textview text { color: %s; caret-color: %s; }",
+	Config.text_fg, Config.text_fg);
+	gtk_css_provider_load_from_data (text_fg_provider, css, -1, NULL);
+	gtk_style_context_add_provider (
+	gtk_widget_get_style_context (Gui.text_view),
+	GTK_STYLE_PROVIDER (text_fg_provider),
+	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_free (css);
     }
 
     if (text_bg_provider)
     {
-        gtk_style_context_remove_provider (
-        gtk_widget_get_style_context (Gui.text_view),
-        GTK_STYLE_PROVIDER (text_bg_provider));
-        g_object_unref (text_bg_provider);
-        text_bg_provider = NULL;
+	gtk_style_context_remove_provider (
+	gtk_widget_get_style_context (Gui.text_view),
+	GTK_STYLE_PROVIDER (text_bg_provider));
+	g_object_unref (text_bg_provider);
+	text_bg_provider = NULL;
     }
 
     if (Config.text_bg && gdk_rgba_parse (&colour, Config.text_bg))
@@ -226,14 +244,14 @@ void text_refresh (void)
 
     if (status_fg_provider)
     {
-        gtk_style_context_remove_provider (
-        gtk_widget_get_style_context (Gui.statusline.left),
-        GTK_STYLE_PROVIDER (status_fg_provider));
-        gtk_style_context_remove_provider (
-        gtk_widget_get_style_context (Gui.statusline.right),
-            GTK_STYLE_PROVIDER (status_fg_provider));
-        g_object_unref (status_fg_provider);
-        status_fg_provider = NULL;
+	gtk_style_context_remove_provider (
+	gtk_widget_get_style_context (Gui.statusline.left),
+	GTK_STYLE_PROVIDER (status_fg_provider));
+	gtk_style_context_remove_provider (
+	gtk_widget_get_style_context (Gui.statusline.right),
+	    GTK_STYLE_PROVIDER (status_fg_provider));
+	g_object_unref (status_fg_provider);
+	status_fg_provider = NULL;
     }
 
     if (Config.status_fg && gdk_rgba_parse (&colour, Config.status_fg))
@@ -272,6 +290,23 @@ void text_refresh (void)
     	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     	g_free (css);
     }
+
+    gtk_text_view_set_left_margin (
+	GTK_TEXT_VIEW (Gui.text_view), Config.text_margin);
+    gtk_text_view_set_right_margin (
+	GTK_TEXT_VIEW (Gui.text_view), Config.text_margin);
+    gtk_text_view_set_top_margin (
+	GTK_TEXT_VIEW (Gui.text_view), Config.text_margin);
+    gtk_text_view_set_bottom_margin (
+	GTK_TEXT_VIEW (Gui.text_view), Config.text_margin);
+
+    int spacing = (int) (Config.text_leading * 4.0);
+    gtk_text_view_set_pixels_inside_wrap (
+	GTK_TEXT_VIEW (Gui.text_view), spacing);
+    gtk_text_view_set_pixels_above_lines (
+	GTK_TEXT_VIEW (Gui.text_view), spacing);
+    gtk_text_view_set_pixels_below_lines (
+	GTK_TEXT_VIEW (Gui.text_view), spacing);
 }
 
 /* ------------------------------------------------------------------------- *
@@ -310,6 +345,9 @@ void text_init ()
      * stays editable.
      */
 
+    gtk_text_buffer_create_tag (Gui.text_buffer, "magnetic-non-editable",
+				"editable", FALSE, NULL);
+
     hSigInsert = g_signal_connect_after (
 	G_OBJECT (Gui.text_buffer), "insert-text",
 	G_CALLBACK (sig_insert), NULL);
@@ -319,6 +357,35 @@ void text_init ()
     hSigKeypress = g_signal_connect (
 	G_OBJECT (Gui.text_view), "key-press-event",
 	G_CALLBACK (sig_keypress), NULL);
+
+    if (!gtk_widget_get_realized (Gui.text_view))
+	gtk_widget_realize (Gui.text_view);
+
+    GdkScreen *screen = gtk_widget_get_screen (Gui.text_view);
+    GtkSettings *settings = gtk_settings_get_for_screen (screen);
+
+    const cairo_font_options_t *font_options =
+	gdk_screen_get_font_options (screen);
+    cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
+
+    if (font_options)
+	subpixel_order = cairo_font_options_get_subpixel_order (font_options);
+
+    const char *rgba_type = "rgb";
+    switch (subpixel_order) {
+	case CAIRO_SUBPIXEL_ORDER_BGR:     rgba_type = "bgr"; break;
+	case CAIRO_SUBPIXEL_ORDER_VRGB:    rgba_type = "vrgb"; break;
+	case CAIRO_SUBPIXEL_ORDER_VBGR:    rgba_type = "vbgr"; break;
+	case CAIRO_SUBPIXEL_ORDER_DEFAULT: rgba_type = "none"; break;
+	default: break;
+    }
+
+    g_object_set (settings,
+	"gtk-xft-antialias", 1,
+	"gtk-xft-hinting", 1,
+	"gtk-xft-hintstyle", "hintslight",
+	"gtk-xft-rgba", rgba_type,
+	NULL);
 }
 
 static void history_insert (gchar *str)
@@ -596,11 +663,26 @@ static void sig_insert (GtkTextBuffer *buffer, GtkTextIter *arg1,
 {
     GtkTextIter start;
     GtkTextIter end;
+    GtkTextIter buffer_start;
+
+    if (!inputMark)
+	return;
 
     gtk_text_buffer_get_iter_at_mark (Gui.text_buffer, &start, inputMark);
     gtk_text_buffer_get_end_iter (Gui.text_buffer, &end);
     gtk_text_buffer_apply_tag_by_name (
 	Gui.text_buffer, "magnetic-input", &start, &end);
+
+    gtk_text_buffer_get_start_iter (Gui.text_buffer, &buffer_start);
+    if (gtk_text_iter_compare (&buffer_start, &start) < 0)
+    {
+	GtkTextTag *tag = gtk_text_tag_table_lookup (
+	    gtk_text_buffer_get_tag_table (Gui.text_buffer), "magnetic-non-editable");
+	if (tag)
+	{
+	    gtk_text_buffer_apply_tag (Gui.text_buffer, tag, &buffer_start, &start);
+	}
+    }
 }
 
 /*
@@ -666,11 +748,32 @@ static void set_input_pending (gboolean pending)
 	g_signal_handler_unblock (G_OBJECT (Gui.text_buffer), hSigInsert);
 	g_signal_handler_unblock (G_OBJECT (Gui.text_buffer), hSigDelete);
 	g_signal_handler_unblock (G_OBJECT (Gui.text_view), hSigKeypress);
+
+	if (Gui.text_view)
+	    gtk_text_view_set_editable (GTK_TEXT_VIEW (Gui.text_view), TRUE);
+
+	if (inputMark && Gui.text_buffer)
+	{
+	    GtkTextIter start, mark_iter;
+	    gtk_text_buffer_get_start_iter (Gui.text_buffer, &start);
+	    gtk_text_buffer_get_iter_at_mark (Gui.text_buffer, &mark_iter, inputMark);
+
+	    if (gtk_text_iter_compare (&start, &mark_iter) < 0)
+	    {
+		GtkTextTag *tag = gtk_text_tag_table_lookup (
+		    gtk_text_buffer_get_tag_table (Gui.text_buffer), "magnetic-non-editable");
+		if (tag)
+		    gtk_text_buffer_apply_tag (Gui.text_buffer, tag, &start, &mark_iter);
+	    }
+	}
     } else
     {
 	g_signal_handler_block (G_OBJECT (Gui.text_buffer), hSigInsert);
 	g_signal_handler_block (G_OBJECT (Gui.text_buffer), hSigDelete);
 	g_signal_handler_block (G_OBJECT (Gui.text_view), hSigKeypress);
+
+	if (Gui.text_view)
+	    gtk_text_view_set_editable (GTK_TEXT_VIEW (Gui.text_view), FALSE);
     }
 }
 
@@ -700,7 +803,7 @@ static void start_something (gboolean silent, GIOChannel **file,
      */
 
     stop_main_loop ();
-    
+
     if (!*file)
     {
 	gchar *filename;
@@ -952,9 +1055,10 @@ type8 ms_getchar (type8 trans)
 	gtk_text_buffer_get_end_iter (Gui.text_buffer, &iter);
 
 	if (!inputMark)
+	{
 	    inputMark = gtk_text_buffer_create_mark (
 		Gui.text_buffer, NULL, &iter, TRUE);
-	else
+	} else
 	{
 	    /*
 	     * Scroll the view so that the previous input is still visible.
@@ -1011,9 +1115,30 @@ type8 ms_getchar (type8 trans)
 	 * from the keyboard.
 	 */
 	
-	if (!replayFile)
+	if (!replayFile && !inputBuffer)
 	{
+	    if (need_magwin_graphics)
+	    {
+		need_magwin_graphics = FALSE;
+		gtk_text_buffer_get_iter_at_mark (
+		    Gui.text_buffer, &iter, inputMark);
+		text_insert ("graphics on");
+		ms_flush ();
+		fetch_command_at_prompt ();
+		goto skip_keyboard_input;
+	    }
+
 	    set_input_pending (TRUE);
+
+	    if (hSigKeypress && g_signal_handler_is_connected (Gui.text_view, hSigKeypress))
+	    {
+		g_signal_handler_disconnect (Gui.text_view, hSigKeypress);
+		hSigKeypress = 0;
+	    }
+	    hSigKeypress = g_signal_connect (
+		G_OBJECT (Gui.text_view), "key-press-event",
+		G_CALLBACK (sig_keypress), NULL);
+
 	    gtk_main ();
 	    if (applicationExiting)
 	    {
@@ -1023,6 +1148,7 @@ type8 ms_getchar (type8 trans)
 	    set_input_pending (FALSE);
 	}
 
+	skip_keyboard_input:
 	start_main_loop ();
     }
 

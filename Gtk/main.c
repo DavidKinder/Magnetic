@@ -100,6 +100,7 @@ static gboolean main_loop (gpointer data)
 	    ms_stop ();
 	    ms_freemem ();
 
+	    text_block_input ();
 	    gtk_text_view_scroll_mark_onscreen (
 		GTK_TEXT_VIEW (Gui.text_view),
 		gtk_text_buffer_get_insert (Gui.text_buffer));
@@ -209,7 +210,7 @@ void do_about ()
 	"Copyright (C) 1997-2023 Niclas Karlsson",
 
 	"comments",
-	"GTK 3.24 interface v2.0 by thr <r@sledinmay.com> ported from\n"
+	"GTK 3.24 interface v2.1 by thr <r@sledinmay.com> ported from\n"
 	"GTK+ 2.6 interface v1.6 by Torbj\303\266rn Andersson <d91tan@Update.UU.SE>",
 
 	"authors",
@@ -229,7 +230,6 @@ void do_about ()
 	"You should have received a copy of the GNU General Public License\n"
 	"along with this program; if not, write to the Free Software\n"
 	"Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA.\n",
-
 	NULL);
 
     gtk_widget_destroy (about);
@@ -328,8 +328,15 @@ gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
 	g_free (basename);
 	gtk_widget_destroy (error);
     } else
+    {
+	if (ms_is_magwin () && Config.auto_graphics_magwin)
+	{
+	    text_set_magwin_graphics ();
+	}
+
 	start_main_loop ();
-    
+    }
+
     g_free (game_filename);
     g_free (graphics_filename);
     g_free (splash_filename);
