@@ -104,6 +104,7 @@ BOOL CMagneticApp::InitInstance()
     ShowGraphics::MainWindow);
   m_dScaleFactor = (double)GetProfileInt("Picture","Scale",scalePics)*0.01;
   m_dGamma = (double)GetProfileInt("Picture","Gamma",100)*0.01;
+  m_bAutoMagwinGfx = GetProfileInt("Picture","Auto MagWin graphics",1);
   m_ForeColour = GetProfileInt("Display","Foreground",~0);
   m_BackColour = GetProfileInt("Display","Background",~0);
   m_GfxColour = GetProfileInt("Display","Graphics",~0);
@@ -201,6 +202,7 @@ int CMagneticApp::ExitInstance()
   WriteProfileInt("Picture","Show",m_ShowGfx);
   WriteProfileInt("Picture","Scale",(int)(m_dScaleFactor*100));
   WriteProfileInt("Picture","Gamma",(int)(m_dGamma*100));
+  WriteProfileInt("Picture","Auto MagWin graphics",m_bAutoMagwinGfx);
 
   WriteProfileInt("Hints","Left",m_HintsRect.left);
   WriteProfileInt("Hints","Top",m_HintsRect.top);
@@ -281,6 +283,7 @@ void CMagneticApp::OnViewOptions()
   Options.m_dGamma = m_dGamma;
   Options.m_bHintWindow = m_bHintWindow;
   Options.m_bAnimWait = m_bAnimWait;
+  Options.m_bAutoMagwinGfx = m_bAutoMagwinGfx;
   Options.m_bPredict = m_bPredict;
   Options.m_iSeed = m_iSeed;
 
@@ -291,6 +294,7 @@ void CMagneticApp::OnViewOptions()
     m_dGamma = Options.m_dGamma;
     m_bHintWindow = Options.m_bHintWindow;
     m_bAnimWait = Options.m_bAnimWait;
+    m_bAutoMagwinGfx = Options.m_bAutoMagwinGfx;
     m_bPredict = Options.m_bPredict;
     m_iSeed = Options.m_iSeed;
 
@@ -468,6 +472,11 @@ BOOL CMagneticApp::GetUseHintWindow(void)
 BOOL CMagneticApp::GetAnimWait(void)
 {
   return m_bAnimWait;
+}
+
+BOOL CMagneticApp::GetAutoMagwinGfx(void)
+{
+  return m_bAutoMagwinGfx;
 }
 
 BOOL CMagneticApp::GetPredictable(void)

@@ -96,6 +96,7 @@ public:
   double GetScaleFactor(void);
   BOOL GetUseHintWindow(void);
   BOOL GetAnimWait(void);
+  BOOL GetAutoMagwinGfx(void);
   BOOL GetPredictable(void);
   int GetRandomSeed(void);
   double GetGamma(void);
@@ -135,6 +136,7 @@ protected:
   COLORREF m_GfxColour;
   BOOL m_bHintWindow;
   BOOL m_bAnimWait;
+  BOOL m_bAutoMagwinGfx;
   BOOL m_bPredict;
   int m_iSeed;
   double m_dGamma;

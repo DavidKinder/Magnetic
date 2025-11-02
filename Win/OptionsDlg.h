@@ -32,6 +32,7 @@ public:
   int     m_iShowPics;
   double  m_dGamma;
   BOOL    m_bAnimWait;
+  BOOL    m_bAutoMagwinGfx;
   BOOL    m_bHintWindow;
   //}}AFX_DATA
 
@@ -67,7 +68,7 @@ protected:
   DarkModeEdit m_Scale, m_Gamma;
   DarkModeSpinButtonCtrl m_SpinScale, m_SpinGamma;
   ColourButton m_FColour, m_BColour, m_GColour;
-  DarkModeCheckButton m_HintCheck, m_AnimWaitCheck, m_PredictCheck;
+  DarkModeCheckButton m_HintCheck, m_AnimWaitCheck, m_AutoMagwinGfxCheck, m_PredictCheck;
   DarkModeEdit m_Seed;
 
   COLORREF m_DefaultFColour, m_DefaultBColour, m_DefaultGColour;

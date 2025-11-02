@@ -104,6 +104,7 @@ public:
   static BOOL OpenGame(LPCTSTR lpszPathName);
   static char GetInput(bool& done, bool trans);
   static char GetPlaybackChar(FILE* file);
+  void ResetGfxOnSent(void) { m_bGfxOnSent = false; }
 
 protected:
   void SolidRect(CDC* pDC, LPCRECT lpRect, COLORREF Colour);
@@ -152,6 +153,7 @@ protected:
   bool m_bMorePrompt;
   bool m_bCaret;
   bool m_bInputActive;
+  bool m_bGfxOnSent;
 
   CString m_strOutput;
   CArray<int,int> m_Input;
