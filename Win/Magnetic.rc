@@ -164,7 +164,7 @@ BEGIN
     LTEXT           "Magnetic v2.3.1, an interpreter for Magnetic Scrolls games. Copyright © 1997-2023 Niclas Karlsson.",IDC_STATIC,99,16,170,16
     LTEXT           "Magnetic is released under the terms of the GNU General Public License.",IDC_STATIC,100,35,160,16
     LTEXT           "Magnetic was written by Niclas Karlsson,\nDavid Kinder, Stefan Meier and Paul David Doherty.",IDC_STATIC,99,54,171,16
-    LTEXT           "Magnetic for Windows Release 16.\nWindows version written by David Kinder.",IDC_STATIC,99,73,141,16
+    LTEXT           "Magnetic for Windows Release 17.\nWindows version written by David Kinder.",IDC_STATIC,99,73,141,16
     DEFPUSHBUTTON   "OK",IDOK,159,98,48,14,WS_GROUP
 END
 
