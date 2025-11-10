@@ -78,6 +78,7 @@ CMagneticView::CMagneticView() : m_PicWnd(m_Picture,m_AnimFrames),
   m_bInputActive = false;
   m_bStatusBar = false;
   m_bAnimate = false;
+  m_bGfxOnSent = false;
 }
 
 CMagneticView::~CMagneticView()
@@ -656,6 +657,7 @@ void CMagneticView::ClearAll(void)
   m_iMaxLines = 0;
   m_bStatusBar = false;
   m_bAnimate = false;
+  m_bGfxOnSent = false;
 
   pApp->SetGameLoaded(0);
 
@@ -1334,6 +1336,16 @@ char CMagneticView::GetInput(bool& done, bool trans)
   pView->CaretOn();
   pView->m_bInputActive = true;
 
+  // Auto-enter "graphics on" for MagWin games if enabled
+  if (!pView->m_bMorePrompt && !pView->m_bGfxOnSent &&
+      pApp->GetAutoMagwinGfx() && ms_is_magwin())
+  {
+    const char* cmd = "graphics on\n";
+    for (int i = 0; cmd[i] != '\0'; i++)
+      pView->m_Input.Add((cmd[i] == '\n') ? 10 : (int)cmd[i]);
+    pView->m_bGfxOnSent = true;
+  }
+
   while (cInput != 10 && cInput != 1)
   {
     pView = CMagneticView::GetView();
@@ -1723,6 +1735,9 @@ void ms_showpic(type32 c, type8 mode)
       pView->GetPicture().ClearAll();
       pView->SetAnimate(FALSE);
       pView->ClearAnims();
+      // Reset graphics-on flag for MagWin games after restart
+      if (ms_is_magwin() && pApp->GetAutoMagwinGfx())
+        pView->ResetGfxOnSent();
       break;
 
     case 1:  // Graphics on (thumbnails)

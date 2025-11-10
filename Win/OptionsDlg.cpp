@@ -33,6 +33,7 @@ COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/) : CMagneticDlg(COptionsDlg::ID
   m_iShowPics = -1;
   m_dGamma = 0.0;
   m_bAnimWait = FALSE;
+  m_bAutoMagwinGfx = FALSE;
   m_bHintWindow = FALSE;
   //}}AFX_DATA_INIT
 
@@ -53,6 +54,7 @@ void COptionsDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Text(pDX, IDC_GAMMA, m_dGamma);
   DDV_MinMaxDouble(pDX, m_dGamma, 0.5, 5.);
   DDX_Check(pDX, IDC_ANIM_WAIT, m_bAnimWait);
+  DDX_Check(pDX, IDC_AUTO_MAGWIN_GFX, m_bAutoMagwinGfx);
   DDX_Check(pDX, IDC_HINT_WINDOW, m_bHintWindow);
   //}}AFX_DATA_MAP
 }
@@ -112,6 +114,8 @@ BOOL COptionsDlg::OnInitDialog()
     return FALSE;
   if (m_AnimWaitCheck.SubclassDlgItem(IDC_ANIM_WAIT,this,IDR_DARK_CHECK) == FALSE)
     return FALSE;
+  if (m_AutoMagwinGfxCheck.SubclassDlgItem(IDC_AUTO_MAGWIN_GFX,this,IDR_DARK_CHECK) == FALSE)
+    return FALSE;
   if (m_PredictCheck.SubclassDlgItem(IDC_PREDICT,this,IDR_DARK_CHECK) == FALSE)
     return FALSE;
   if (m_Seed.SubclassDlgItem(IDC_SEED,this) == FALSE)
@@ -154,6 +158,7 @@ BOOL COptionsDlg::OnHelpInfo(HELPINFO* pHelpInfo)
     IDC_SEED,7,
     IDC_SEED_LABEL,7,
     IDC_ANIM_WAIT,8,
+    IDC_AUTO_MAGWIN_GFX,10,
     IDC_HINT_WINDOW,9,
     0,0
   };

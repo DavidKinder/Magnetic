@@ -25,4 +25,5 @@ interpreter.
 If this checkbox is selected, the replaying of scripts pauses to allow animations to finish.
 .topic 9
 If this checkbox is selected, hints for the Magnetic Windows games are shown in a separate window.
-
+.topic 10
+If selected, the interpreter will automatically enter "graphics on" at game startup when a Magnetic Windows game (Wonderland and games from The Collection) is detected.

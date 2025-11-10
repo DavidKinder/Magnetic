@@ -42,6 +42,7 @@
 #define IDC_GRAPHICS_GROUP              1027
 #define IDC_COLOURS_GROUP               1028
 #define IDC_OTHER_GROUP                 1029
+#define IDC_AUTO_MAGWIN_GFX             1030
 #define ID_VIEW_FONT                    32770
 #define ID_HELP_TOPICS                  32771
 #define ID_FILE_RECORD                  32772
