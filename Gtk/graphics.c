@@ -27,6 +27,7 @@
 #include "gui.h"
 #include "graphics.h"
 #include "sound.h"
+#include "text.h"
 
 /* ------------------------------------------------------------------------- *
  * Utility functions.                                                        *
@@ -130,6 +131,7 @@ void graphics_clear ()
 	g_source_remove (refresh_timeout_id);
 	refresh_timeout_id = 0;
     }
+    text_set_magwin_graphics (TRUE);
     ms_showpic (0, 0);
     currentPicture = -1;
     currentMode = -1;
@@ -502,21 +504,32 @@ void ms_showpic (type32 c, type8 mode)
      * Remember the current picture and mode so that we can refresh whatever
      * image is shown if the graphics settings change.
      */
-    
+
     currentPicture = c;
     currentMode = mode;
 
     /* Remove the current picture */
-    
+
     free_picture (&picture);
-    
+
     /* Mode 0 means turn off graphics */
 
     if (mode == 0)
     {
 	gtk_image_set_from_pixbuf (GTK_IMAGE (Gui.picture), NULL);
+	currentPicture = -1;
+	currentMode = -1;
+
+	if (ms_is_magwin () && Config.auto_graphics_magwin)
+	{
+	    text_set_magwin_graphics (
+		!text_has_active_input () && !ms_is_running ());
+	}
 	return;
     }
+
+    if (ms_is_magwin () && Config.auto_graphics_magwin)
+	text_set_magwin_graphics (FALSE);
 
     raw_data = ms_extract (c, &picture.width, &picture.height, palette,
 			   &is_anim);
@@ -525,7 +538,7 @@ void ms_showpic (type32 c, type8 mode)
 	return;
 
     /* Convert the raw, paletted image to RGB data */
-    
+
     picture.rgb_data =
 	g_malloc (3 * picture.width * picture.height);
 
@@ -543,7 +556,7 @@ void ms_showpic (type32 c, type8 mode)
 	*ptr++ = picture.rgb_palette[raw_data[i]].green;
 	*ptr++ = picture.rgb_palette[raw_data[i]].blue;
     }
-    
+
     if (is_anim)
     {
 	/*

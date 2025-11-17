@@ -20,7 +20,7 @@
 #ifndef _GRAPHICS_H
 #define _GRAPHICS_H
 
-void display_splash_screen (gchar *splash_filenam, gchar *music_filename);
+void display_splash_screen (gchar *splash_filename, gchar *music_filename);
 void graphics_init (void);
 void graphics_clear (void);
 void graphics_refresh (void);

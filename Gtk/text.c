@@ -112,7 +112,6 @@ void text_clear (void)
     }
 
     promptingForSeed = FALSE;
-    need_magwin_graphics = FALSE;
     clear_input_buffer ();
 }
 
@@ -121,9 +120,14 @@ void text_block_input (void)
     set_input_pending (FALSE);
 }
 
-void text_set_magwin_graphics (void)
+void text_set_magwin_graphics (gboolean allow)
 {
-    need_magwin_graphics = TRUE;
+    need_magwin_graphics = allow;
+}
+
+gboolean text_has_active_input (void)
+{
+    return inputBuffer != NULL;
 }
 
 void text_refresh (void)
@@ -494,6 +498,8 @@ static void fetch_command_at_prompt ()
 	gtk_text_buffer_get_text (Gui.text_buffer, &start, &end, FALSE));
     inputPtr = inputBuffer;
 
+    need_magwin_graphics = FALSE;
+
     history_insert (inputBuffer);
 
     /*
@@ -507,7 +513,7 @@ static void fetch_command_at_prompt ()
     set_input_pending (FALSE);
     gtk_text_buffer_delete (Gui.text_buffer, &start, &end);
     set_input_pending (TRUE);
-			    
+
     gtk_text_buffer_get_end_iter (Gui.text_buffer, &end);
     gtk_text_buffer_insert_with_tags_by_name (
 	Gui.text_buffer, &end, inputBuffer, -1, "magnetic-old-input", NULL);
@@ -743,14 +749,17 @@ static gboolean sig_keypress (GtkWidget *widget, GdkEventKey *event,
 
 static void set_input_pending (gboolean pending)
 {
+    if (!Gui.text_view || !GTK_IS_TEXT_VIEW (Gui.text_view) ||
+	!Gui.text_buffer || !GTK_IS_TEXT_BUFFER (Gui.text_buffer))
+	return;
+
     if (pending)
     {
 	g_signal_handler_unblock (G_OBJECT (Gui.text_buffer), hSigInsert);
 	g_signal_handler_unblock (G_OBJECT (Gui.text_buffer), hSigDelete);
 	g_signal_handler_unblock (G_OBJECT (Gui.text_view), hSigKeypress);
 
-	if (Gui.text_view)
-	    gtk_text_view_set_editable (GTK_TEXT_VIEW (Gui.text_view), TRUE);
+	gtk_text_view_set_editable (GTK_TEXT_VIEW (Gui.text_view), TRUE);
 
 	if (inputMark && Gui.text_buffer)
 	{
@@ -772,8 +781,7 @@ static void set_input_pending (gboolean pending)
 	g_signal_handler_block (G_OBJECT (Gui.text_buffer), hSigDelete);
 	g_signal_handler_block (G_OBJECT (Gui.text_view), hSigKeypress);
 
-	if (Gui.text_view)
-	    gtk_text_view_set_editable (GTK_TEXT_VIEW (Gui.text_view), FALSE);
+	gtk_text_view_set_editable (GTK_TEXT_VIEW (Gui.text_view), FALSE);
     }
 }
 
@@ -1050,6 +1058,10 @@ type8 ms_getchar (type8 trans)
 
 	stop_main_loop ();
 
+	if (!Gui.text_view || !GTK_IS_TEXT_VIEW (Gui.text_view) ||
+	    !Gui.text_buffer || !GTK_IS_TEXT_BUFFER (Gui.text_buffer))
+	    return '\n';
+
 	/* Make the text at the input prompt editable */
 	
 	gtk_text_buffer_get_end_iter (Gui.text_buffer, &iter);
@@ -1117,7 +1129,8 @@ type8 ms_getchar (type8 trans)
 	
 	if (!replayFile && !inputBuffer)
 	{
-	    if (need_magwin_graphics)
+	    if (need_magwin_graphics &&
+		ms_is_magwin () && Config.auto_graphics_magwin)
 	    {
 		need_magwin_graphics = FALSE;
 		gtk_text_buffer_get_iter_at_mark (
