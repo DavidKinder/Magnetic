@@ -32,7 +32,7 @@ void text_clear (void);
 void text_block_input (void);
 void text_refresh (void);
 void text_insert (gchar *fmt, ...) G_GNUC_PRINTF (1, 2);
-void text_send_command (const gchar *cmd);
-void text_set_magwin_graphics (void);
+gboolean text_has_active_input (void);
+void text_set_magwin_graphics (gboolean allow);
 
 #endif

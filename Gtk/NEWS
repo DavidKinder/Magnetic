@@ -12,6 +12,8 @@ Bugfixes
   divider and the window edge to prevent accidentally collapsing either
   pane to zero width or height during window resizing.
 
+- MIDI music from Wonderland will no longer play between games.
+
 Other changes
 
 - Improved font rendering quality with antialiasing, light hinting

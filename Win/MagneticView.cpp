@@ -78,7 +78,7 @@ CMagneticView::CMagneticView() : m_PicWnd(m_Picture,m_AnimFrames),
   m_bInputActive = false;
   m_bStatusBar = false;
   m_bAnimate = false;
-  m_bGfxOnSent = false;
+  m_bAllowAutoGfx = false;
 }
 
 CMagneticView::~CMagneticView()
@@ -657,7 +657,7 @@ void CMagneticView::ClearAll(void)
   m_iMaxLines = 0;
   m_bStatusBar = false;
   m_bAnimate = false;
-  m_bGfxOnSent = false;
+  m_bInputActive = false;
 
   pApp->SetGameLoaded(0);
 
@@ -676,6 +676,8 @@ void CMagneticView::ClearAll(void)
   m_Picture.ClearAll();
   SetAnimate(FALSE);
   ClearAnims();
+  m_bAllowAutoGfx = false;
+  ms_showpic(0, 0);
   PlayMusic(NULL,0,0);
 }
 
@@ -1293,6 +1295,8 @@ BOOL CMagneticView::OpenGame(LPCTSTR lpszPathName)
       MakeFilePath(pView->m_strFileName,lpszPathName,".sav");
 
       pView->m_bStatusBar = ms_is_magwin() ? false : true;
+      if (ms_is_magwin() && pApp->GetAutoMagwinGfx())
+        pView->m_bAllowAutoGfx = true;
     }
   }
 
@@ -1337,13 +1341,13 @@ char CMagneticView::GetInput(bool& done, bool trans)
   pView->m_bInputActive = true;
 
   // Auto-enter "graphics on" for MagWin games if enabled
-  if (!pView->m_bMorePrompt && !pView->m_bGfxOnSent &&
+  if (!pView->m_bMorePrompt && pView->m_bAllowAutoGfx &&
       pApp->GetAutoMagwinGfx() && ms_is_magwin())
   {
     const char* cmd = "graphics on\n";
     for (int i = 0; cmd[i] != '\0'; i++)
       pView->m_Input.Add((cmd[i] == '\n') ? 10 : (int)cmd[i]);
-    pView->m_bGfxOnSent = true;
+    pView->m_bAllowAutoGfx = false;
   }
 
   while (cInput != 10 && cInput != 1)
@@ -1486,6 +1490,8 @@ char CMagneticView::GetInput(bool& done, bool trans)
       int i;
       while ((i = strHistory.Find((char)(CMagneticView::SPECIAL_KEYS + VK_SPACE))) >= 0)
         strHistory.SetAt(i,' ');
+
+      pView->m_bAllowAutoGfx = false;
 
       // Input recording
       if ((pView->m_Recording == Recording::RecordingOn) && (pView->m_pFileRecord))
@@ -1735,15 +1741,17 @@ void ms_showpic(type32 c, type8 mode)
       pView->GetPicture().ClearAll();
       pView->SetAnimate(FALSE);
       pView->ClearAnims();
-      // Reset graphics-on flag for MagWin games after restart
-      if (ms_is_magwin() && pApp->GetAutoMagwinGfx())
-        pView->ResetGfxOnSent();
+      // Enable auto-graphics for MagWin games
+      if (ms_is_magwin() && pApp->GetAutoMagwinGfx() && pApp->GetGameLoaded())
+        pView->m_bAllowAutoGfx = !pView->IsInputActive() && !ms_is_running();
       break;
 
     case 1:  // Graphics on (thumbnails)
     case 2:  // Graphics on (normal)
       pView->SetAnimate(FALSE);
       pView->ClearAnims();
+      if (ms_is_magwin() && pApp->GetAutoMagwinGfx())
+        pView->m_bAllowAutoGfx = false;
       pPictureData = ms_extract(c,&Width,&Height,pView->GetPalette(),&IsAnim);
       if (pPictureData)
       {

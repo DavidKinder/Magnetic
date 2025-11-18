@@ -906,7 +906,6 @@ void do_config ()
     GtkWidget *animation_delay;
     GtkWidget *image_filter;
     gint filter_idx = 0;
-    gint i;
 
     /*
      * Some settings, such as the partition, may have changed since they were

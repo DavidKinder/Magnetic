@@ -95,15 +95,19 @@ static gboolean main_loop (gpointer data)
 	if (!result)
 	{
 	    text_insert ("\n[End of session]\n");
-	    mainIdleHandler = 0;
+	    stop_main_loop ();
 	    ms_flush ();
 	    ms_stop ();
 	    ms_freemem ();
 
-	    text_block_input ();
-	    gtk_text_view_scroll_mark_onscreen (
-		GTK_TEXT_VIEW (Gui.text_view),
-		gtk_text_buffer_get_insert (Gui.text_buffer));
+	    if (Gui.text_view && GTK_IS_TEXT_VIEW (Gui.text_view) &&
+		Gui.text_buffer && GTK_IS_TEXT_BUFFER (Gui.text_buffer))
+	    {
+		text_block_input ();
+		gtk_text_view_scroll_mark_onscreen (
+		    GTK_TEXT_VIEW (Gui.text_view),
+		    gtk_text_buffer_get_insert (Gui.text_buffer));
+	    }
 	    break;
 	}
     }
@@ -306,6 +310,7 @@ gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
     text_clear ();
     graphics_clear ();
     hints_clear ();
+    sound_stop_music ();
 
     if (applicationExiting)
 	return FALSE;
@@ -329,11 +334,6 @@ gboolean start_new_game (gchar *game_filename, gchar *graphics_filename,
 	gtk_widget_destroy (error);
     } else
     {
-	if (ms_is_magwin () && Config.auto_graphics_magwin)
-	{
-	    text_set_magwin_graphics ();
-	}
-
 	start_main_loop ();
     }
 
